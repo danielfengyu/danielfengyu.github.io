@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-03T02:34:25.110Z</updated>
+  <updated>2016-09-03T15:15:12.354Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,30 +16,211 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>NodeJs Install and Configuration</title>
-    <link href="http://yoursite.com/2016/09/03/NodeJs-Install-and-Configuration/"/>
-    <id>http://yoursite.com/2016/09/03/NodeJs-Install-and-Configuration/</id>
-    <published>2016-09-03T02:34:25.000Z</published>
-    <updated>2016-09-03T02:34:25.110Z</updated>
+    <title>个人博客——基于hexo的Github.page</title>
+    <link href="http://yoursite.com/2016/09/03/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8Ehexo%E7%9A%84Github%20Page/"/>
+    <id>http://yoursite.com/2016/09/03/个人博客——基于hexo的Github Page/</id>
+    <published>2016-09-03T11:45:37.000Z</published>
+    <updated>2016-09-03T15:15:12.354Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="个人博客——基于hexo的Github-page"><a href="#个人博客——基于hexo的Github-page" class="headerlink" title="个人博客——基于hexo的Github.page"></a>个人博客——基于hexo的Github.page</h1><h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><ul>
+<li>安装NodeJs</li>
+<li>安装Git</li>
+</ul>
+<h2 id="在github上创建仓库"><a href="#在github上创建仓库" class="headerlink" title="在github上创建仓库"></a>在github上创建仓库</h2><p>建立与你用户名对应的仓库，仓库名必须为【yourusername.github.io】</p>
+<center><br><img src="http://i2.buimg.com/567571/b5aabb76dc5a87c2.png" alt="Alt loading" title="新建仓库"><br></center>
+
+<center><br><img src="http://i4.buimg.com/567571/3b507106c15b47a5.png" alt="Alt loading" title="填写新建仓库的信息"><br></center>
+
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><pre><code>//全局安装hexo,安装完成后可以在nodejs/node_gloabal/node_modules下看到
+$ npm install hexo-cli -g
+</code></pre><h2 id="快速启动"><a href="#快速启动" class="headerlink" title="快速启动"></a>快速启动</h2><pre><code>$ hexo init &lt;floder&gt; #初始化blog所在的文件夹
+$ cd blog #进入你所设置的blog文件夹
+$ npm install
+$ hexo server #启动hexo
+$ hexo new &quot;Hello Hexo&quot; #新建一个名叫 Hello Hexo的博文
+$ hexo generate #生成通用的静态文件
+</code></pre><p>进入blog目录：</p>
+<center><br><img src="http://i2.buimg.com/567571/1cf76e414967c4d6.png" alt="Alt loading" title="运行hexo init &lt;floder&gt;生成的blog的目录结构"><br></center>
+
+<p>启动hexo生成的blog：</p>
+<center><br><img src="http://i2.buimg.com/567571/6eb68cc3c7a76fd9.png" alt="Alt loading" title="成功启动hexo"><br></center>
+
+<p>访问<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a>:</p>
+<center><br><img src="http://i2.buimg.com/567571/7de0d6da7ae949a8.png" alt="ALt loading" title="浏览器中成功访问生成的blog"><br></center>
+
+<h2 id="Hexo常用的命令"><a href="#Hexo常用的命令" class="headerlink" title="Hexo常用的命令"></a>Hexo常用的命令</h2><pre><code>hexo new &quot;postName&quot; #新建文章
+hexo new page &quot;pageName&quot; #新建页面
+hexo generate #生成静态页面至public目录
+hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）
+hexo deploy #将.deploy目录部署到GitHub
+hexo help  # 查看帮助
+hexo version  #查看Hexo的版本
+hexo clean #清空public目录下生成的内容
+</code></pre><h2 id="修改配置文件-config-yml"><a href="#修改配置文件-config-yml" class="headerlink" title="修改配置文件 _config.yml"></a>修改配置文件 _config.yml</h2><p>该文件中多数选项都有说明，按照说明配置即可。这里主要介绍如何把Hexo构建的blog部署到github page上。</p>
+<p>部署方式配置前：</p>
+<center><br><img src="http://i2.buimg.com/567571/cb0cd68f7c7bed4e.png" alt="ALt loading" title="部署方式配置前"><br></center>
+
+<p>部署方式配置后,（仓库地址获取于github上新建的名称为yourusename.github.io的库）</p>
+<center><br><img src="http://i2.buimg.com/567571/bd2ca1fcf811e9cf.png" alt="Alt loading" title="部署方式配置后"><br></center>
+
+<center><br><img src="http://i2.buimg.com/567571/113d87f21a6a3502.png" alt="Alt loading" title="获取仓库地址"><br></center>
+
+<h2 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h2><p>这里主要讲解设置主题：Tinnypp</p>
+<p>1.安装Tinnypp</p>
+<pre><code>cd themes
+git clone git@github.com:levonlin/Tinnypp.git
+</code></pre><center><br><img src="http://i2.buimg.com/567571/e86eb329acd6f195.png" alt="Alt loading" title="安装Tinnypp主题"><br></center>
+
+<p>2.修改_config.yml配置文件中的主题设置为：Tinnypp</p>
+<center><br><img src="http://i4.buimg.com/567571/4a28326b980d9290.png" alt="Alt loading" title="修改主题"><br></center>
+
+<p>3.更新主题</p>
+<pre><code>cd themes/Tinnypp
+git pull
+</code></pre><p>4.设置主题配置信息</p>
+<p>（1）设置blog首页的按钮，如果直接使用默认配置，点击按钮会出现404错误，原因是blog部署后按钮所指向目录就是根目录。</p>
+<center><br><img src="http://i2.buimg.com/567571/98bc8d9a49063abe.png" alt="Alt loading" title="按钮的URL设置前"><br></center>
+
+<center><br><img src="http://i4.buimg.com/567571/2b36fd9a01bfe314.png" alt="Alt loading" title="按钮的URL设置后"><br></center>
+
+<p>（2）已经设置/atom.xml为rss源。要使用rss,先安装hexo的rss插件：</p>
+<pre><code>$npm install hexo-generator-feed --save
+</code></pre><p> 修改Tinnypp配置文件_config.yml中的RSS设置，因为安装rss源是在根目录下/atom.xml，但是默认的配置文件中的RSS 地址是: /Tinnypp/atom.xml</p>
+<center><br><img src="http://i2.buimg.com/567571/69b0a373a5c0a75f.png" alt="Alt loading" title="修改前"><br></center>
+
+<center><br><img src="http://i2.buimg.com/567571/97bb747d68ce2823.png" alt="Alt loading" title="修改后"><br></center>
+
+<p>5.主题切换后 blog的首页</p>
+<center><br><img src="http://i2.buimg.com/567571/7c1868648614812c.png" alt="Alt loading" title="切换主题后的首页"><br></center>
+
+<p>6.设置tags和categories</p>
+<p>(1).tags设置</p>
+<p>在themes/Tinnypp/source/下新建文件夹tags，在文件夹中新建文件index.md，在index.md文件中新增内容：</p>
+<center><br><img src="http://i4.buimg.com/567571/22b36d60fb766cc9.png" alt="Alt loading" title="index.md中的内容"><br></center>
+
+<p>(2).categories设置<br>在themes/Tinnypp/source/下新建文件夹categories，在文件夹中新建文件index.md，在index.md文件中新增内容：</p>
+<center><br><img src="http://i4.buimg.com/567571/22b36d60fb766cc9.png" alt="Alt loading" title="index.md中的内容"><br></center>
+
+<p>设置后的目录结构：</p>
+<center><br><img src="http://i1.piimg.com/567571/ba893bb91a362072.png" alt="Alt loading" title="tags和categories设置"><br></center>
+
+<p>7.新建blog文章</p>
+<pre><code>hexo new &quot;Test&quot;
+</code></pre><p>打开blog目录下的../source/_posts/Test.md文件</p>
+<center><br><img src="http://i1.piimg.com/567571/caa7baa5aab508de.png" alt="Alt loading" title="默认内容"><br></center>
+
+<p>修改默认内容后</p>
+<center><br><img src="http://i2.buimg.com/567571/f204735ba668d05e.png" alt="Alt loading" title="修改后的默认内容"><br></center>
+
+<p>8.重新启动hexo查看设置情况</p>
+<pre><code>hexo clean
+hexo generator
+hexo server
+</code></pre><center><br><img src="http://i1.piimg.com/567571/5aadbc05c5aca7fa.png" alt="Alt loading" title="tags和categories设置后的blog首页"><br></center>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://github.com/hexojs/hexo" target="_blank" rel="external">hexo安装配置</a></li>
+<li><a href="http://www.isetsuna.com/hexo/introduction/" target="_blank" rel="external">hexo安装配置1</a></li>
+<li><a href="http://www.isetsuna.com/hexo/install-config/" target="_blank" rel="external">hexo安装配置2</a></li>
+<li><a href="http://www.isetsuna.com/hexo/theme-plugin/" target="_blank" rel="external">hexo安装配置3</a></li>
+<li><a href="http://www.isetsuna.com/hexo/writing-image/" target="_blank" rel="external">hexo安装配置4</a></li>
+<li><a href="http://www.isetsuna.com/hexo/deploy-github-gitcafe/" target="_blank" rel="external">hexo安装配置5</a></li>
+<li><a href="http://www.isetsuna.com/hexo/deploy-qiniu/" target="_blank" rel="external">hexo安装配置6</a></li>
+<li><a href="http://www.isetsuna.com/hexo/domain-dns/" target="_blank" rel="external">hexo安装配置7</a></li>
+<li><a href="https://github.com/levonlin/Tinnypp" target="_blank" rel="external">博客主题切换</a></li>
+<li><a href="http://blog.csdn.net/poem_of_sunshine/article/details/29369785/" target="_blank" rel="external"> hexo部署个人博客全</a></li>
+<li><a href="http://www.jerryfu.net/post/search-engine-for-hexo-with-swiftype-v2.html" target="_blank" rel="external">利用swiftype为hexo添加站内搜索v2.0</a></li>
+</ol>
+]]></content>
     
     <summary type="html">
     
+      &lt;h1 id=&quot;个人博客——基于hexo的Github-page&quot;&gt;&lt;a href=&quot;#个人博客——基于hexo的Github-page&quot; class=&quot;headerlink&quot; title=&quot;个人博客——基于hexo的Github.page&quot;&gt;&lt;/a&gt;个人博客——基于hexo的G
+    
     </summary>
     
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="安装学习" scheme="http://yoursite.com/tags/%E5%AE%89%E8%A3%85%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
   <entry>
-    <title>Hello Hexo</title>
-    <link href="http://yoursite.com/2016/09/02/Hello-Hexo/"/>
-    <id>http://yoursite.com/2016/09/02/Hello-Hexo/</id>
-    <published>2016-09-02T15:02:56.000Z</published>
-    <updated>2016-09-02T15:02:56.784Z</updated>
+    <title>NodeJs安装</title>
+    <link href="http://yoursite.com/2016/09/03/NodeJs%E5%AE%89%E8%A3%85/"/>
+    <id>http://yoursite.com/2016/09/03/NodeJs安装/</id>
+    <published>2016-09-03T09:05:58.000Z</published>
+    <updated>2016-09-03T11:21:26.536Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Node-js-安装及环境搭建"><a href="#Node-js-安装及环境搭建" class="headerlink" title="Node.js 安装及环境搭建"></a>Node.js 安装及环境搭建</h1><h2 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h2><p>1.NODE<a href="https://nodejs.org/en/" target="_blank" rel="external">下载 </a> ，下载对应的操作系统版本即可。</p>
+<p>2.Windows版本的NODE.js下载之后，双击即可安装，安装方式与普通的window软件相同。安装的时候记住安装的路径。</p>
+<p>3.配置环境变量。</p>
+<p>4.检查是否安装成功。node –version || node -v</p>
+<h2 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h2><p>1.git<a href="https://www.git-scm.com/download/" target="_blank" rel="external">下载</a></p>
+<p>2.和安装一般的window程序并无差异。</p>
+<p>3.设置git的环境变量。</p>
+<p>4.打开cmd窗口，输入 git，检查是否安装配置成功。</p>
+<h2 id="npm安装"><a href="#npm安装" class="headerlink" title="npm安装"></a>npm安装</h2><p>1.确保node和git都在环境变量PATH中</p>
+<p>2.开始-&gt; 打开Git Shell,运行命令：</p>
+<pre><code>mkdir npm
+cd npm
+git config --system http.sslcainfo /bin/curl-ca-bundle.crt
+git clone --recursive git://github.com/isaacs/npm.git
+cd npm
+node cli.js install npm –gf
+</code></pre>
+
+<p>3.git 和npm被墙的解决办法</p>
+<blockquote>
+<ul>
+<li>设置国内镜像  </li>
+<li>git撞墙的解决办法：<br>设置代理服务器，使用一些免费的或者是商用的代理下载  </li>
+<li>npm被墙的解决办法：<br>设置国内镜像 npm config set registry <a href="http://registry.npmjs.vitecho.com" target="_blank" rel="external">http://registry.npmjs.vitecho.com</a></li>
+</ul>
+</blockquote>
+<p>4.配置npm的全局模块的存放路径以及cache的路径</p>
+<blockquote>
+<ul>
+<li>启动cmd  </li>
+<li>npm config set prefix “全局模块的存放路”  </li>
+<li>npm config set cache “cache的路径”</li>
+</ul>
+</blockquote>
+<p>5.例如我的就放在Node主目录下  </p>
+<blockquote>
+<ul>
+<li>npm config set prefix “F:\nodejs\node_global”  </li>
+<li>npm config set cache “F:\nodejs\node_cache”  </li>
+</ul>
+</blockquote>
+<p>6.设置环境变量  </p>
+<blockquote>
+<ul>
+<li>NODE_PATH = F:\nodejs\node_global\node_modules  </li>
+<li>PATH = E:\nodejs\node_global\</li>
+</ul>
+</blockquote>
+<p>7.安装express测试一下npm是否安装成功</p>
+<p><pre><code>npm install express –g</code></pre></p>
+<blockquote>
+<p>-g代表安装到全局目录<br>安装成功后，在前面的node_global目录下多了一个目录node_modules/express，表示express安装成功</p>
+</blockquote>
+<h2 id="安装vue-js"><a href="#安装vue-js" class="headerlink" title="安装vue.js"></a>安装vue.js</h2><p><pre><code>#最新稳定版本<br>$ npm install vue<br></code></pre></p>
+<h1 id="最新稳定-CSP-兼容版本"><a href="#最新稳定-CSP-兼容版本" class="headerlink" title="最新稳定 CSP 兼容版本"></a>最新稳定 CSP 兼容版本</h1><p><pre><code>$ npm install vue@csp<br></code></pre></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://www.cnblogs.com/pigtail/archive/2013/01/08/2850486.html" target="_blank" rel="external">http://www.cnblogs.com/pigtail/archive/2013/01/08/2850486.html</a><br><a href="http://xiaoyaojones.blog.163.com/blog/static/28370125201351501113581/" target="_blank" rel="external">http://xiaoyaojones.blog.163.com/blog/static/28370125201351501113581/</a></p>
+]]></content>
     
     <summary type="html">
     
+      &lt;h1 id=&quot;Node-js-安装及环境搭建&quot;&gt;&lt;a href=&quot;#Node-js-安装及环境搭建&quot; class=&quot;headerlink&quot; title=&quot;Node.js 安装及环境搭建&quot;&gt;&lt;/a&gt;Node.js 安装及环境搭建&lt;/h1&gt;&lt;h2 id=&quot;Node-js安装&quot;&gt;&lt;a
+    
     </summary>
     
+      <category term="UI" scheme="http://yoursite.com/categories/UI/"/>
+    
+    
+      <category term="node.js" scheme="http://yoursite.com/tags/node-js/"/>
     
   </entry>
   

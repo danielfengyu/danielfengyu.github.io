@@ -1,0 +1,466 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>个人博客——基于hexo的Github.page | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="个人博客——基于hexo的Github.page前提
+安装NodeJs
+安装Git
+
+在github上创建仓库建立与你用户名对应的仓库，仓库名必须为【yourusername.github.io】
+
+
+
+
+安装Hexo//全局安装hexo,安装完成后可以在nodejs/node_gloabal/no">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/09/03/个人博客——基于hexo的Github Page/" title="个人博客——基于hexo的Github.page" itemprop="url">个人博客——基于hexo的Github.page</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2016-09-03T11:45:37.000Z" itemprop="datePublished">2016-09-03</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#个人博客——基于hexo的Github-page"><span class="toc-number">1.</span> <span class="toc-text">个人博客——基于hexo的Github.page</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前提"><span class="toc-number">1.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在github上创建仓库"><span class="toc-number">1.2.</span> <span class="toc-text">在github上创建仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Hexo"><span class="toc-number">1.3.</span> <span class="toc-text">安装Hexo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快速启动"><span class="toc-number">1.4.</span> <span class="toc-text">快速启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用的命令"><span class="toc-number">1.5.</span> <span class="toc-text">Hexo常用的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改配置文件-config-yml"><span class="toc-number">1.6.</span> <span class="toc-text">修改配置文件 _config.yml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置主题"><span class="toc-number">1.7.</span> <span class="toc-text">设置主题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">2.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<h1 id="个人博客——基于hexo的Github-page"><a href="#个人博客——基于hexo的Github-page" class="headerlink" title="个人博客——基于hexo的Github.page"></a>个人博客——基于hexo的Github.page</h1><h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><ul>
+<li>安装NodeJs</li>
+<li>安装Git</li>
+</ul>
+<h2 id="在github上创建仓库"><a href="#在github上创建仓库" class="headerlink" title="在github上创建仓库"></a>在github上创建仓库</h2><p>建立与你用户名对应的仓库，仓库名必须为【yourusername.github.io】</p>
+<center><br><img src="http://i2.buimg.com/567571/b5aabb76dc5a87c2.png" alt="Alt loading" title="新建仓库"><br></center>
+
+<center><br><img src="http://i4.buimg.com/567571/3b507106c15b47a5.png" alt="Alt loading" title="填写新建仓库的信息"><br></center>
+
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><pre><code>//全局安装hexo,安装完成后可以在nodejs/node_gloabal/node_modules下看到
+$ npm install hexo-cli -g
+</code></pre><h2 id="快速启动"><a href="#快速启动" class="headerlink" title="快速启动"></a>快速启动</h2><pre><code>$ hexo init &lt;floder&gt; #初始化blog所在的文件夹
+$ cd blog #进入你所设置的blog文件夹
+$ npm install
+$ hexo server #启动hexo
+$ hexo new &quot;Hello Hexo&quot; #新建一个名叫 Hello Hexo的博文
+$ hexo generate #生成通用的静态文件
+</code></pre><p>进入blog目录：</p>
+<center><br><img src="http://i2.buimg.com/567571/1cf76e414967c4d6.png" alt="Alt loading" title="运行hexo init &lt;floder&gt;生成的blog的目录结构"><br></center>
+
+<p>启动hexo生成的blog：</p>
+<center><br><img src="http://i2.buimg.com/567571/6eb68cc3c7a76fd9.png" alt="Alt loading" title="成功启动hexo"><br></center>
+
+<p>访问<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a>:</p>
+<center><br><img src="http://i2.buimg.com/567571/7de0d6da7ae949a8.png" alt="ALt loading" title="浏览器中成功访问生成的blog"><br></center>
+
+<h2 id="Hexo常用的命令"><a href="#Hexo常用的命令" class="headerlink" title="Hexo常用的命令"></a>Hexo常用的命令</h2><pre><code>hexo new &quot;postName&quot; #新建文章
+hexo new page &quot;pageName&quot; #新建页面
+hexo generate #生成静态页面至public目录
+hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）
+hexo deploy #将.deploy目录部署到GitHub
+hexo help  # 查看帮助
+hexo version  #查看Hexo的版本
+hexo clean #清空public目录下生成的内容
+</code></pre><h2 id="修改配置文件-config-yml"><a href="#修改配置文件-config-yml" class="headerlink" title="修改配置文件 _config.yml"></a>修改配置文件 _config.yml</h2><p>该文件中多数选项都有说明，按照说明配置即可。这里主要介绍如何把Hexo构建的blog部署到github page上。</p>
+<p>部署方式配置前：</p>
+<center><br><img src="http://i2.buimg.com/567571/cb0cd68f7c7bed4e.png" alt="ALt loading" title="部署方式配置前"><br></center>
+
+<p>部署方式配置后,（仓库地址获取于github上新建的名称为yourusename.github.io的库）</p>
+<center><br><img src="http://i2.buimg.com/567571/bd2ca1fcf811e9cf.png" alt="Alt loading" title="部署方式配置后"><br></center>
+
+<center><br><img src="http://i2.buimg.com/567571/113d87f21a6a3502.png" alt="Alt loading" title="获取仓库地址"><br></center>
+
+<h2 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h2><p>这里主要讲解设置主题：Tinnypp</p>
+<p>1.安装Tinnypp</p>
+<pre><code>cd themes
+git clone git@github.com:levonlin/Tinnypp.git
+</code></pre><center><br><img src="http://i2.buimg.com/567571/e86eb329acd6f195.png" alt="Alt loading" title="安装Tinnypp主题"><br></center>
+
+<p>2.修改_config.yml配置文件中的主题设置为：Tinnypp</p>
+<center><br><img src="http://i4.buimg.com/567571/4a28326b980d9290.png" alt="Alt loading" title="修改主题"><br></center>
+
+<p>3.更新主题</p>
+<pre><code>cd themes/Tinnypp
+git pull
+</code></pre><p>4.设置主题配置信息</p>
+<p>（1）设置blog首页的按钮，如果直接使用默认配置，点击按钮会出现404错误，原因是blog部署后按钮所指向目录就是根目录。</p>
+<center><br><img src="http://i2.buimg.com/567571/98bc8d9a49063abe.png" alt="Alt loading" title="按钮的URL设置前"><br></center>
+
+<center><br><img src="http://i4.buimg.com/567571/2b36fd9a01bfe314.png" alt="Alt loading" title="按钮的URL设置后"><br></center>
+
+<p>（2）已经设置/atom.xml为rss源。要使用rss,先安装hexo的rss插件：</p>
+<pre><code>$npm install hexo-generator-feed --save
+</code></pre><p> 修改Tinnypp配置文件_config.yml中的RSS设置，因为安装rss源是在根目录下/atom.xml，但是默认的配置文件中的RSS 地址是: /Tinnypp/atom.xml</p>
+<center><br><img src="http://i2.buimg.com/567571/69b0a373a5c0a75f.png" alt="Alt loading" title="修改前"><br></center>
+
+<center><br><img src="http://i2.buimg.com/567571/97bb747d68ce2823.png" alt="Alt loading" title="修改后"><br></center>
+
+<p>5.主题切换后 blog的首页</p>
+<center><br><img src="http://i2.buimg.com/567571/7c1868648614812c.png" alt="Alt loading" title="切换主题后的首页"><br></center>
+
+<p>6.设置tags和categories</p>
+<p>(1).tags设置</p>
+<p>在themes/Tinnypp/source/下新建文件夹tags，在文件夹中新建文件index.md，在index.md文件中新增内容：</p>
+<center><br><img src="http://i4.buimg.com/567571/22b36d60fb766cc9.png" alt="Alt loading" title="index.md中的内容"><br></center>
+
+<p>(2).categories设置<br>在themes/Tinnypp/source/下新建文件夹categories，在文件夹中新建文件index.md，在index.md文件中新增内容：</p>
+<center><br><img src="http://i4.buimg.com/567571/22b36d60fb766cc9.png" alt="Alt loading" title="index.md中的内容"><br></center>
+
+<p>设置后的目录结构：</p>
+<center><br><img src="http://i1.piimg.com/567571/ba893bb91a362072.png" alt="Alt loading" title="tags和categories设置"><br></center>
+
+<p>7.新建blog文章</p>
+<pre><code>hexo new &quot;Test&quot;
+</code></pre><p>打开blog目录下的../source/_posts/Test.md文件</p>
+<center><br><img src="http://i1.piimg.com/567571/caa7baa5aab508de.png" alt="Alt loading" title="默认内容"><br></center>
+
+<p>修改默认内容后</p>
+<center><br><img src="http://i2.buimg.com/567571/f204735ba668d05e.png" alt="Alt loading" title="修改后的默认内容"><br></center>
+
+<p>8.重新启动hexo查看设置情况</p>
+<pre><code>hexo clean
+hexo generator
+hexo server
+</code></pre><center><br><img src="http://i1.piimg.com/567571/5aadbc05c5aca7fa.png" alt="Alt loading" title="tags和categories设置后的blog首页"><br></center>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://github.com/hexojs/hexo" target="_blank" rel="external">hexo安装配置</a></li>
+<li><a href="http://www.isetsuna.com/hexo/introduction/" target="_blank" rel="external">hexo安装配置1</a></li>
+<li><a href="http://www.isetsuna.com/hexo/install-config/" target="_blank" rel="external">hexo安装配置2</a></li>
+<li><a href="http://www.isetsuna.com/hexo/theme-plugin/" target="_blank" rel="external">hexo安装配置3</a></li>
+<li><a href="http://www.isetsuna.com/hexo/writing-image/" target="_blank" rel="external">hexo安装配置4</a></li>
+<li><a href="http://www.isetsuna.com/hexo/deploy-github-gitcafe/" target="_blank" rel="external">hexo安装配置5</a></li>
+<li><a href="http://www.isetsuna.com/hexo/deploy-qiniu/" target="_blank" rel="external">hexo安装配置6</a></li>
+<li><a href="http://www.isetsuna.com/hexo/domain-dns/" target="_blank" rel="external">hexo安装配置7</a></li>
+<li><a href="https://github.com/levonlin/Tinnypp" target="_blank" rel="external">博客主题切换</a></li>
+<li><a href="http://blog.csdn.net/poem_of_sunshine/article/details/29369785/" target="_blank" rel="external"> hexo部署个人博客全</a></li>
+<li><a href="http://www.jerryfu.net/post/search-engine-for-hexo-with-swiftype-v2.html" target="_blank" rel="external">利用swiftype为hexo添加站内搜索v2.0</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/安装学习/">安装学习</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/学习/">学习</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2016/09/03/个人博客——基于hexo的Github Page/" data-title="个人博客——基于hexo的Github.page | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/09/03/NodeJs安装/"  title="NodeJs安装">
+ <strong>旧一篇:</strong><br/> 
+ <span>NodeJs安装
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="个人博客——基于hexo的Github.page" data-thread-key="个人博客——基于hexo的Github Page" data-author-key="Daniel" data-url="http://yoursite.com/post/个人博客——基于hexo的Github Page"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/冯玉</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    'ds.src = '/js/embed.js'';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>
