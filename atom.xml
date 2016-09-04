@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-03T15:15:12.354Z</updated>
+  <updated>2016-09-04T08:58:32.609Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2016/09/03/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8Ehexo%E7%9A%84Github%20Page/"/>
     <id>http://yoursite.com/2016/09/03/个人博客——基于hexo的Github Page/</id>
     <published>2016-09-03T11:45:37.000Z</published>
-    <updated>2016-09-03T15:15:12.354Z</updated>
+    <updated>2016-09-04T08:58:32.609Z</updated>
     
     <content type="html"><![CDATA[<h1 id="个人博客——基于hexo的Github-page"><a href="#个人博客——基于hexo的Github-page" class="headerlink" title="个人博客——基于hexo的Github.page"></a>个人博客——基于hexo的Github.page</h1><h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><ul>
 <li>安装NodeJs</li>
@@ -130,12 +130,13 @@ hexo server
 <li><a href="https://github.com/levonlin/Tinnypp" target="_blank" rel="external">博客主题切换</a></li>
 <li><a href="http://blog.csdn.net/poem_of_sunshine/article/details/29369785/" target="_blank" rel="external"> hexo部署个人博客全</a></li>
 <li><a href="http://www.jerryfu.net/post/search-engine-for-hexo-with-swiftype-v2.html" target="_blank" rel="external">利用swiftype为hexo添加站内搜索v2.0</a></li>
+<li><a href="http://blog.fens.me/hexo-blog-github/" target="_blank" rel="external">个人blog搭建全</a></li>
 </ol>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;个人博客——基于hexo的Github-page&quot;&gt;&lt;a href=&quot;#个人博客——基于hexo的Github-page&quot; class=&quot;headerlink&quot; title=&quot;个人博客——基于hexo的Github.page&quot;&gt;&lt;/a&gt;个人博客——基于hexo的G
+      通过Hexo生成、部署个人博客到Github Page上，本文涉及到Hexo的安装、个人博客网站的生成并对生成的网站代码进行重新配置、主题的切换及部署。
     
     </summary>
     
