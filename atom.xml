@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-04T08:58:32.609Z</updated>
+  <updated>2016-09-04T12:17:41.763Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一些疑问</title>
+    <link href="http://yoursite.com/2016/09/04/%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE/"/>
+    <id>http://yoursite.com/2016/09/04/一些疑问/</id>
+    <published>2016-09-04T11:18:20.000Z</published>
+    <updated>2016-09-04T12:17:41.763Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1-什么是回调函数？"><a href="#1-什么是回调函数？" class="headerlink" title="1.什么是回调函数？"></a>1.什么是回调函数？</h1><blockquote>
+<p>回调函数就是你写好一个函数，让预先写好的系统来调用。你去调用系统的函数，是直调。让系统调用你的函数，就是回调。回调函数可以看成，让别人做事，传进去的额外信息。</p>
+<p>简单一点说：回调函数是调用者传递给被调用者的函数。做什么事只有调用者知道，但调用者不能直接去“做”，因为调用者可能不具备执行这个动作的全部条件；但是被调用者具有执行这个动作的所有条件，只是他不知道该怎么去做。调用者调用被调用者时传递回调函数给被调用者，就告诉被调用者用其所具备的条件去执行这个动作。其中：做什么样的事就是回调函数。</p>
+<p>在动态语言中表现为直接传递一个方法（或函数）；在静态语言中可能是通过函数指针来传递的（例如C），也可能是通过interface实现的（例如Java）</p>
+<p>实现这种机制的原理：函数接受的参数，我们通常叫做“数据”，其实这是不完全正确的，其实我们传递给函数的参数实质都是二进制代码。基本类型的数据可以看成是二进制，函数类型的数据也是可以看做二进制的。总之代码和数据都是一个性质，共性都是信息。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      解答编码中遇到的一些疑难、重点知识。
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="编码学习" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
   
   <entry>
     <title>个人博客——基于hexo的Github.page</title>
