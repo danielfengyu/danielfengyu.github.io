@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>一些疑问 | 山间听雨者主页</title>
+    <title>编码过程中的注意事项 | 山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" itemprop="description" content="解答编码中遇到的一些疑难、重点知识。">
+    <meta name="description" itemprop="description" content="工作中关于变量、方法或函数命名规范的总结。">
     
     
     
@@ -90,10 +90,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/09/04/一些疑问/" title="一些疑问" itemprop="url">一些疑问</a>
+      <a href="/2016/09/14/编码过程中的注意事项/" title="编码过程中的注意事项" itemprop="url">编码过程中的注意事项</a>
   </h1>
   <p class="article-time">
-    <time datetime="2016-09-04T11:18:20.000Z" itemprop="datePublished">2016-09-04</time>
+    <time datetime="2016-09-14T15:20:54.000Z" itemprop="datePublished">2016-09-14</time>
   </p>
 </header>
 	<div class="article-content">
@@ -101,26 +101,67 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-什么是回调函数？"><span class="toc-number">1.</span> <span class="toc-text">1.什么是回调函数？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-CSS中的绝对定位和相对定位"><span class="toc-number">2.</span> <span class="toc-text">2.CSS中的绝对定位和相对定位</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命名规则"><span class="toc-number">2.</span> <span class="toc-text">命名规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意事项"><span class="toc-number">3.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#函数"><span class="toc-number">4.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数传参"><span class="toc-number">4.1.</span> <span class="toc-text">函数传参</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数体编写"><span class="toc-number">4.2.</span> <span class="toc-text">函数体编写</span></a></li></ol></li></ol>
 		</div>
 		
-		<h1 id="1-什么是回调函数？"><a href="#1-什么是回调函数？" class="headerlink" title="1.什么是回调函数？"></a>1.什么是回调函数？</h1><blockquote>
-<p>回调函数就是你写好一个函数，让预先写好的系统来调用。你去调用系统的函数，是直调。让系统调用你的函数，就是回调。回调函数可以看成，让别人做事，传进去的额外信息。</p>
-<p>简单一点说：回调函数是调用者传递给被调用者的函数。做什么事只有调用者知道，但调用者不能直接去“做”，因为调用者可能不具备执行这个动作的全部条件；但是被调用者具有执行这个动作的所有条件，只是他不知道该怎么去做。调用者调用被调用者时传递回调函数给被调用者，就告诉被调用者用其所具备的条件去执行这个动作。其中：做什么样的事就是回调函数。</p>
-<p>在动态语言中表现为直接传递一个方法（或函数）；在静态语言中可能是通过函数指针来传递的（例如C），也可能是通过interface实现的（例如Java）</p>
-<p>实现这种机制的原理：函数接受的参数，我们通常叫做“数据”，其实这是不完全正确的，其实我们传递给函数的参数实质都是二进制代码。基本类型的数据可以看成是二进制，函数类型的数据也是可以看做二进制的。总之代码和数据都是一个性质，共性都是信息。</p>
+		<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在工作中发现最令我苦恼的居然是怎么给一个变量、方法或函数命名，有时候会纠结我一个上午，甚至一天之后还会耿耿于怀。所以一直希望总结一下怎么给变量、方法或函数命名。</p>
+<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><p>言归正传，目前比较流行的命名规则有：帕斯卡命名法和驼峰命名法。帕斯卡命名的规则是从名称的第一个字单词开始，每一个单词的首字母大写；驼峰命名的规则是名称的第一个单词全部字母小写，之后的每个单词的首字母大写。一般来说类名称采用帕斯卡命名法，变量名和方法或函数名采用驼峰法命名规则。</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li>见名知意：通常来说，一个变量的名称应该能表现它的使用场景、范围、性质等，一个方法或函数的名称应该尽可能描述其功用和动作。</li>
+<li>对于方法或函数的命名通常要用动词，因为方法或函数表现得就应该是一个动作（这里的一个动作很重要，不要一个方法包含过多的动作，方法的职责应该单一）。</li>
+<li>命名是不要用一些太泛泛的单词，而应该具体点，最好根据使用场景命名。例如对于获取数据，很多人都是用getSomething,这有点泛泛。为了命名的精准，应该多积累词汇。对于获取数据：如果只是简单的返回数据，使用getSomething；如果是从远程获取数据，使用fetchSomething；如果只是从本地加载数据，使用loadSomething；如果是从缓存中获取数据，使用findSomething；如果是通过某些数据衍生而来，可以使用createSomething(data)，buildSomething(data)，parseSomething(data)。</li>
+<li>不同的项目，因为使用场景的、使用技术不同，很可能命名规则也不同。在项目进行前，应该先规范整个团队的命名规则。</li>
+<li>函数使用者在调用函数时，参数名称应该跟函数定义者给的形参的名称一致。</li>
+</ul>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="函数传参"><a href="#函数传参" class="headerlink" title="函数传参"></a>函数传参</h2><ul>
+<li>不要用boolean变量作为函数的参数，如果出现这种情况，需要考虑重写函数。</li>
+<li>不要修改传入函数中的参数。</li>
+<li>返回不能是传入的参数，否则意味着一个函数中实现了不止一个功能，要进来达到单一职责原则。</li>
+</ul>
+<h2 id="函数体编写"><a href="#函数体编写" class="headerlink" title="函数体编写"></a>函数体编写</h2><ul>
+<li>必须是相关的操作放在一起构成一个函数，而不是一个函数只求功能齐全，而不注重复用，函数就是复用的最小单元。</li>
+<li><p>尽量减少代码嵌套</p>
+<blockquote>
+<ol>
+<li>函数最容易终止的判断分支放在判断的最前面。</li>
+<li>如果使用判断语句，发现判断分支太多，就不应该使用判断，换一种方法实现同样的功能，例如使用表驱动法。</li>
+</ol>
 </blockquote>
-<h1 id="2-CSS中的绝对定位和相对定位"><a href="#2-CSS中的绝对定位和相对定位" class="headerlink" title="2.CSS中的绝对定位和相对定位"></a>2.CSS中的绝对定位和相对定位</h1><p><strong>相对定位</strong>：就是一个元素本身自己位置的变化，如一个元素开始时设置其position的值为relative，那么它就会在文档流中占据一个自己本身的位置，当设置了其top和left值后就会相对于它本身的位置偏移。在使用相对定位时，无论是否进行移动，元素仍然占据原来的空间。因此，移动元素会导致它覆盖其它框。那么我们就会想了怎么让框三把框二覆盖呢，很自然的想到把框3的z-index设为一个优先级高的值如100，但是这样并不能得到我们想要的结果，必须把框2的z-index设为优先级低的如-1。相对定位就是文旦流的默认定位方式。</p>
-<p><strong>绝对定位</strong>：使用的绝对定位（position:absolute）的元素不存在文档流中，普通流中其它元素的布局就像绝对定位的元素不存在一样，所以在文档流中不占据空间。因此如果一个元素的position设置为absolute，会影响它的兄弟元素的相对定位（默认定位）从而改变它的兄弟节点在文档流中的位置。绝对定位的元素的位置相对于最近的已定位（拥有position属性）祖先元素，如果元素没有已定位的祖先元素，那么它的位置相对于最初的包含块。</p>
-<p>总之，相对定位是“相对于”元素在文档中的初始位置，而绝对定位是“相对于”最近的已定位祖先元素，如果不存在已定位的祖先元素，那么“相对于”最初的包含块。</p>
-<p>扩展，还可以使用margin属性来进行绝对定位，这时元素也脱离了文档流，不管它的祖先元素有没有定位，都是以文档流中原来所在的位置上偏移参照物。  </p>
+<p>  if(condition == “case1”){ </p>
+<pre><code>return 1; 
+</code></pre><p>  } elseif(condition == “case2”){</p>
+<pre><code>return 2; 
+</code></pre><p>  } elseif(condition == “case3”){</p>
+<pre><code>return 3;
+</code></pre><p>  } elseif(condition == “case4”){</p>
+<pre><code>return 4; 
+</code></pre><p>  }</p>
+</li>
+</ul>
+<blockquote>
+<p>表驱动方法</p>
+</blockquote>
+<pre><code>var map = { 
+    &quot;case1&quot;:1,
+    &quot;case2&quot;:2, 
+    &quot;case3&quot;:3, 
+    &quot;case4&quot;:4 
+} 
+return map[condition];
+</code></pre><blockquote>
+<p>3.多层嵌套时，可以提取内层嵌套为一个函数或方法进行调用。</p>
+<p>4.for循环的嵌套层数应该尽可能的少</p>
+</blockquote>
+<ul>
+<li>提取复杂逻辑，语义化</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/编码学习/">编码学习</a>
+  <span></span> <a href="/tags/总结/">总结</a>
   </div>
 
 
@@ -133,7 +174,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/09/04/一些疑问/" data-title="一些疑问 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/09/14/编码过程中的注意事项/" data-title="编码过程中的注意事项 | 山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -142,19 +183,11 @@ var _hmt = _hmt || [];
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/09/14/编码过程中的注意事项/" title="编码过程中的注意事项">
-  <strong>新一篇:</strong><br/>
-  <span>
-  编码过程中的注意事项</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/09/03/个人博客——基于hexo的Github Page/"  title="个人博客——基于hexo的Github.page">
+<a href="/2016/09/04/一些疑问/"  title="一些疑问">
  <strong>旧一篇:</strong><br/> 
- <span>个人博客——基于hexo的Github.page
+ <span>一些疑问
 </span>
 </a>
 </div>
@@ -164,7 +197,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="一些疑问" data-thread-key="一些疑问" data-author-key="Daniel" data-url="http://yoursite.com/post/一些疑问"></div>
+	<div class="ds-thread" data-title="编码过程中的注意事项" data-thread-key="编码过程中的注意事项" data-author-key="Daniel" data-url="http://yoursite.com/post/编码过程中的注意事项"></div>
 	
 </section>
 
