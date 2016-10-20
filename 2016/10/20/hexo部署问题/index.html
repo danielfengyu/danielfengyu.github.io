@@ -4,12 +4,16 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>使用Vue开发大型单页应用的步骤 | 山间听雨者主页</title>
+    <title>hexo部署问题 | 山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" itemprop="description" content="本文主要讲解怎么快速构建一个基于Vue的大型的单页应用。">
+    <meta name="description" content="hexo发布项目到github上时出了问题，其原因是没有配置git相关的环境变量，而hexo deploy命令需要调用git命令。解决方法：
+
+配置git的环境变量
+
+直接使用git的命令窗口运行hexo相关的命令，尤其是hexo deploy命令">
     
     
     
@@ -90,10 +94,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/10/20/使用Vue开发大型单页应用的步骤/" title="使用Vue开发大型单页应用的步骤" itemprop="url">使用Vue开发大型单页应用的步骤</a>
+      <a href="/2016/10/20/hexo部署问题/" title="hexo部署问题" itemprop="url">hexo部署问题</a>
   </h1>
   <p class="article-time">
-    <time datetime="2016-10-20T13:24:13.000Z" itemprop="datePublished">2016-10-20</time>
+    <time datetime="2016-10-20T14:33:23.000Z" itemprop="datePublished">2016-10-20</time>
   </p>
 </header>
 	<div class="article-content">
@@ -104,62 +108,20 @@ var _hmt = _hmt || [];
 		
 		</div>
 		
-		<ul>
-<li>首先开发机器上要安装nodejs服务（怎么安装网上有一堆教程）。</li>
-<li><p>安装js包管理器npm。如果你安装的是比较新的nodejs,则npm包管理器已经随之安装，如果使用的是比较旧版的nodejs可能需要自己安装npm包安装管理器。也有可能你觉得随nodejs一起安装的npm比较旧，我们可以通过如下命令安装npm。   </p>
-<blockquote>
-<p>sudo npm install npm -g（Linux系统）</p>
-<p>npm install npm -g （windows系统）</p>
-</blockquote>
+		<p>hexo发布项目到github上时出了问题，其原因是没有配置git相关的环境变量，而hexo deploy命令需要调用git命令。<br>解决方法：</p>
+<ul>
+<li><p>配置git的环境变量</p>
 </li>
-<li><p>npm是所谓的包管理器，所以可以通过npm命令安装nodejs模块</p>
-<blockquote>
-<p>npm install &lt; Module Name &gt;</p>
-</blockquote>
-</li>
-<li><p>使用npm安装Vue</p>
-<blockquote>
-<p>npm install vue （本地安装）</p>
-<p>npm install vue -g (全局安装)</p>
-</blockquote>
-</li>
-<li><p>使用npm安装Vuejs官方提供的一个可以快速搭建大型单页应用的命令行工具 vue-cli,该工具其实是一个脚手架</p>
-<blockquote>
-<p>npm install -g vue-cli</p>
-</blockquote>
-</li>
-<li><p>创建一个基于“Webpack”模板的项目</p>
-<blockquote>
-<p>vue init webpack &lt; my-project &gt;</p>
-</blockquote>
-</li>
-<li><p>安装依赖</p>
-<blockquote>
-<p>cd &lt; my-project &gt;</p>
-<p>npm install</p>
-<p>npm run dev(启动应用)</p>
-</blockquote>
-</li>
-<li><p>编译单页应用</p>
-<blockquote>
-<p>npm run build</p>
-</blockquote>
+<li><p>直接使用git的命令窗口运行hexo相关的命令，尤其是hexo deploy命令</p>
 </li>
 </ul>
-<p><strong>注意：手动编译Vue最新的代码</strong></p>
-<blockquote>
-<p>git clone <a href="https://github.com/vuejs/vue.git" target="_blank" rel="external">https://github.com/vuejs/vue.git</a> node_modules/vue</p>
-<p>cd node_modules/vue</p>
-<p>npm install</p>
-<p>npm run build</p>
-</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/编码学习/">编码学习</a>
+  <span></span> <a href="/tags/问题/">问题</a>
   </div>
 
 
@@ -172,7 +134,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/10/20/使用Vue开发大型单页应用的步骤/" data-title="使用Vue开发大型单页应用的步骤 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/10/20/hexo部署问题/" data-title="hexo部署问题 | 山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -182,18 +144,18 @@ var _hmt = _hmt || [];
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/10/20/hexo部署问题/" title="hexo部署问题">
+ <a href="/2016/10/20/npm使用介绍/" title="npm使用介绍">
   <strong>新一篇:</strong><br/>
   <span>
-  hexo部署问题</span>
+  npm使用介绍</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/09/14/编码过程中的注意事项/"  title="编码过程中的注意事项">
+<a href="/2016/10/20/使用Vue开发大型单页应用的步骤/"  title="使用Vue开发大型单页应用的步骤">
  <strong>旧一篇:</strong><br/> 
- <span>编码过程中的注意事项
+ <span>使用Vue开发大型单页应用的步骤
 </span>
 </a>
 </div>
@@ -203,7 +165,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="使用Vue开发大型单页应用的步骤" data-thread-key="使用Vue开发大型单页应用的步骤" data-author-key="Daniel" data-url="http://yoursite.com/post/使用Vue开发大型单页应用的步骤"></div>
+	<div class="ds-thread" data-title="hexo部署问题" data-thread-key="hexo部署问题" data-author-key="Daniel" data-url="http://yoursite.com/post/hexo部署问题"></div>
 	
 </section>
 
