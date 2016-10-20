@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-15T03:48:38.608Z</updated>
+  <updated>2016-10-20T14:06:20.584Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,77 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用Vue开发大型单页应用的步骤</title>
+    <link href="http://yoursite.com/2016/10/20/%E4%BD%BF%E7%94%A8Vue%E5%BC%80%E5%8F%91%E5%A4%A7%E5%9E%8B%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8%E7%9A%84%E6%AD%A5%E9%AA%A4/"/>
+    <id>http://yoursite.com/2016/10/20/使用Vue开发大型单页应用的步骤/</id>
+    <published>2016-10-20T13:24:13.000Z</published>
+    <updated>2016-10-20T14:06:20.584Z</updated>
+    
+    <content type="html"><![CDATA[<ul>
+<li>首先开发机器上要安装nodejs服务（怎么安装网上有一堆教程）。</li>
+<li><p>安装js包管理器npm。如果你安装的是比较新的nodejs,则npm包管理器已经随之安装，如果使用的是比较旧版的nodejs可能需要自己安装npm包安装管理器。也有可能你觉得随nodejs一起安装的npm比较旧，我们可以通过如下命令安装npm。   </p>
+<blockquote>
+<p>sudo npm install npm -g（Linux系统）</p>
+<p>npm install npm -g （windows系统）</p>
+</blockquote>
+</li>
+<li><p>npm是所谓的包管理器，所以可以通过npm命令安装nodejs模块</p>
+<blockquote>
+<p>npm install &lt; Module Name &gt;</p>
+</blockquote>
+</li>
+<li><p>使用npm安装Vue</p>
+<blockquote>
+<p>npm install vue （本地安装）</p>
+<p>npm install vue -g (全局安装)</p>
+</blockquote>
+</li>
+<li><p>使用npm安装Vuejs官方提供的一个可以快速搭建大型单页应用的命令行工具 vue-cli,该工具其实是一个脚手架</p>
+<blockquote>
+<p>npm install -g vue-cli</p>
+</blockquote>
+</li>
+<li><p>创建一个基于“Webpack”模板的项目</p>
+<blockquote>
+<p>vue init webpack &lt; my-project &gt;</p>
+</blockquote>
+</li>
+<li><p>安装依赖</p>
+<blockquote>
+<p>cd &lt; my-project &gt;</p>
+<p>npm install</p>
+<p>npm run dev(启动应用)</p>
+</blockquote>
+</li>
+<li><p>编译单页应用</p>
+<blockquote>
+<p>npm run build</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>注意：手动编译Vue最新的代码</strong></p>
+<blockquote>
+<p>git clone <a href="https://github.com/vuejs/vue.git" target="_blank" rel="external">https://github.com/vuejs/vue.git</a> node_modules/vue</p>
+<p>cd node_modules/vue</p>
+<p>npm install</p>
+<p>npm run build</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      本文主要讲解怎么快速构建一个基于Vue的大型的单页应用。
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="编码学习" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
   
   <entry>
     <title>编码过程中的注意事项</title>
