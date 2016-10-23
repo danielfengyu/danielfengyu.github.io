@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-10-23T08:32:52.145Z</updated>
+  <updated>2016-10-23T09:48:33.050Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,9 +20,10 @@
     <link href="http://yoursite.com/2016/10/23/NodeJs-%E5%AD%A6%E4%B9%A0/"/>
     <id>http://yoursite.com/2016/10/23/NodeJs-学习/</id>
     <published>2016-10-23T08:26:26.000Z</published>
-    <updated>2016-10-23T08:32:52.145Z</updated>
+    <updated>2016-10-23T09:48:33.050Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="NodeJs的回调"><a href="#NodeJs的回调" class="headerlink" title="NodeJs的回调"></a>NodeJs的回调</h1><ul>
+    <content type="html"><![CDATA[<h1 id="NodeJs的回调"><a href="#NodeJs的回调" class="headerlink" title="NodeJs的回调"></a>NodeJs的回调</h1><hr>
+<ul>
 <li><p>Node.js 异步编程的直接体现就是回调。</p>
 </li>
 <li><p>异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了。</p>
@@ -31,7 +32,39 @@
 </li>
 </ul>
 <p><strong><em>注意：异步代表代码是非阻塞的，阻塞按是按顺序执行的，而非阻塞是不需要按顺序的，所以如果需要处理回调函数的参数，我们就需要写在回调函数内。</em></strong></p>
-]]></content>
+<h1 id="NodeJs的事件驱动模型"><a href="#NodeJs的事件驱动模型" class="headerlink" title="NodeJs的事件驱动模型"></a>NodeJs的事件驱动模型</h1><hr>
+<ul>
+<li><p>Node.js 是单进程单线程应用程序，但是通过事件和回调支持并发，所以性能非常高。</p>
+</li>
+<li><p>Node.js 的每一个 API 都是异步的，并作为一个独立线程运行，使用异步函数调用，并处理并发。</p>
+</li>
+<li><p>Node.js 基本上所有的事件机制都是用设计模式中观察者模式实现。</p>
+</li>
+<li><p>Node.js 单线程类似进入一个while(true)的事件循环，直到没有事件观察者退出，每个异步事件都生成一个事件观察者，如果有事件发生就调用该回调函数.</p>
+<h2 id="一个简单的事件驱动模型例子"><a href="#一个简单的事件驱动模型例子" class="headerlink" title="一个简单的事件驱动模型例子"></a>一个简单的事件驱动模型例子</h2><p>Node.js 使用事件驱动模型，当web server接收到请求，就把它关闭然后进行处理，然后去服务下一个web请求。当这个请求完成，它被放回处理队列，当到达队列开头，这个结果被返回给用户。这个模型非常高效可扩展性非常强，因为webserver一直接受请求而不等待任何读写操作。（这也被称之为非阻塞式IO或者事件驱动IO）在事件驱动模型中，会生成一个主循环来监听事件，当检测到事件时触发回调函数。</p>
+</li>
+</ul>
+<p><strong><em>注意：这里的观察者模式的观察者（Observer）是事件处理函数，主题（Subject）是事件</em></strong></p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><pre><code>// 引入 events 模块 
+var events = require(&apos;events&apos;);
+// 创建 eventEmitter 对象
+var eventEmitter = new events.EventEmitter();
+// 创建事件处理程序
+var connectHandler = function connected() {
+console.log(&apos;连接成功。&apos;);
+// 触发 data_received 事件 
+eventEmitter.emit(&apos;data_received&apos;);
+}
+// 绑定 connection 事件处理程序
+eventEmitter.on(&apos;connection&apos;, connectHandler);
+// 使用匿名函数绑定 data_received 事件
+eventEmitter.on(&apos;data_received&apos;, function(){
+console.log(&apos;数据接收成功。&apos;);
+});
+// 触发 connection 事件 
+eventEmitter.emit(&apos;connection&apos;);
+console.log(&quot;程序执行完毕。&quot;);
+</code></pre>]]></content>
     
     <summary type="html">
     
