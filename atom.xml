@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-10-20T14:44:22.135Z</updated>
+  <updated>2016-10-23T08:32:52.145Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>NodeJs 学习</title>
+    <link href="http://yoursite.com/2016/10/23/NodeJs-%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://yoursite.com/2016/10/23/NodeJs-学习/</id>
+    <published>2016-10-23T08:26:26.000Z</published>
+    <updated>2016-10-23T08:32:52.145Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="NodeJs的回调"><a href="#NodeJs的回调" class="headerlink" title="NodeJs的回调"></a>NodeJs的回调</h1><ul>
+<li><p>Node.js 异步编程的直接体现就是回调。</p>
+</li>
+<li><p>异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了。</p>
+</li>
+<li><p>回调函数在完成任务后就会被调用，Node 使用了大量的回调函数，Node 所有 API 都支持回调函数。</p>
+</li>
+</ul>
+<p><strong><em>注意：异步代表代码是非阻塞的，阻塞按是按顺序执行的，而非阻塞是不需要按顺序的，所以如果需要处理回调函数的参数，我们就需要写在回调函数内。</em></strong></p>
+]]></content>
+    
+    <summary type="html">
+    
+      NodeJs的基础知识的学习，学习NodeJs的基础是需要了解一些JavaScript的知识。
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="编程" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>npm使用介绍</title>
