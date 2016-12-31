@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-12-31T11:54:54.615Z</updated>
+  <updated>2016-10-23T09:48:33.050Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,20 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Winodws 下搭建wiki知识库</title>
-    <link href="http://yoursite.com/2016/12/31/Winodws-%E4%B8%8B%E6%90%AD%E5%BB%BAwiki%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
-    <id>http://yoursite.com/2016/12/31/Winodws-下搭建wiki知识库/</id>
-    <published>2016-12-31T11:54:54.000Z</published>
-    <updated>2016-12-31T11:54:54.615Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>NodeJs 学习</title>
