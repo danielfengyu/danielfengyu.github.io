@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-04T10:53:17.538Z</updated>
+  <updated>2017-05-11T15:08:25.210Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,573 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Spring Framework 指导文档</title>
+    <link href="http://yoursite.com/2017/05/02/Spring-Framework-%E6%8C%87%E5%AF%BC%E6%96%87%E6%A1%A3/"/>
+    <id>http://yoursite.com/2017/05/02/Spring-Framework-指导文档/</id>
+    <published>2017-05-02T14:15:58.000Z</published>
+    <updated>2017-05-11T15:08:25.210Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Spring-依赖和依赖于Spring"><a href="#Spring-依赖和依赖于Spring" class="headerlink" title="Spring 依赖和依赖于Spring"></a>Spring 依赖和依赖于Spring</h4><p>尽管Spring为大量的企业和其他非Spring的工具提供集成和支持， 但Spring特意使依赖于它的应用尽可能的依赖一个绝对小的包集合：为了在一个小的用例中使用Spring，你不必搜索（定位）和下载大量的jar库文件。对于基本的依赖注入，只有一个强制的外部依赖，就是日志记录相关的依赖。<br>接下来我们即将概述配置一个依赖于Spring应用所必须的基本步骤，首先，通过maven配置，接着是通过gradle配置，最后是通过Ivy配置。在任何一种配置方式下，如果有不清楚的，参考你的依赖管理系统文档，或者查看一些样例的编码——Spring本身在构建的时候就是使用gradle管理依赖的，我们的样例大多也是是应用gradle和Maven来做依赖管理的。</p>
+<h4 id="Maven-依赖管理"><a href="#Maven-依赖管理" class="headerlink" title="Maven 依赖管理"></a>Maven 依赖管理</h4><p>如果你使用的是maven做依赖管理，你甚至不必明确地提供日志相关的依赖，例如，为创建一个应用环境并使用依赖注入来配置一个应用，你的maven依赖如下：</p>
+<p><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+        &lt;version&gt;5.0.0.M5&lt;/version&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></p>
+<p>正如上面所示，注意，如果你不必依赖于Spring的API编译，那么可以通过<scope>声明为运行时依赖，这是一个典型的关于基本的依赖注入的用例。</scope></p>
+<p>上述例子工作在Maven中心库上，为了使用Maven库，必须在maven的配置文件中指定库的位置。只依赖于所有的发布版本的配置：</p>
+<p><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;io.spring.repo.maven.release&lt;/id&gt;
+        &lt;url&gt;http://repo.spring.io/release/&lt;/url&gt;
+        &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;</code></p>
+<p>依赖于里程碑的配置：</p>
+<p><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;io.spring.repo.maven.milestone&lt;/id&gt;
+        &lt;url&gt;http://repo.spring.io/milestone/&lt;/url&gt;
+        &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;</code></p>
+<p>依赖于快照的配置：</p>
+<p><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;io.spring.repo.maven.snapshot&lt;/id&gt;
+        &lt;url&gt;http://repo.spring.io/snapshot/&lt;/url&gt;
+        &lt;snapshots&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/snapshots&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;</code></p>
+<h4 id="Maven-依赖“材料清单”"><a href="#Maven-依赖“材料清单”" class="headerlink" title="Maven 依赖“材料清单”"></a>Maven 依赖“材料清单”</h4><p>在使用Maven的时候，可能不慎混合不同的Spring版本，例如，你会发现一个第三方库，或者另一个Spring工程，引入了一个传递依赖，并且该依赖还是一个较早的发行版本。如果你忘了明确的声明一个直接依赖，许多难以预料的问题会发生。</p>
+<p>为了克服以上描述的问题，maven提供了一个材料清单（bill of materials，BOM）的概念，为了确保所有的Spring依赖（直接或者间接的）是同一个版本，你可以导入<code>spring-framework-bom</code>到你的<code>dependencyManagement</code>区中：</p>
+<p><code>&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-framework-bom&lt;/artifactId&gt;
+            &lt;version&gt;5.0.0.M5&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</code></p>
+<p>使用BOM增加的一个好处是，当依赖Spring框架产品时不必再指定<code>&lt;version&gt;</code>属性：</p>
+<p>`<dependencies><br>    <dependency><br>        <groupid>org.springframework</groupid><br>        <artifactid>spring-context</artifactid><br>    </dependency><br>    <dependency><br>        <groupid>org.springframework</groupid><br>        <artifactid>spring-web</artifactid><br>    </dependency></dependencies></p>
+<dependencies><code>#### Gradle依赖管理 ####
+通过构建系统来使用Spring库，需要在</code>repositories<code>中包含恰当的URL：</code>repositories {<br>    mavenCentral()<br>    // and optionally…<br>    maven { url “<a href="http://repo.spring.io/release" target="_blank" rel="external">http://repo.spring.io/release</a>“ }<br>}<code>你可以根据需求改变</code>repositories<code>中URL的</code>/release<code>为</code>/milestone<code>，或者改变为</code>/snapshot<code>。一旦一个库已经被配置，你可以通过普通的gradle方法声明依赖，如:</code>dependencies{<br>    compile(“org.springframework:spring-context:5.0.0.M5”)<br>    testCompile(“org.springframework:spring-test:5.0.0.M5”)<br> }<code>#### Ivy 依赖管理 ####
+如果你更喜欢使用Ivy管理依赖，也有相似的配置选择。配置Ivy指向Spring库（repository）,需增加如下的</code>resolver<code>到你的</code>ivysettings.xml<code>配置文件中：</code><resolvers><a href="ibiblioname=&quot;io.spring.repo.maven.release&quot;m2compatible=&quot;true&quot;root=&quot;http://repo.spring.io/release/&quot;/">ibiblioname=&quot;io.spring.repo.maven.release&quot;m2compatible=&quot;true&quot;root=&quot;http://repo.spring.io/release/&quot;/</a></resolvers><code>你也可以根据需要修改</code>root<code>URL中的</code>/release/<code>为</code>/milestone/<code>或</code>/snapshot/<code>。一旦配置完成，就可以使用通用的方式增加依赖了，例如（在ivy.xml中）：
+
+
+
+        &lt;dependency org=&quot;org.springframework&quot; 
+                    name=&quot;spring-core&quot; rev=&quot;5.0.0.M5&quot; conf=&quot;compile-&gt;runtime&quot;/&gt;
+
+#### 发布zip文件 ####
+尽管建议使用支持依赖管理的构建系统获取Spring Framework，但仍然可以下载发布的zip文件。
+
+发布的zip文件也被提交到Spring Maven 库（这只是为了方便，你不必使用maven或者是其他的构建工具来下载他们）。
+
+下载发布的zip文件，首先打开浏览器，输入 [http://repo.spring.io/release/org/springframework/spring]( http://repo.spring.io/release/org/springframework/spring)，并选择你想下载的版本对应的子文件夹。发布的文件以</code>-dist.zip<code>结尾，如 spring-framework-{spring-version}-RELEASE-dist.zip。发布文件也被提交到 [milestones](http://repo.spring.io/milestone/org/springframework/spring/) 和[snapshots](http://repo.spring.io/snapshot/org/springframework/spring/)。
+
+#### 2.3.2 Logging ####
+对于Spring来说logging是一个非常重要的依赖，因为：
+a)它是唯一强制依赖的外部依赖
+b)每个人都喜欢从他们使用的工具中输出些东西
+c)Spring集成了许多其他的工具，这些工具都选择logging作为依赖。应用开发者的一个普遍目标是在一个中间位置使用一个作用于整个应用的统一logging配置，包括应用依赖的第三方组件，这也许是比较难的在有许多logging框架可供选择之前。
+
+Spring强制依赖的logging框架是Jakarta Commons Logging API (JCL)。我们依赖JCL编译，我们也使JCL Log对象对于扩展自Spring Framework的classes是可见的。对于用户来说，重要的是所有的Spring版本都依赖于同一个logging库：因为向后兼容，所以好迁移，扩展自Spring的应用也是支持向后兼容的。为了支持向后兼容，我使Spring中的一个模块明确地依赖上</code>commons-logging<code>（JCL的标准实现），然后使所有的其他Spring模块在编译时期依赖于这个模块。举个例，如果你正在使用Maven，且不知道在哪里记录</code>commons-logging<code>的依赖，其实这个依赖来自Spring，更准确的说是来自Spring的核心模块</code>spring-core<code>。
+
+关于</code>commons-logging<code>的一个好处是你不需要额外的库就能使你的应用正常运行，有一个运行时发掘算法，可以从classpath指定的地方寻找别的logging框架，并使用一个它认为合适的（或者你可以直接告诉这个算法你要使用哪一个）。如果没有可用的logging框架，你还可以使用JDK自带的logging框架（java.util.logging，JUL）。当你的Spring应用运行起来后，你应该会看到console窗口快速的输出大部分重要情况下的日志。
+##### 不用 Common Loging #####
+不幸的是，</code>commons-logging<code>中的运行时探查算法尽管方便了终端用户，但也是有问题的。回到之前，我们重新启动，Spring会使用一个不同的日志依赖。我们的首选可能是 Simple Logging Facade for Java ( 面向Java的简单日志管理，SLF4J),它也被用在人们使用的许多其他工具中，这些工具和Spring一起被使用在人们的应用中。
+
+这有两种基础的方法来关闭</code>commons-logging<code>：
+1. 从</code>spring-core<code>（因为它是唯一明确依赖</code>commons-logging<code>的模块）模块中排出</code>commons-logging<code>相关的依赖，
+
+2. 依赖一个特殊的</code>commons-logging<code>依赖，该依赖被一个空的jar包替换（更多详情见 [SLF4J FAQ](https://www.slf4j.org/faq.html#excludingJCL)）。
+
+为了排出</code>commons-logging<code>，增加如下内容到</code>dependencyManagement`标签中：<br><br>    <dependencies><br>        <dependency><br>            <groupid>org.springframework</groupid><br>            <artifactid>spring-core</artifactid><br>            <version>5.0.0.M5</version><br>            <exclusions><br>                <exclusion><br>                    <groupid>commons-logging</groupid><br>                    <artifactid>commons-logging</artifactid><br>                </exclusion><br>            </exclusions><br>        </dependency><br>    </dependencies>
+
+<p>这时这个应用可能出现问题，因为在classpath中没有JCL API的实现，为了修复这个问题，需要提供一个新的实现。在下一节，我们将通过使用SLF4J作为例子，介绍怎么样提供一个可选择的JCL实现。</p>
+<h5 id="使用SLF4J"><a href="#使用SLF4J" class="headerlink" title="使用SLF4J"></a>使用SLF4J</h5><p>比起<code>commons-logging</code>，SLF4J是一个更轻量的依赖，且在运行时更有效，因为它是在编译时期绑定，而别的集成日志框架是在运行时刻发现。这也就意味着你必须更加明确在运行期需要做什么，并因此声明，或者配置它。SLF4J给许多通用日志框架提供粘合剂，因此你通常可以选择一个你已经在使用的日志框架，并通过绑定到SLF4J上对它配置和管理。</p>
+<p>SLF4J给许多通用日志框架提供粘合剂功能，配合JCL，它也可以做一些别致的事：把别的日志框架和它本身连接起来。因此为了在Spring中使用SLF4J，你必须用SLF4J-JCL替换<code>commons-logging</code>依赖。一旦你替换了<code>commons-logging</code>依赖，日志调用将由Spring内部转变为SLF4J API调用，所以如果在你的应用中别的库使用了<code>commons-logging</code>依赖，你都可以在一个单一地方配置和管理日志。</p>
+<p>一个普遍的选择将有可能是在Spring和SLF4J中架起桥梁，在SLF4J和Log4j之间提供明确的绑定。你需要提供几种依赖（消除存在的<code>common-logging</code>依赖）：桥梁，SLF4J 实现Log4j，Log4j实现它自身，在Maven中，你可以想这样配置：</p>
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+        &lt;version&gt;5.0.0.M5&lt;/version&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;groupId&gt;commons-logging&lt;/groupId&gt;
+                &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+        &lt;artifactId&gt;jcl-over-slf4j&lt;/artifactId&gt;
+        &lt;version&gt;1.7.22&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
+        &lt;version&gt;2.7&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
+        &lt;version&gt;2.7&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+        &lt;version&gt;2.7&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p>这看起来似乎有许多依赖，而且只是为了看到一些日志。对，就是如此，但这是可选的，而且考虑到类加载器的问题，尤其是在一个有限制的容器中，如OSGi平台，比起<code>common-logging</code>,上面的这种选择应该更好，综上，使用SLF4J-JCL有一个性能上的好处，因为它的绑定时在编译期，而不是运行期。</p>
+<p>在SLF4J的用户中，一个更常见的选择是，直接绑定<a href="https://logback.qos.ch/" target="_blank" rel="external">Logback</a>,因为它使用较少的步骤和生成较少的依赖。Logback消除了额外的绑定步骤，因为它直接实现了SLF4J，因此你只需要绑定两个（<code>jcl-over-slf4j</code> 和<code>logback</code>）而不是四个库。如果你绑定的是Logback，你还需要消除来自其他依赖（不是Spring）的对slf4j-api的依赖，因为你需要确保在classpath中只依赖一个slf4j版本的API。</p>
+<h5 id="Using-Log4j"><a href="#Using-Log4j" class="headerlink" title="Using Log4j"></a>Using Log4j</h5><p>Note：Log4j1.x已经不更新了，下面讲解的是Log4j2。</p>
+<p>为了配置和管理的目的，许多人使用Log4j作为日志框架。Log4j是高效和稳定的，实际上它也正是我们在构建和测试Spring的运行时刻所使用的。Spring也提供了一些实用工具来配置和初始化Log4j，所以在Spring的一些模块中Log4j是一个可选择的编译时依赖。</p>
+<p>为了并用Log4j和JCL，你所需要做的就是把Log4j加入classpath中，并为他提供一个配置文件（<code>log4j2.xml</code>,<code>log4j2.properties</code>,或者它支持的其他配置格式），对于Maven的使用者，最少的依赖配置是：</p>
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+        &lt;version&gt;2.7&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j-jcl&lt;/artifactId&gt;
+        &lt;version&gt;2.7&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p>如果你还希望使用SLF4J，如下的依赖是必要的：</p>
+<pre><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
+    &lt;version&gt;2.7&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p>这里有一个关于把日志定向到控制台的<code>log4j2.xml</code>配置例子：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;Configuration status=&quot;WARN&quot;&gt;
+  &lt;Appenders&gt;
+    &lt;Console name=&quot;Console&quot; target=&quot;SYSTEM_OUT&quot;&gt;
+      &lt;PatternLayout pattern=&quot;%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n&quot;/&gt;
+    &lt;/Console&gt;
+  &lt;/Appenders&gt;
+  &lt;Loggers&gt;
+    &lt;Logger name=&quot;org.springframework.beans.factory&quot; level=&quot;DEBUG&quot;/&gt;
+    &lt;Root level=&quot;error&quot;&gt;
+      &lt;AppenderRef ref=&quot;Console&quot;/&gt;
+    &lt;/Root&gt;
+  &lt;/Loggers&gt;
+&lt;/Configuration&gt;
+</code></pre><h5 id="自带本地JCL的运行时容器"><a href="#自带本地JCL的运行时容器" class="headerlink" title="自带本地JCL的运行时容器"></a>自带本地JCL的运行时容器</h5><p>许多人在一个实现了JCL的的容器中运行他们的Spring应用。IBM的Websphere 应用服务器（WAS）就是一个这样的容器。这样的容器经常出现问题，不幸的是还没有一个好的解决方案；大部分情况下，只是简单的把<code>common-logging</code>从你的应用中排出是远远不够的。</p>
+<p>必须清晰的认识到：问题的报告通常不是通过JCL的，甚至也不是通过<code>common-logging</code>，尽管他们把<code>common-logging</code>绑定到了其他的框架（通常是Log4j）上了。这个可能失败的原因为】是<code>common-logging</code>改变了他们上报的方式，在运行时刻发现在一些容器中使用较老的版本（1.0），然而现在许多人用的却是新的版本（1.1）。Spring不使用不通用的JCL API，因此在这里没有问题，但是一旦Spring或者你的应用尝试做一些日志操作，你可能会发现你所绑定的Log4j是不起作用的。</p>
+<p>在这种情况下的 WAS ，最简单的事是反转类加载的层级（IBM称“parent last”），因此是应用控制了JCL的依赖，而不是容器。这种选择不总是可行的，但在公共领域有许多别的建议作为供选择的方法， 依赖正确的版本和容器的特性集合你的旅程可能会产生变化。</p>
+<h1 id="二、核心技术"><a href="#二、核心技术" class="headerlink" title="二、核心技术"></a>二、核心技术</h1><p>这部分指导文档包含了所有的绝对完整的Spring Framework技术。</p>
+<p>其中最重要的是Spring Framework的控制反转（IoC）容器。深入处理Spring Framework的IoC容器离不开Spring的面向切面编程（AOP）的技术，该技术是广泛应用的。spring Framework拥有自己的AOP框架，从概念上来说是比较简单的，在Java的企业级编程中成功的占据了AOP需求的80%的热点。</p>
+<p>这部分内容也会涉及到Spring中集成的AspectJ（一种当前最完善，最成熟的企业级AOP实现的框架）</p>
+<ul>
+<li>第三章，IoC容器</li>
+<li>第四章，资源</li>
+<li>第五章，校验、数据绑定和类型转换</li>
+<li>第六章，Spring表达式语言（SpEL）</li>
+<li>第七章，Spring的面向切面编程</li>
+<li>第八章，Spring AOP APIs</li>
+</ul>
+<h2 id="3-IoC容器"><a href="#3-IoC容器" class="headerlink" title="3. IoC容器"></a>3. IoC容器</h2><h3 id="3-1-Spring-IoC容器和Beans的介绍"><a href="#3-1-Spring-IoC容器和Beans的介绍" class="headerlink" title="3.1 Spring IoC容器和Beans的介绍"></a>3.1 Spring IoC容器和Beans的介绍</h3><p>本质涵盖Spring框架中控制反转规则的实现。IoC也以依赖注入而著称。依赖注入是一种对象凭借什么来定义他们的依赖的方法，依赖指的是对象能有效完成它的工作所借助的其他对象，这些依赖只有通过构造器的参数，工厂方法的参数，或是对象实体的属性来设置，这个对象实体或是被构造的，或是由工厂方法返回的。当容器创建bean的时候，它会注入bean的依赖。这种方式是反转的基础，之所以叫做控制反转（IoC）,是因为bean通过直接使用本身的类构造器，或者是像服务定位器模式的机制来控制实例，或是定位自身的依赖。</p>
+<p><code>org.springframework.beans</code>和<code>org.springframework.context</code>包是Spring框架的IoC容器的基础。<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html" target="_blank" rel="external"><code>BeanFactory</code></a>接口提供一个高级的，能管理各种对象类型的配置机制。<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html" target="_blank" rel="external"><code>ApplicationContext</code></a>是一个<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html" target="_blank" rel="external"><code>BeanFactory</code></a>的子接口，<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html" target="_blank" rel="external"><code>ApplicationContext</code></a>增加了Spring AOP易集成的特性；甚至发布了消息，资源处理机制；特殊的应用层上下文，例如用于web应用中的<code>WebApplicationContext</code></p>
+<p>总之，<code>BeanFactory</code>提供了配置框架和基本功能，ApplicationContext 增加了更多企业特征的功能。<code>ApplicationContext</code> 是<code>BeanFactory</code>的一个完全超级，因此在本章关于Spring IOC容器的说明中特意使用它。如果想了解更多的关于使用BeanFactory的信息， 请参考<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-beanfactory" target="_blank" rel="external">Section 3.16, “The BeanFactory”</a></p>
+<p>在Spring中，各种对象构成了你的应用的主干，被Spring IOC容器管理的对象通常称为<em>beans</em>。一个bean要么是一个实例化的、组装好的对象，要么是一个被Spring IoC容器管理的对象。另外，在你的应用中，一个bean是众多对象中简单的一个。Beans和在他们中的依赖，被映射到容器使用的一个配置元数据中。</p>
+<h3 id="3-2-容器概览"><a href="#3-2-容器概览" class="headerlink" title="3.2 容器概览"></a>3.2 容器概览</h3><p>接口<code>org.springframework.context.ApplicationContext</code>代表Spring IoC容器，它负责实例化、配置和组装前面提到的beans。容器通过读取配置元数据来获取关于实例化、配置和组装对象的说明。配置元数据通过XML文件、Java注解和Java代码来描述。配置元数据允许你表达组成你的应用的对象和这些对象之间的复杂关系。</p>
+<p>Spring提供了几种开箱即用的<code>ApplicationContext</code>接口的实现。在一个单一的应用中，通常需要创建一个<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html" target="_blank" rel="external"><code>ClassPathXmlApplicationContext</code></a>或<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/support/FileSystemXmlApplicationContext.html" target="_blank" rel="external"><code>FileSystemXmlApplicationContext</code></a>。XML已经成为定义配置元数据的传统格式，你也可以通知容器使用Java注解或Java代码作为元数据的定义格式，这种方式只需要提供一个小的XML配置以说明可支持这中额外的元数据格式。</p>
+<p>在许多的应用场景中，明确用户代码不必实例化一个或多个SpringIoC的容器的实例。例如，在一个web应用场景中，应用的web.xml文件中只需要简单八行web XML描述符通常就足够了。 (见 3.15.4节, “方便web应用上下文的实例化”)。如果你当前正在使用 <a href="https://spring.io/tools/sts" target="_blank" rel="external"><code>Spring Tool Suite</code></a>，一个加强版的Eclipse开发环境，这个样板配置文件只需简单地点击几次鼠标或是敲几次键盘就被创建。</p>
+<p>下图是一个表示Spring怎样工作的高级视图。你的应用类与配置元数据相结合，因此，创建和初始化<code>ApplicationContext</code>之后，你就拥有了一个完全配置的、可运行的的系统或应用。</p>
+<p><center><br><img src="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/images/container-magic.png.pagespeed.ce.-0JjaOG5As.png" alt="" title="Spring IoC容器"></center></p>
+<p>图 3.1. Spring IoC容器<br></p>
+<h4 id="3-2-1-配置元数据"><a href="#3-2-1-配置元数据" class="headerlink" title="3.2.1 配置元数据"></a>3.2.1 配置元数据</h4><p>正如之前的图所描述的一样，Spring IoC容器需要一个配置元数据。这个配置元数据描绘你作为一个应用开发者应该怎么告诉Spring容器在你的应用中去实例化、配置和组装对象。</p>
+<p>传统第提供配置元数据的方式是通过一个简单的，直接明了的XML格式，这也是本章为了传达Spring IoC容器的关键概念和特征而使用得最多的方式。</p>
+<p><em>注：基于XML的元数据并不是唯一的配置元数据格式。Spring IoC容器与配置元数据的实际书写格式毫无关系。并且进来，许多开发者为他们的Spring应用选择基于Java的配置</em>。</p>
+<p>想要获取更多的关于在Spring容器中使用其他的元数据格式的信息，请查阅：</p>
+<ul>
+<li><p><a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-annotation-config" target="_blank" rel="external">基于注解的配置</a>：Spring2.5引进了注解对元数据配置的支持。</p>
+</li>
+<li><p><a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-java" target="_blank" rel="external">基于Java的配置</a>：从Spring3.0开始，Spring提供了许多特性来支持Java配置工程，这些特性还成为了核心Spring框架的一部分。那就是说，你可以使用Java而非XML文件来定义你的应用的类型的beans的外观。为了使用这些新特性，请查看 <code>@Configuration</code>,<code>@Bean</code>, <code>@Import</code> 和<code>@DependsOn</code> 注解.</p>
+</li>
+</ul>
+<p>Spring配置由至少一个，但通常来说不止一个bean的定义组成，容器必须管理他们。基于XML的配置元数据以处于顶级元素<code>&lt;beans&gt;</code>中的<code>&lt;bean/&gt;</code>元素来表示这些bean的配置。Java配置通常使用@Bean注解@Configuration类中的方法。</p>
+<p>这些bean定义符合组成应用的实际的对象。通常来说，你需定义服务层对象，数据访问层对象（DAOs）对象,诸如Struts <code>Action</code>实例这样的表示对象，和诸如Hibernate <code>SessionFactories</code>，JMS队列之类的底层对象。一般来说，在容器中，不必配置细粒度的领域对象，因为创建和加载领域对象通常是DAOs和业务逻辑的责任。然而，你可以使用Spring中集成的AspectJ来配置那些脱离IoC容器控制而创建的对象。查看<a href="ocs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#aop-atconfigurable">使用AspectJ和Spring一起依赖注入领域对象</a></p>
+<p>如下展示了基于XML的配置元数据的基本结构：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;
+        &lt;!-- collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;
+        &lt;!-- collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- more bean definitions go here --&gt;
+
+&lt;/beans&gt;
+</code></pre><p><code>id</code>属性是一个字符串，用来鉴别bean定义的唯一性；<code>class</code>属性定义了bean的类型，且使用的是全限定类名。id属性的值涉及到对象协作。在这个例子中，XML没有展现协作对象之间的引用；获取更多信息，请查看<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-dependencies" target="_blank" rel="external">依赖</a></p>
+<h4 id="3-2-2-实例化一个容器"><a href="#3-2-2-实例化一个容器" class="headerlink" title="3.2.2 实例化一个容器"></a>3.2.2 实例化一个容器</h4><p>实例化一个Spring IoC容器很简单，提供给ApplicationContext的构造器的位置路径（可以多个）就是实际的资源位置字符串，他们允许容器从一系列的外部资源，如本地文件系统，从Java <code>classpath</code>等加载配置元数据。</p>
+<pre><code>ApplicationContext context =
+    new ClassPathXmlApplicationContext(new String[] {&quot;services.xml&quot;, &quot;daos.xml&quot;});
+</code></pre><p>注：在你了解了Spring IoC容器后，你也许想知道更多的关于Spring的<code>Resource</code>抽象，正如在第四章，资源中描述的一样，资源提供了方便的机制读取来自URI语法定义的位置的输入。尤其Resource路径被用来构建应用 上下文，正如<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#resources-app-ctx" target="_blank" rel="external">4.7节 应用上下文和资源路径</a>所描述的。</p>
+<p>如下展示了服务层对象配置文件<code>（services.xml）</code>:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;!-- services --&gt;
+
+    &lt;bean id=&quot;petStore&quot; class=&quot;org.springframework.samples.jpetstore.services.PetStoreServiceImpl&quot;&gt;
+        &lt;property name=&quot;accountDao&quot; ref=&quot;accountDao&quot;/&gt;
+        &lt;property name=&quot;itemDao&quot; ref=&quot;itemDao&quot;/&gt;
+        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- more bean definitions for services go here --&gt;
+
+&lt;/beans&gt;
+</code></pre><p>如下展示了数据访问对象配置文件<code>（daos.xml）</code>：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;bean id=&quot;accountDao&quot;
+        class=&quot;org.springframework.samples.jpetstore.dao.jpa.JpaAccountDao&quot;&gt;
+        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id=&quot;itemDao&quot; class=&quot;org.springframework.samples.jpetstore.dao.jpa.JpaItemDao&quot;&gt;
+        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- more bean definitions for data access objects go here --&gt;
+
+&lt;/beans&gt;
+</code></pre><p>之前的例子中，服务层由<code>PetStoreServiceImpl</code>类与<code>JpaAccountDao</code> 和<code>JpaItemDao</code>（基于JPA对象/关系映射标准）两个数据访问对象类型组成，<code>property name</code>元素引用Javabean的属性名字，<code>ref</code>元素引用另一个bean定义的名称。id和ref之间的链接了表达了协作对象之间的依赖。想了解一个对象的依赖的详细配置方式，查看<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-dependencies" target="_blank" rel="external">依赖</a>。</p>
+<h5 id="基于XML的配置元数据的组成"><a href="#基于XML的配置元数据的组成" class="headerlink" title="基于XML的配置元数据的组成"></a>基于XML的配置元数据的组成</h5><p>把bean的定义放到多个XML文件中是有用的。在你的架构中，常常每个独立的XML配置文件代表一个逻辑层或模块。</p>
+<p>你可以使用应用上下文构造器来从所有这些XML片段中加载bean的定义。这个构造器提取多<code>Resource</code>位置，如前一节所示。作为一种选择，使用一个或多个<code>&lt;import/&gt;</code>元素来从别的文件加载bean定义，如：</p>
+<pre><code>&lt;beans&gt;
+    &lt;import resource=&quot;services.xml&quot;/&gt;
+    &lt;import resource=&quot;resources/messageSource.xml&quot;/&gt;
+    &lt;import resource=&quot;/resources/themeSource.xml&quot;/&gt;
+
+    &lt;bean id=&quot;bean1&quot; class=&quot;...&quot;/&gt;
+    &lt;bean id=&quot;bean2&quot; class=&quot;...&quot;/&gt;
+&lt;/beans&gt;
+</code></pre><p>在前面的例子中，外部的bean定义加载自三个文件：<code>services.xml</code>, <code>messageSource.xml</code>, 和<code>themeSource.xml</code>。所有的位置路径与导入的定义文件相关，因此<code>services.xml</code>必须在完全一样的目录，或classpath位置中，正如文件中的导入活动。因此，<code>messageSource.xml</code> 和 <code>themeSource.xml</code>必须在一个<code>Resource</code>位置中，这个位置在导入文件的位置下。    如你所见，一个引导斜线被忽视了，但是如果加上了斜线，这些路径就是相对的，不使用斜线是更好的格式。一旦文件的内容被导入，包括最上层的<code>&lt;beans/&gt;</code>元素，都必须根据Spring的模式校验XMLbean的定义。</p>
+<p>注：<em>使用相对路径（../）引用在父目录中的文件是可以的，但是不建议这样做。如果这样做了，就会创建一个不再当前应用中的文件的依赖。尤其，这个不建议用于“classpath：”URLs (例如, “classpath:../services.xml”),运行时的解决方法是选择“最近”的classpath的根目录，之后在它的父目录中搜寻。Classpath配置的改变会导致选择一个不同的错误的目录。</em></p>
+<p><em>你可以总是资源的全限定位置而不是相对路径：如，”file:C:/config/services.xml” 或”classpath:/config/services.xml”。然而，你应该意识到你正在使你的应用的配置与特殊的绝对位置相耦合了。</em></p>
+<p>import指令是beans命名空间本身提供的一个特征。超出了普通的bean定义的，更深层次的配置特征在一个选择的spring提供的XML命名空间中是可用的，如，“context”和“util”命名空间。</p>
+<h5 id="Groovy的bean定义——DSL（领域专用语言）"><a href="#Groovy的bean定义——DSL（领域专用语言）" class="headerlink" title="Groovy的bean定义——DSL（领域专用语言）"></a>Groovy的bean定义——DSL（领域专用语言）</h5><p>作为一个具体的配置元数据的高级例子，bean定义也可以通过spring的Groovy的bean定义——DSL来表示，这可以通过Grails框架来了解。通常来说，这样的配置是配置在一个.groovy文件中的，其结构如下：</p>
+<p>beans{<br>    dataSource(BasicDataSource) {<br>   driverClassName = “org.hsqldb.jdbcDriver”<br>url = “jdbc:hsqldb:mem:grailsDB”<br>username = “sa”<br>password = “”<br>settings = [mynew:”setting”]<br>}<br>sessionFactory(SessionFactory) {<br>dataSource = dataSource<br>}<br>myService(MyService) {<br>nestedBean = { AnotherBean bean -&gt;<br>dataSource = dataSource<br>}<br>}<br>}</p>
+<p>这中配置的格式大部分等价于XMLbean定义，甚至支持spring的XML配置命名空间。通过一个“importBeans”指令，这种配置也允许导入XML bean定义文件。</p>
+<h4 id="3-2-3-使用容器"><a href="#3-2-3-使用容器" class="headerlink" title="3.2.3 使用容器"></a>3.2.3 使用容器</h4><p><code>ApplicationContext</code>是一个高级工厂接口，并且有能力维护不同的beans的注册和他们的依赖。使用方法<code>T getBean(String name, Class&lt;T&gt; requiredType)</code>，可以检索你的bean的实体。</p>
+<p><code>ApplicationContext</code>使你能够读取bean定义并使用他们，如下所示：</p>
+<pre><code>// create and configure beans
+ApplicationContext context = new ClassPathXmlApplicationContext(&quot;services.xml&quot;, &quot;daos.xml&quot;);
+
+// retrieve configured instance
+PetStoreService service = context.getBean(&quot;petStore&quot;, PetStoreService.class);
+
+// use configured instance
+List&lt;String&gt; userList = service.getUsernameList();
+</code></pre><p>使用Groovy的配置，引导程序看起来与上面非常相似，只是一个不同的上下文实现类，体现出Groovy（但也了解XML bean的定义）</p>
+<pre><code>ApplicationContext context = new GenericGroovyApplicationContext(&quot;services.groovy&quot;, &quot;daos.groovy&quot;);
+</code></pre><p>结合阅读器代理，<code>GenericApplicationContext</code>成为最灵活多变的变体，例如与读取XML文件的<code>XmlBeanDefinitionReader</code>相结合：</p>
+<pre><code>GenericApplicationContext context = new GenericApplicationContext();
+new XmlBeanDefinitionReader(ctx).loadBeanDefinitions(&quot;services.xml&quot;, &quot;daos.xml&quot;);
+   context.refresh();
+</code></pre><p>与读取Groovy文件的<code>GroovyBeanDefinitionReader</code>相结合：</p>
+<pre><code>GenericApplicationContext context = new GenericApplicationContext();
+new GroovyBeanDefinitionReader(ctx).loadBeanDefinitions(&quot;services.groovy&quot;, &quot;daos.groovy&quot;);
+   context.refresh();
+</code></pre><p>如果需要，这些阅读器代理可以在同一个<code>ApplicationContext</code>上混合和配合使用，从不同的配置源读取bean定义。</p>
+<p>之后你可以使用getBean检索bean的实体。<code>ApplicationContext</code>接口还有几个别的方法可以检索beans，理想的应用编码不应该使用它们。的确，你的应用编码不应该调用<code>getBean()</code>方法，从而你的应用一点都不依赖Spring APIs。例如，Spring与web框架的集成为了不同的web框架组件提供依赖注入，这些组件如controller和JSF管理beans,允许你声明通过元数据在特殊的bean上声明依赖（如，autowiring 注解）</p>
+<h3 id="Bean概览"><a href="#Bean概览" class="headerlink" title="Bean概览"></a>Bean概览</h3><p>一个Spring IoC容器管理一个或多个beans。这些beans是通过提供给容器的配置元数据来创建的，如在XML<code>&lt;beans/&gt;</code>标签中定义的格式。</p>
+<p>在容器中，这些bean定义被描述为<code>BeanDefinition</code>对象，这些对象包含（以及其他信息）如下的元数据</p>
+<ul>
+<li>一个包全限定类名：典型地实际实现类型</li>
+<li>bean行为的配置元素，声明了bean在容器中应该有的行为（范围，声明周期回调等等）。</li>
+<li>引用那些对当前bean工作来说是必要的bean，这些引用通常叫合作者或是依赖者。</li>
+<li>别的设置在新创建的对象中的配置，如，使用在一个bean中的连接次数，可以用来管理连接池，或是限制一个连接池的大小。</li>
+</ul>
+<p>这些元数据翻译为一系列组成每个bean定义的属性。</p>
+<p>表3.1. bean定义</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Explained in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>class</td>
+<td>Section 3.3.2, “Instantiating beans”</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Section 3.3.1, “Naming beans”</td>
+</tr>
+<tr>
+<td>scope</td>
+<td>Section 3.5, “Bean scopes”</td>
+</tr>
+<tr>
+<td>constructor arguments</td>
+<td>Section 3.4.1, “Dependency Injection”</td>
+</tr>
+<tr>
+<td>properties</td>
+<td>Section 3.4.1, “Dependency Injection”</td>
+</tr>
+<tr>
+<td>autowiring mode</td>
+<td>Section 3.4.5, “Autowiring collaborators”</td>
+</tr>
+<tr>
+<td>lazy-initialization mode</td>
+<td>Section 3.4.4, “Lazy-initialized beans”</td>
+</tr>
+<tr>
+<td>initialization method</td>
+<td>the section called “Initialization callbacks”</td>
+</tr>
+<tr>
+<td>destruction method</td>
+<td>the section called “Destruction callbacks”</td>
+</tr>
+</tbody>
+</table>
+<p><code>ApplicationContext</code> 的实现，除了bean定义外还包含关于如何创建一个特殊的bean的信息，也允许注册已存在的，用户在容器外面创建的对象。由返回工厂实现<code>DefaultListableBeanFactory</code>的<code>getBeanFactory()</code>方法访问ApplicationContext的Bean工厂来完成这个功能。凭借方法registerSingleton(..) 和 registerBeanDefinition(..)，<code>DefaultListableBeanFactory</code>支持注册。然而，有经过元数据定义的beans定义，典型的应用能独立工作。</p>
+<p><em>注：Bean metadata and manually supplied singleton instances need to be registered as early as possible, in order for the container to properly reason about them during autowiring and other introspection steps. While overriding of existing metadata and existing singleton instances is supported to some degree, the registration of new beans at runtime (concurrently with live access to factory) is not officially supported and may lead to concurrent access exceptions and/or inconsistent state in the bean container</em>.</p>
+<h4 id="命名-beans"><a href="#命名-beans" class="headerlink" title="命名 beans"></a>命名 beans</h4><p>每个bean都有一个或多个标识符。在持有bean的容器中，这些标识符必须是独一无二的。一个bean通常只有一个标识符，但如果需要多个标识符，额外的可以看做别名。</p>
+<p>在基于XML的配置元数据中，使用<code>id</code>和/或<code>name</code>属性来指定bean标识符。<code>id</code>属性允许精确指定一个ID。按照惯例，这些名称是字母和数字的组合（’myBean’,’fooService’等），但也可以含有特殊字符。如果你想采用bean的别名，你可以在<code>name</code>属性中指定他们，并通过逗号（,），分号（；）或空格分隔。按历史的标记，在版本Spring3.1前，<code>id</code>属性被定义为<code>xsd:ID</code> 类型，它约束合理的字符。从3.1开始，<code>id</code>属性被定义为<code>xsd:string</code>类型。注意，尽管不再通过XML解析，但容器依然强制bean id独一无二的特性。</p>
+<p>不要求你给bean提供一个名称或ID。如果没有明确的提供名称或ID，容器会给bean生成一个独一无二的名称。然而，如果你想通过名称引用bean，或通过使用<code>ref</code>元素或者<a href="">服务定位器</a>来查看bean,都必须提供一个名称。不给bean提供名称的动机是与使用<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-inner-beans" target="_blank" rel="external">内部bean</a>s和<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-autowire" target="_blank" rel="external">自动包装者</a></p>
+<blockquote>
+<p><strong>bean命名约定</strong></p>
+<p>当命名beans时，约定就是使用标准的Java实例化域名称的约定，也就是bean名称以一个小写字符开始，之后按驼峰形式。这样的名称如<code>&#39;accountManager&#39;</code>, <code>&#39;accountService&#39;</code>, <code>&#39;userDao&#39;</code>, <code>&#39;loginController&#39;</code>等等。</p>
+<p>命名beans时，一贯主张配置容易阅读和理解，如果你使用Spring AOP，这命名约定是很有帮助的，当通过名字应用通知到一系列的相关beans上时。</p>
+</blockquote>
+<p>注：通过组件扫描classpath，Spring会按如下规则为没有命名的组件生成bean名称：基本上是，获取简单的class名称，把第一个字母变为小写。然而在特殊的情况下，有超过一个字符且第一个和第二个字符都是大写，原始的方式就不起作用了。    这些规则与<code>java.beans.Introspector.decapitalize</code>（Spring在这里用到的）定义的规则是相同的。</p>
+<h5 id="Aliasing-a-bean-outside-the-bean-definition"><a href="#Aliasing-a-bean-outside-the-bean-definition" class="headerlink" title="Aliasing a bean outside the bean definition"></a>Aliasing a bean outside the bean definition</h5><p>在bean的自定义中，可以提供多个名称给bean，通过使用一个组合决定一个名称，该名称由<code>id</code>属性和在<code>name</code>属性中任何数量的名称指定。这些名称可以等价于同一个bean的别名，且在许多情况下是有用的，比如，通过使用一个特殊的bean名称，允许在同一个应用中的每个组件引用一个共同的依赖。</p>
+<p>然而，在bean被实际定义的地方指定所有的别名并不总是适合的，。有时为一个在其他地方定义的bean启用一个别名是值得的。这种情况在大型系统是常见的，这种系统中配置被分配到每个子系统，每个子系统都有它自己的一系列对象定义。在基于XML的配置元数据中，可以使用<alias>元素来完成别名的定义：</alias></p>
+<pre><code>&lt;alias name=&quot;fromName&quot; alias=&quot;toName&quot;/&gt;
+</code></pre><p>在这种情况下，在同一个容器，一个bean被命名为<code>fromName</code>，也许，在使用完这个别名定义后，又被<code>toName</code>引用。</p>
+<p>例如，子系统A的配置元数据引用名称为<code>subsystemA-dataSource</code>的DataSource。子系统B的配置元数据引用名称为<code>subsystemB-dataSource</code>的DataSource。当使用这两个子系统来组合成一个主应用，且这个主应用引用名称为<code>myApp-dataSource</code>的DataSource。为了使这三个名称引用相同的对象，需要添加如下的别名定义到MyApp配置元数据：</p>
+<pre><code>&lt;alias name=&quot;subsystemA-dataSource&quot; alias=&quot;subsystemB-dataSource&quot;/&gt;
+&lt;alias name=&quot;subsystemA-dataSource&quot; alias=&quot;myApp-dataSource&quot; /&gt;
+</code></pre><p>现在，每个组件和主应用都可以通过一个独立的（有效的创建一个命名空间），并且保证不与其他定义冲突的名称来引用dataSource，而且引用的是相同的bean。</p>
+<blockquote>
+<p><strong>Java 配置</strong></p>
+<p>如果使用Java配置，@Bean注解可以用来提供别名，详情见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-java-bean-annotation" target="_blank" rel="external"> 3.12.3, “使用 @Bean 注解”</a>。</p>
+</blockquote>
+<h4 id="3-3-2-实例化bean"><a href="#3-3-2-实例化bean" class="headerlink" title="3.3.2 实例化bean"></a>3.3.2 实例化bean</h4><p>一个bean的定义本质上来说是一个创建一个或多个对象的食谱。当接收到请求，容器会查询食谱找到一个命名的bean，并使用被bean定义封装的配置元数据来创建一个实际的对象。</p>
+<p>如果你使用的是基于XML的配置元数据，指定实例化在<code>&lt;bean/&gt;</code>元素中的<code>class</code>属性中的对象类型。这个class属性，内部是一个在<code>BeanDefinition</code> 实体上的Class属性，通常是强制的。（例子见，“<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-class-instance-factory-method" target="_blank" rel="external">使用一个实例工厂方法实例化</a>”这节和 3.7 “<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-child-bean-definitions" target="_blank" rel="external">Bean定义的继承</a>”）。有一种或两种方法使用<code>Class</code>属性。</p>
+<ul>
+<li>典型地是为了指定构造bean的类，容器直接通过调用构造函数创建bean的情况，有点像使用Java代码的<code>new</code>操作。</li>
+<li>为了指定包含用来创建对象的静态工厂方法的实际类类型，容器回调一个在类中的静态工厂方法来创建对象并不是常见的情况。</li>
+</ul>
+<blockquote>
+<p><strong>内部类名称</strong>。如果你想为一个<code>static</code>的内部类（nested class）配置一个bean定义,你必须使用这个内部类的二元名称。</p>
+<p>例如，如果你在<code>com.example</code>包中有一个名叫Foo的类,且在Foo中有一个<code>static</code>内部类叫Bar，那么一个bean定义中的<code>class</code>属性的值会是：</p>
+<pre><code>com.example.Foo$Bar
+</code></pre><p>注意在类名称中使用<code>$</code>字符来分隔内部类名称和外部类名称。</p>
+</blockquote>
+<h5 id="构造函数实例化"><a href="#构造函数实例化" class="headerlink" title="构造函数实例化"></a>构造函数实例化</h5><p>当通过构造方法来创建一个bean时，对所有正常的类都是可以的，并且与Sprin是兼容的。也就是说，开发的类（class）不必实现任何特殊的接口，或者以特殊的方式编码。简单地指定bean类就足够了。但是，根据你用什么类型的IoC来定义特殊bean，你也许需要一个默认的构造函数。</p>
+<p>Spring IoC容器实质上能管理任何你想管理的类型；不限制管理真实的JavaBean。在容器中，大部分的Spring使用者更喜欢只有一个默认构造函数的和在内容之后有恰当的setter和getter模式的真实JavaBean。在容器中，你可能有更特殊的非bean风格的类。例如，如果你需要使用一个遗留下来的连接池，它绝对不遵循JavaBean规范，Spring也可以管理它。</p>
+<p>通过基于XML的配置元数据，你可以照着下面指定你的bean:</p>
+<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;/&gt;
+
+&lt;bean name=&quot;anotherExample&quot; class=&quot;examples.ExampleBeanTwo&quot;/&gt;
+</code></pre><p>关于提供参数给构造函数和在对象被创建之后设置对象实体的内容的原理的详细信息，见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-collaborators" target="_blank" rel="external">注入依赖</a></p>
+<h5 id="静态工厂方法实例化"><a href="#静态工厂方法实例化" class="headerlink" title="静态工厂方法实例化"></a>静态工厂方法实例化</h5><p>当定义一个用静态工厂方法来创建的bean时，使用<code>class</code>属性来指定包含<code>static</code>工厂方法的的类，使用<code>factory-method</code>属性来指定工厂方法本身的名称。你应该可以调用这个方法，返回一个存活的对象，随后被认为是否已经通过构造函数被创建。这样的bean定义的一个用法是在遗留代码中调用静态工厂。</p>
+<p>如下的bean定义表明bean将通过调用一个工厂方法来创建。这个定义没有指定返回对象的类型（class）,只指定了含有工厂的类。在这个例子中，<code>createInstance()</code>方法必定是一个静态方法。</p>
+<pre><code>&lt;bean id=&quot;clientService&quot;
+    class=&quot;examples.ClientService&quot;
+    factory-method=&quot;createInstance&quot;/&gt;
+</code></pre><p>-</p>
+<pre><code>public class ClientService {
+    private static ClientService clientService = new ClientService();
+    private ClientService() {}
+
+    public static ClientService createInstance() {
+        return clientService;
+    }
+}
+</code></pre><p>关于提供参数给工厂方法和对象在工厂返回后设置对象实体内容的原理的详细信息，见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-properties-detailed" target="_blank" rel="external">依赖和配置详情</a></p>
+<h5 id="使用一个实例工厂方法实例化"><a href="#使用一个实例工厂方法实例化" class="headerlink" title="使用一个实例工厂方法实例化"></a>使用一个实例工厂方法实例化</h5><p>与静态工厂方法实例化类似，通过一个实例工厂方法实例化，会回调一个已经存在容器中的bean的非静态的方法来创建一个新的bean。    为了使用该原理，保留<code>class</code>属性为空，并在<code>factory-bean</code>属性中，为在当前（或父/祖先）容器中的bean指定名称，该bean包含用来创建对象的实例方法。通过<code>factory-method</code>属性为工厂方法本身设置名称。</p>
+<pre><code>&lt;!-- the factory bean, which contains a method called createInstance() --&gt;
+&lt;bean id=&quot;serviceLocator&quot; class=&quot;examples.DefaultServiceLocator&quot;&gt;
+    &lt;!-- inject any dependencies required by this locator bean --&gt;
+&lt;/bean&gt;
+
+&lt;!-- the bean to be created via the factory bean --&gt;
+&lt;bean id=&quot;clientService&quot;
+    factory-bean=&quot;serviceLocator&quot;
+    factory-method=&quot;createClientServiceInstance&quot;/&gt;
+</code></pre><p>.</p>
+<pre><code>public class DefaultServiceLocator {
+
+    private static ClientService clientService = new ClientServiceImpl();
+    private DefaultServiceLocator() {}
+
+    public ClientService createClientServiceInstance() {
+        return clientService;
+    }
+}
+</code></pre><p>如下，一个工厂类可以拥有多余一个的工厂方法：</p>
+<pre><code>&lt;bean id=&quot;serviceLocator&quot; class=&quot;examples.DefaultServiceLocator&quot;&gt;
+    &lt;!-- inject any dependencies required by this locator bean --&gt;
+&lt;/bean&gt;
+
+&lt;bean id=&quot;clientService&quot;
+    factory-bean=&quot;serviceLocator&quot;
+    factory-method=&quot;createClientServiceInstance&quot;/&gt;
+
+&lt;bean id=&quot;accountService&quot;
+    factory-bean=&quot;serviceLocator&quot;
+    factory-method=&quot;createAccountServiceInstance&quot;/&gt;
+</code></pre><p>.</p>
+<pre><code>public class DefaultServiceLocator {
+
+    private static ClientService clientService = new ClientServiceImpl();
+    private static AccountService accountService = new AccountServiceImpl();
+
+    private DefaultServiceLocator() {}
+
+    public ClientService createClientServiceInstance() {
+        return clientService;
+    }
+
+    public AccountService createAccountServiceInstance() {
+        return accountService;
+    }
+
+}
+</code></pre><p>这种方式表明工厂bean(factory bean )本身可以通过依赖注入（DI）来管理和配置，见见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-properties-detailed" target="_blank" rel="external">依赖和配置详情</a></p>
+<p>注意：在Spring文档中，工厂bean(factory bean)指的是这样一种bean，就是被配置在Spring容器中，可以通过<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-class-instance-factory-method" target="_blank" rel="external">实例</a>或<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-class-static-factory-method" target="_blank" rel="external">静态</a>工厂方法来创建对象的bean。通过对比，<code>FactoryBean</code>（注意大写）是指一个特殊的Spring <a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean" target="_blank" rel="external"><code>FactoryBean</code></a></p>
+<h3 id="3-4-依赖"><a href="#3-4-依赖" class="headerlink" title="3.4 依赖"></a>3.4 依赖</h3><p>一个典型的企业应用不是由单个对象（Spring称为bean）组成。甚至最简单的应用都有几个对象协同工作，呈现给终端用户所见的是一个紧凑的应用。下一节说明你怎么从定义若干的独一无二的bean定义迈向一个完全实际的应用，该应用中对象之间为了完成一个目标而协作。</p>
+<h4 id="3-4-1-依赖注入"><a href="#3-4-1-依赖注入" class="headerlink" title="3.4.1 依赖注入"></a>3.4.1 依赖注入</h4><p><em>依赖注入</em>（DI）是一个方法，该方法通过对象定义他们的依赖，也就是与他们一起运作的别的对象，只有通过构造参数，工厂方法参数，或者是在它被构造或者从一个工厂方法返回后设置在对象实体上的内容。当容器创建bean的时候会注入那些依赖。这种方法是基础的反转，因此称<em>控制反转</em>（IoC），通过使用直接的类构造方法或者服务定位模式，bean自己控制实例化或者它自己的依赖的位置。</p>
+<p>使用DI原理，代码更清晰，当通过对象的依赖提供对象，能更有效的解耦。对象不查询它自己的依赖，也不知道依赖的位置或类。照此，你的类变得更容易测试，尤其是当依赖是接口或抽象的基类时，它们允许打桩或模仿实现被用到单元测试中。</p>
+<p>DI存在两大变体，基于构造器的依赖注入和基于Setter的依赖注入。</p>
+<h5 id="基于构造器的注入"><a href="#基于构造器的注入" class="headerlink" title="基于构造器的注入"></a>基于构造器的注入</h5><p>基于构造器的依赖注入是成熟的，通过容器回调一个有若干参数的构造器，其中的每个参数代表一个依赖。与调用一个有特殊参数的<code>static</code>工厂方法来构造bean是几乎等价的，本文论点是处理构造器的参数和类似地处理<code>static</code>工厂方法的参数。下面的例子展示的是一个只能通过构造器注入的依赖注入的的类。注意这个类没有任何特殊性，它只是一个POJO，没有依赖容器的特殊接口，基类和注解。     </p>
+<pre><code>public class SimpleMovieLister {
+
+    // the SimpleMovieLister has a dependency on a MovieFinder
+    private MovieFinder movieFinder;
+
+    // a constructor so that the Spring container can inject a MovieFinder
+    public SimpleMovieLister(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // business logic that actually uses the injected MovieFinder is omitted...
+
+}
+</code></pre><h5 id="构造参数解析"><a href="#构造参数解析" class="headerlink" title="构造参数解析"></a>构造参数解析</h5><p>使用参数类型来解决构造参数匹配的问题。如果没有潜在的不确定性存在bean定义的构造器参数中，构造器参数的顺序被定义在一个bean定义中，当bean被实例化时，正是那些参数的顺序被提供给恰当的构造器。请仔细想想下面的类：</p>
+<pre><code>package x.y;
+
+public class Foo {
+
+    public Foo(Bar bar, Baz baz) {
+        // ...
+    }
+
+}
+</code></pre><p>假设<code>Bar</code>和<code>Baz</code>类与继承不相关，那么就没有潜在的不确定性存在。如此，下面的配置就工作正常，你也不必在<code>&lt;constructor-arg/&gt;</code>元素中明确地指定构造参数索引和/或类型。</p>
+<pre><code>&lt;beans&gt;
+    &lt;bean id=&quot;foo&quot; class=&quot;x.y.Foo&quot;&gt;
+        &lt;constructor-arg ref=&quot;bar&quot;/&gt;
+        &lt;constructor-arg ref=&quot;baz&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id=&quot;bar&quot; class=&quot;x.y.Bar&quot;/&gt;
+
+    &lt;bean id=&quot;baz&quot; class=&quot;x.y.Baz&quot;/&gt;
+&lt;/beans&gt;
+</code></pre><p>当另一个bean被引用，且类型是已知的，那么匹配就可能发生（正如前面的例子）。当一个简单的类型被使用，如<code>&lt;value&gt;true&lt;/value&gt;</code>，Spring不能决定这个值的类型，因此在没有帮助的情况下不能匹配，请仔细想想下面的类：</p>
+<pre><code>package examples;
+
+public class ExampleBean {
+
+    // Number of years to calculate the Ultimate Answer
+    private int years;
+
+    // The Answer to Life, the Universe, and Everything
+    private String ultimateAnswer;
+
+    public ExampleBean(int years, String ultimateAnswer) {
+        this.years = years;
+        this.ultimateAnswer = ultimateAnswer;
+    }
+
+}
+</code></pre><p>在前面的场景中，如果使用<code>type</code>属性明确指定构造器参数的类型的话，容器就可以使用类型来匹配简单的类型，如：</p>
+<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
+    &lt;constructor-arg type=&quot;int&quot; value=&quot;7500000&quot;/&gt;
+    &lt;constructor-arg type=&quot;java.lang.String&quot; value=&quot;42&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>使用<code>index</code>属性来精确指定构造器参数的索引，如：</p>
+<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
+    &lt;constructor-arg index=&quot;0&quot; value=&quot;7500000&quot;/&gt;
+    &lt;constructor-arg index=&quot;1&quot; value=&quot;42&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>除了解决多个简单值的不确定性外，指定索引还可以解决一个构造器有两个相同类型的参数的不确定性。注意索引值是从0起步的。</p>
+<p>你也可以使用构造器参数名消除值的歧异：</p>
+<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
+    &lt;constructor-arg name=&quot;years&quot; value=&quot;7500000&quot;/&gt;
+    &lt;constructor-arg name=&quot;ultimateAnswer&quot; value=&quot;42&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>记住，为使这种配置在你的代码之外起作用，必须在调试标记可用可用的情况下编译，那样的话，Spring可以从构造器中浏览参数的名称。如果不能再调试标记下编译你的代码（或者是不想），你可以使用JDK注解 <a href="http://docs.oracle.com/javase/6/docs/api/java/beans/ConstructorProperties.html" target="_blank" rel="external">@ConstructorProperties</a>明确你的构造器参数的名称。样例类必须看起来如下：</p>
+<pre><code>package examples;
+
+public class ExampleBean {
+
+    // Fields omitted
+
+    @ConstructorProperties({&quot;years&quot;, &quot;ultimateAnswer&quot;})
+    public ExampleBean(int years, String ultimateAnswer) {
+        this.years = years;
+        this.ultimateAnswer = ultimateAnswer;
+    }
+
+}
+</code></pre><h5 id="基于setter的依赖注入"><a href="#基于setter的依赖注入" class="headerlink" title="基于setter的依赖注入"></a>基于setter的依赖注入</h5><p>基于setter的依赖注入是成熟的，</p>
+</dependencies>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;Spring-依赖和依赖于Spring&quot;&gt;&lt;a href=&quot;#Spring-依赖和依赖于Spring&quot; class=&quot;headerlink&quot; title=&quot;Spring 依赖和依赖于Spring&quot;&gt;&lt;/a&gt;Spring 依赖和依赖于Spring&lt;/h4&gt;&lt;p&gt;尽管
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>GVim的编码设置</title>
