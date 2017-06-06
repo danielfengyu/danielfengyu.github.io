@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-05T15:53:22.519Z</updated>
+  <updated>2017-06-06T15:37:58.619Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/05/02/Spring-Framework-%E6%8C%87%E5%AF%BC%E6%96%87%E6%A1%A3/"/>
     <id>http://yoursite.com/2017/05/02/Spring-Framework-指导文档/</id>
     <published>2017-05-02T14:15:58.000Z</published>
-    <updated>2017-06-05T15:53:22.519Z</updated>
+    <updated>2017-06-06T15:37:58.619Z</updated>
     
     <content type="html"><![CDATA[<h4 id="Spring-依赖和依赖于Spring"><a href="#Spring-依赖和依赖于Spring" class="headerlink" title="Spring 依赖和依赖于Spring"></a>Spring 依赖和依赖于Spring</h4><p>尽管Spring为大量的企业和其他非Spring的工具提供集成和支持， 但Spring特意使依赖于它的应用尽可能的依赖一个绝对小的包集合：为了在一个小的用例中使用Spring，你不必搜索（定位）和下载大量的jar库文件。对于基本的依赖注入，只有一个强制的外部依赖，就是日志记录相关的依赖。<br>接下来我们即将概述配置一个依赖于Spring应用所必须的基本步骤，首先，通过maven配置，接着是通过gradle配置，最后是通过Ivy配置。在任何一种配置方式下，如果有不清楚的，参考你的依赖管理系统文档，或者查看一些样例的编码——Spring本身在构建的时候就是使用gradle管理依赖的，我们的样例大多也是是应用gradle和Maven来做依赖管理的。</p>
 <h4 id="Maven-依赖管理"><a href="#Maven-依赖管理" class="headerlink" title="Maven 依赖管理"></a>Maven 依赖管理</h4><p>如果你使用的是maven做依赖管理，你甚至不必明确地提供日志相关的依赖，例如，为创建一个应用环境并使用依赖注入来配置一个应用，你的maven依赖如下：</p>
@@ -1165,7 +1165,27 @@ public class ReplacementComputeValue implements MethodReplacer {
 String
 Str
 </code></pre><p>因为参数的数量通常足够区分每个可能的选择，这个简写可以节约键入次数，允许你只键入最短的字符串就可以匹配一个参数类型。</p>
-<h3 id="3-5-Bean作用域"><a href="#3-5-Bean作用域" class="headerlink" title="3.5 Bean作用域"></a>3.5 Bean作用域</h3></table></dependencies>]]></content>
+<h3 id="3-5-Bean作用域"><a href="#3-5-Bean作用域" class="headerlink" title="3.5 Bean作用域"></a>3.5 Bean作用域</h3><p>当你创建一个bean定义的时候，实际上是为通过bean定义定义的类的创建真实的实例建立了一个菜谱。把一个bean的定义看做菜谱的观点是很重要的，因为这意味着，就一个类来说，你可以从一个单一的菜谱创建许多对象实例。</p>
+<p>你能控制的不只有各种各样的依赖和塞入一个由一个特殊的bean定义创建的对象中的配置值，而且还包括由特殊bean定义创建的对象的作用域。在你能选择的对象的作用域中，这种方法是强大和灵活的，所选折的对象是通过配置而不是必须在Java类级别的对象作用域中创建的。可以把Bean定义为部署到多个作用域中的一个：创造性地，Spring Framework 支持留个作用域，其中的五个只有在你使用web方面的<code>ApplicationContext</code>时才起效。</p>
+<p>如下的作用域支持开箱即用，你也可以创建传统的作用域：</p>
+<p><table><br>    <tr><br>        <th>Scope</th><br>        <th>描述</th><br>    </tr><br>    <tr><br>        <th>singleton</th><br>        <th>(默认)每个Spring IoC容器都会把单一的bean定义映射为一个单一的对象实例</th><br>    </tr><br>    <tr><br>        <th>prototype</th><br>        <th>把一个单一的bean定义映射到任何数量的对象实例</th><br>    </tr><br>    <tr><br>        <th>request</th><br>        <th>把一个单一的bean定义映射到单个HTTP请求的生命周期中，也就会说每个HTPP请求有一个它自身的一个bean实例，该bean反复被一个单一的bean定义创建，只有在web感知的Spring ApplicationContext的上下文中才有效</th><br>    </tr><br>    <tr><br>        <th>session</th><br>        <th>Scopes a single bean definition to the lifecycle of an HTTP Session. Only valid in the context of a web-aware Spring ApplicationContext.</th><br>    </tr><br>    <tr><br>        <th>application</th><br>        <th>Scopes a single bean definition to the lifecycle of a ServletContext. Only valid in the context of a web-aware Spring ApplicationContext.</th><br>    </tr><br>    <tr><br>        <th>application</th><br>        <th>Scopes a single bean definition to the lifecycle of a WebSocket. Only valid in the context of a web-aware Spring ApplicationContext.</th><br>    </tr><br></table></p>
+<blockquote>
+<p>Spring3.0之后，一个线程级的作用域是可用的，但没有默认注册。更多的信息见<a href="http://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/javadoc-api/org/springframework/context/support/SimpleThreadScope.html" target="_blank" rel="external"><code>SimpleThreadScope</code></a>相关的文档。关于怎样注册这个作用或者其他的惯用的作用域，查看“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-factory-scopes-custom-using" target="_blank" rel="external">使用一个常用作用域</a>”这节。</p>
+</blockquote>
+<h4 id="3-5-1-单例作用域"><a href="#3-5-1-单例作用域" class="headerlink" title="3.5.1 单例作用域"></a>3.5.1 单例作用域</h4><p>一个被管理的单例bean只有一个共享的实例，所有通过ID或IDS匹配bean定义的bean请求导致一个特殊的bean实例被Spring容器返回。</p>
+<p>换句话说，当你定义一个bean定义，它被定义为一个单例，Spring IoC容器精确地创建一个通过bean定义定义的对象实例。这个单实例被存储在一个类似单例bean的缓存中，所有后面的关于这个bean的请求和引用，返回的都是这个对象。</p>
+<p><img src="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/singleton.png.pagespeed.ce.U0lSEQUK39.png" alt=""><br>Spring单例bean的概念不同于在 Gang of Four (GoF)中定义的单例模式。GoF单例硬编码一个对象的作用域，对于每个类加载器一个特殊的类只被创建一次，Spring单例的作用域最好描述为一个容器一个bean。这意味着在一个单一的容器中如果你为一个特殊的类定义了一个bean，那么Spring容器创建一个，且只创建一个通过bean定义定义的类实例。Spring中的单例作用域就是默认的作用域。为了在XML文件中把一个bean定义为单例，你会像下面一样编写这个XML文件：</p>
+<pre><code>&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.DefaultAccountService&quot;/&gt;
+
+&lt;!-- the following is equivalent, though redundant (singleton scope is the default) --&gt;
+&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.DefaultAccountService&quot; scope=&quot;singleton&quot;/&gt;
+</code></pre><h3 id="3-5-2-原型作用域"><a href="#3-5-2-原型作用域" class="headerlink" title="3.5.2 原型作用域"></a>3.5.2 原型作用域</h3><p>非单例，bean的原型作用域的部署导致一个新的bean实例创建，每次对这个特殊bean的请求都会创建这个bean。也就是说，这个bean被注入到另一个bean中，或者你可以通过getBean()方法在容器上回调来请求这个bean。作为一个规则，为所有有状态的bean使用原型作用域，为所有的无状态的bean使用单例。</p>
+<p>下图阐明了Spring的原型作用域，一个数据访问对象（DAO）通常不配置为一个原型，因为一个典型的DAO没有持有任何的会话状态。这里作者只是简单的复用单例图的核心：</p>
+<p><img src="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/prototype.png.pagespeed.ce._EP1ydjN29.png" alt=""><br>如下例子，在XML文件中定义了一个原型bean：</p>
+<pre><code>&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.DefaultAccountService&quot; scope=&quot;prototype&quot;/&gt;
+</code></pre><p>与其他的作用域进行对比，Spring并没有管理一个原型bean的完整生命周期：容器实例化、配置，另外还集合一个原型对象，并把它推送给用户，除此之外并没有更多的关于原型实例的记录。    那就是，尽管初始化生命周期的回调方法在所有不分作用域的对象上被调用，但是在原型作用域的情况下，销毁生命周期回调函数的配置不被调用。客户端代码必须清理原型作用域对象，并且释放原型bean占有的宝贵的资源。为了获得Spring容器释放的被原型作用域bean占有的资源，试着使用一个常用的 bean 提交处理器，该处理器拥有需要被清理的bean的引用。</p>
+<p>某些情况下，Spring容器关于原型作用域bean的角色是Java new操作符的代替者。全生命周期管理越过那个点，就必须被客户端处理。（关于Spring容器中的bean的生命周期的详细信息，可以参考3.6.1节，“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-factory-lifecycle" target="_blank" rel="external">生命周期回调</a>”）</p>
+</table></dependencies>]]></content>
     
     <summary type="html">
     
