@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-06T15:37:58.619Z</updated>
+  <updated>2017-07-11T13:56:20.640Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,44 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>webpack 入门</title>
+    <link href="http://yoursite.com/2017/07/11/webpack-%E5%85%A5%E9%97%A8/"/>
+    <id>http://yoursite.com/2017/07/11/webpack-入门/</id>
+    <published>2017-07-11T13:36:14.000Z</published>
+    <updated>2017-07-11T13:56:20.640Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="创建第一个webpack的前端项目"><a href="#创建第一个webpack的前端项目" class="headerlink" title="创建第一个webpack的前端项目"></a>创建第一个webpack的前端项目</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>安装nodejs和npm（nodejs package managemer），新版本的nodejs都是自带npm的，安装完nodejs，默认就安装了npm，最好是把npm的包下载路径指向国内的镜像，方便下载。常用的有cnpm。</p>
+<h2 id="初始化webpack前端工程"><a href="#初始化webpack前端工程" class="headerlink" title="初始化webpack前端工程"></a>初始化webpack前端工程</h2><ul>
+<li>mkdir webpack-demo &amp; cd webpack-demo</li>
+<li>npm init -y</li>
+<li>npm install –save-dev webpack</li>
+</ul>
+<h2 id="创建目录结构"><a href="#创建目录结构" class="headerlink" title="创建目录结构"></a>创建目录结构</h2><ul>
+<li>mkdir src</li>
+<li>mkdir dist</li>
+<li>在src目录下创建 index.js文件，其中的内容</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      webpack是前端代码的包管理工具，依赖管理工具，类似后端开发中的maven
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="总结" scheme="http://yoursite.com/tags/%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Spring Framework 指导文档</title>
     <link href="http://yoursite.com/2017/05/02/Spring-Framework-%E6%8C%87%E5%AF%BC%E6%96%87%E6%A1%A3/"/>
     <id>http://yoursite.com/2017/05/02/Spring-Framework-指导文档/</id>
     <published>2017-05-02T14:15:58.000Z</published>
-    <updated>2017-06-06T15:37:58.619Z</updated>
+    <updated>2017-06-06T15:37:58.620Z</updated>
     
     <content type="html"><![CDATA[<h4 id="Spring-依赖和依赖于Spring"><a href="#Spring-依赖和依赖于Spring" class="headerlink" title="Spring 依赖和依赖于Spring"></a>Spring 依赖和依赖于Spring</h4><p>尽管Spring为大量的企业和其他非Spring的工具提供集成和支持， 但Spring特意使依赖于它的应用尽可能的依赖一个绝对小的包集合：为了在一个小的用例中使用Spring，你不必搜索（定位）和下载大量的jar库文件。对于基本的依赖注入，只有一个强制的外部依赖，就是日志记录相关的依赖。<br>接下来我们即将概述配置一个依赖于Spring应用所必须的基本步骤，首先，通过maven配置，接着是通过gradle配置，最后是通过Ivy配置。在任何一种配置方式下，如果有不清楚的，参考你的依赖管理系统文档，或者查看一些样例的编码——Spring本身在构建的时候就是使用gradle管理依赖的，我们的样例大多也是是应用gradle和Maven来做依赖管理的。</p>
 <h4 id="Maven-依赖管理"><a href="#Maven-依赖管理" class="headerlink" title="Maven 依赖管理"></a>Maven 依赖管理</h4><p>如果你使用的是maven做依赖管理，你甚至不必明确地提供日志相关的依赖，例如，为创建一个应用环境并使用依赖注入来配置一个应用，你的maven依赖如下：</p>
@@ -1227,7 +1260,7 @@ Str
     <link href="http://yoursite.com/2017/03/19/%E6%88%91%E7%9A%84%E9%98%85%E8%AF%BB%E6%B8%85%E5%8D%95/"/>
     <id>http://yoursite.com/2017/03/19/我的阅读清单/</id>
     <published>2017-03-19T09:47:00.000Z</published>
-    <updated>2017-07-09T12:08:56.082Z</updated>
+    <updated>2017-08-06T12:24:17.663Z</updated>
     
     <content type="html"><![CDATA[<h1 id="《未来简史》"><a href="#《未来简史》" class="headerlink" title="《未来简史》"></a>《未来简史》</h1><hr>
 <h2 id="作品简介"><a href="#作品简介" class="headerlink" title="作品简介"></a>作品简介</h2><p>本书的作者是以色列的尤瓦尔.赫拉利，他本人是一个研究历史的历史学家，但他却在很多方面都有自己独到的见解，因此，从他的作品中，我们会发现他在讲述历史并不单单是只从历史范畴来阐明他的观点。他一般会旁征博引，如他的《人类简史》，讲述的是人类发展的变迁史。但其中涉及极其广泛，包括生物学、物理学、社会学等。所以读他的作品，并不会是我们的思维受到限制，相反，通过它睿智的文笔和独特视角我们会看到一个不一样的世界。他的作品都是各个学科交叉的，所以不管你是什么专业的人，你都能从他的作品中得到一些启示。你会认为他的作品不够专业，但是你有没有想过，当今的任何学科都不可能孤立存在，就像历史，难道我们只能去抛开一堆土，告诉你这大概是哪个时代的泥土吗？不，那绝对枯燥而没有说服力，一个优秀的历史学家除了侃侃而谈的告诉你他的历史见解外，一般会用上其他学科的研究成果来佐证他的推断，比如生物学。</p>
@@ -1270,6 +1303,10 @@ Str
 <p>该书有个特点，对于一些古怪的问题的回答都是有板有眼的，通过阅读本书，我们可以轻松愉快的学到许多的物理知识，这些都是经过验证了的知识，只是作者换了一种方式告诉你，使得这些理论知识不显得过于晦涩、枯燥和教条。</p>
 <p>并不像人们普遍认为的那样不是每个问题都有答案，在本书中，作者就教给我们这样一个道理，每个问题都有答案，但要我们发挥想象，用我们已有的知识都能解答大部分了。</p>
 <h2 id="个人感悟-7"><a href="#个人感悟-7" class="headerlink" title="个人感悟"></a>个人感悟</h2><p>并不是理论知识很难，以至于在考试中很多学生都是惨不忍睹，而是我们的教科书的表达方式有问题。如果都像本书一样，用一种有板有眼幽默方式来解释这些知识，我想一定会收到奇效。幽默并不是人的天赋，但是幽默是一个人的财富。需要学会幽默的的面对一切，包括古怪的问题和无常的人生。</p>
+<h1 id="《万物简史》"><a href="#《万物简史》" class="headerlink" title="《万物简史》"></a>《万物简史》</h1><h2 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h2><p>作者 比尔.布莱森【美】。本书描述的是衣服宏大的场景，讲述了从宇宙大爆炸到人类的产生的历史进程。很难想象这样宏大的背景，竟能通过一本书来描述和进行科学的解释，并且在描述万物的历史中顺带梳理现代各个学科的发展历史和对各个科学学科做出伟大贡献的科学家简单传记。<br>本书中我最感兴趣的是作者对当今各个学科历史发展的介绍和对那些伟大的推动人类进步的科学家的介绍，既幽默，又有科学的严肃感。科学并不一定是出自那些天才，也由那些坚守在一件事业上的添砖加瓦，转考天才，显然这个世界并没有足够多的天才，但却有足够多孜孜不倦的平凡人，他们中的一些人一生都在做同一件事，比如有些科学家，一生只收集贝类的化石，从而给给其他的古生物学家提供推断地球、声明的历史的依据。<br>作为普通人，我很难能做出改变某个学科的科学历史，但如果我能在一件事上坚持不懈，矢志不渝，奇迹还是有可能发生的。</p>
+<h2 id="个人感悟-8"><a href="#个人感悟-8" class="headerlink" title="个人感悟"></a>个人感悟</h2><p>不要认为自己渺小，其实你所知道的许多伟大的科学发现竟是那些和你养平凡的人所探索出来的。坚持你选择的事业，不因为任何外力停止它，你有可能会变得伟大，请相信，平凡并伟大不在于你的智商，而在于你坚持的情商本身。</p>
+<h1 id="《我的简史》"><a href="#《我的简史》" class="headerlink" title="《我的简史》"></a>《我的简史》</h1><h2 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h2><p>作者斯蒂芬.霍金【英】，不错他就是当今最伟大的物理学家之一，他本身就是一个传奇，但他却塑造了物理学、宇宙学的传奇。书中他自认为自己并不像别人认为的那样事一个天才，甚至他说他是在说话的年龄偏大，看上去有点笨笨，在学校考试也不是很好，他最终能进入大学还是在于一点运气，差点就没有考上。他的传奇始于目前我们所知道的他所患的疾病，在它坐上轮椅后，他的很多科学观点都渐渐清晰。</p>
+<p>##个人感悟<br>有时候并不是老天没有给你开上另一扇窗，而是你永远盯着那扇给你关上的们，或在那里怨天尤人，或是在那里祈求上天。</p>
 ]]></content>
     
     <summary type="html">
@@ -1360,7 +1397,7 @@ Str
     <link href="http://yoursite.com/2016/10/23/NodeJs-%E5%AD%A6%E4%B9%A0/"/>
     <id>http://yoursite.com/2016/10/23/NodeJs-学习/</id>
     <published>2016-10-23T08:26:26.000Z</published>
-    <updated>2016-10-23T09:48:33.050Z</updated>
+    <updated>2016-10-23T09:48:33.051Z</updated>
     
     <content type="html"><![CDATA[<h1 id="NodeJs的回调"><a href="#NodeJs的回调" class="headerlink" title="NodeJs的回调"></a>NodeJs的回调</h1><hr>
 <ul>
@@ -1424,7 +1461,7 @@ console.log(&quot;程序执行完毕。&quot;);
     <link href="http://yoursite.com/2016/10/20/npm%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"/>
     <id>http://yoursite.com/2016/10/20/npm使用介绍/</id>
     <published>2016-10-20T14:42:16.000Z</published>
-    <updated>2016-10-20T14:44:22.135Z</updated>
+    <updated>2016-10-20T14:44:22.136Z</updated>
     
     <content type="html"><![CDATA[<p><a href="http://www.runoob.com/nodejs/nodejs-npm.html" title="npm使用介绍" target="_blank" rel="external">http://www.runoob.com/nodejs/nodejs-npm.html</a></p>
 ]]></content>
@@ -1624,7 +1661,7 @@ return map[condition];
     <link href="http://yoursite.com/2016/09/04/%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE/"/>
     <id>http://yoursite.com/2016/09/04/一些疑问/</id>
     <published>2016-09-04T11:18:20.000Z</published>
-    <updated>2016-09-11T12:42:02.119Z</updated>
+    <updated>2016-09-11T12:42:02.120Z</updated>
     
     <content type="html"><![CDATA[<h1 id="1-什么是回调函数？"><a href="#1-什么是回调函数？" class="headerlink" title="1.什么是回调函数？"></a>1.什么是回调函数？</h1><blockquote>
 <p>回调函数就是你写好一个函数，让预先写好的系统来调用。你去调用系统的函数，是直调。让系统调用你的函数，就是回调。回调函数可以看成，让别人做事，传进去的额外信息。</p>
@@ -1656,7 +1693,7 @@ return map[condition];
     <link href="http://yoursite.com/2016/09/03/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8Ehexo%E7%9A%84Github%20Page/"/>
     <id>http://yoursite.com/2016/09/03/个人博客——基于hexo的Github Page/</id>
     <published>2016-09-03T11:45:37.000Z</published>
-    <updated>2016-09-04T08:58:32.609Z</updated>
+    <updated>2016-09-04T08:58:32.610Z</updated>
     
     <content type="html"><![CDATA[<h1 id="个人博客——基于hexo的Github-page"><a href="#个人博客——基于hexo的Github-page" class="headerlink" title="个人博客——基于hexo的Github.page"></a>个人博客——基于hexo的Github.page</h1><h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><ul>
 <li>安装NodeJs</li>
@@ -1788,7 +1825,7 @@ hexo server
     <link href="http://yoursite.com/2016/09/03/NodeJs%E5%AE%89%E8%A3%85/"/>
     <id>http://yoursite.com/2016/09/03/NodeJs安装/</id>
     <published>2016-09-03T09:05:58.000Z</published>
-    <updated>2016-09-03T11:21:26.536Z</updated>
+    <updated>2016-09-03T11:21:26.537Z</updated>
     
     <content type="html"><![CDATA[<h1 id="Node-js-安装及环境搭建"><a href="#Node-js-安装及环境搭建" class="headerlink" title="Node.js 安装及环境搭建"></a>Node.js 安装及环境搭建</h1><h2 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h2><p>1.NODE<a href="https://nodejs.org/en/" target="_blank" rel="external">下载 </a> ，下载对应的操作系统版本即可。</p>
 <p>2.Windows版本的NODE.js下载之后，双击即可安装，安装方式与普通的window软件相同。安装的时候记住安装的路径。</p>
