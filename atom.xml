@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-07-11T13:56:20.640Z</updated>
+  <updated>2017-08-06T14:58:52.011Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Vue学习</title>
+    <link href="http://yoursite.com/2017/08/06/Vue%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://yoursite.com/2017/08/06/Vue学习/</id>
+    <published>2017-08-06T14:53:02.000Z</published>
+    <updated>2017-08-06T14:58:52.011Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"><a href="#在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法" class="headerlink" title="在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"></a>在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法</h1><p>方法一、</p>
+<p>npm install –save-dev font-awesome</p>
+<p>在main.js里添加</p>
+<p>import ‘font-awesome/css/font-awesome.css’</p>
+<p>方法二、</p>
+<p>在官网下载代码到本地，现在应该是font-awesome-4.7，把整个文件夹放到资源文件夹中，然后在index.html中加上：</p>
+<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/font-awesome-4.7/css/font-awesome.min.css&quot;&gt;
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      学习Vue中遇到的一些问题的解决方法
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="前端" scheme="http://yoursite.com/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>webpack 入门</title>
