@@ -4,12 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Vue学习 | 山间听雨者主页</title>
+    <title>jdk 源码阅读 | 山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" itemprop="description" content="学习Vue中遇到的一些问题的解决方法">
+    <meta name="description" content="IO
+Java中一个Unicode字符占两个字节
+UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度，当字符在ASCII码的范围时，就用一个字节表示，保留了ASCII字符一个字节的编码做为它的一部分，注意的是unicode一个中文字">
     
     
     
@@ -90,10 +92,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/08/06/Vue学习/" title="Vue学习" itemprop="url">Vue学习</a>
+      <a href="/2017/08/30/jdk-源码阅读/" title="jdk 源码阅读" itemprop="url">jdk 源码阅读</a>
   </h1>
   <p class="article-time">
-    <time datetime="2017-08-06T14:53:02.000Z" itemprop="datePublished">2017-08-06</time>
+    <time datetime="2017-08-30T15:16:11.000Z" itemprop="datePublished">2017-08-30</time>
   </p>
 </header>
 	<div class="article-content">
@@ -101,23 +103,20 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"><span class="toc-number">1.</span> <span class="toc-text">在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#IO"><span class="toc-number">1.</span> <span class="toc-text">IO</span></a></li></ol>
 		</div>
 		
-		<h1 id="在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"><a href="#在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法" class="headerlink" title="在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"></a>在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法</h1><p>方法一、</p>
-<p>npm install –save-dev font-awesome</p>
-<p>在main.js里添加</p>
-<p>import ‘font-awesome/css/font-awesome.css’</p>
-<p>方法二、</p>
-<p>在官网下载代码到本地，现在应该是font-awesome-4.7，把整个文件夹放到资源文件夹中，然后在index.html中加上：</p>
-<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/font-awesome-4.7/css/font-awesome.min.css&quot;&gt;
-</code></pre>  
+		<h1 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h1><ul>
+<li>Java中一个Unicode字符占两个字节</li>
+<li>UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度，当字符在ASCII<br>码的范围时，就用一个字节表示，保留了ASCII字符一个字节的编码做为它的一部分，注意的是unicode一个中文字符占2个字节，而UTF-8一个中<br>文字符占3个字节）。从unicode到uft-8并不是直接的对应，而是要过一些算法和规则来转换</li>
+</ul>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/前端/">前端</a>
+  <span></span> <a href="/tags/后端，Java/">后端，Java</a>
   </div>
 
 
@@ -130,7 +129,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/08/06/Vue学习/" data-title="Vue学习 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2017/08/30/jdk-源码阅读/" data-title="jdk 源码阅读 | 山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -139,19 +138,11 @@ var _hmt = _hmt || [];
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/08/30/jdk-源码阅读/" title="jdk 源码阅读">
-  <strong>新一篇:</strong><br/>
-  <span>
-  jdk 源码阅读</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/07/11/webpack-入门/"  title="webpack 入门">
+<a href="/2017/08/06/Vue学习/"  title="Vue学习">
  <strong>旧一篇:</strong><br/> 
- <span>webpack 入门
+ <span>Vue学习
 </span>
 </a>
 </div>
@@ -161,7 +152,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Vue学习" data-thread-key="Vue学习" data-author-key="Daniel" data-url="http://yoursite.com/post/Vue学习"></div>
+	<div class="ds-thread" data-title="jdk 源码阅读" data-thread-key="jdk-源码阅读" data-author-key="Daniel" data-url="http://yoursite.com/post/jdk-源码阅读"></div>
 	
 </section>
 
