@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | 山间听雨者主页</title>
+    <title>山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in ">
+    <meta name="description" content="—title: jms学习遇到的坑date: 2017-12-30 10:45:02categories:tags:
+description:JMS使用中遇到的问题使用spring的消息转换器时提示的安全问题自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对">
     
     
     
@@ -90,10 +91,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/10/20/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2017/12/30/jms学习遇到的坑/" title="" itemprop="url"></a>
   </h1>
   <p class="article-time">
-    <time datetime="2017-10-20T12:49:03.277Z" itemprop="datePublished">2017-10-20</time>
+    <time datetime="2017-12-30T02:45:02.134Z" itemprop="datePublished">2017-12-30</time>
   </p>
 </header>
 	<div class="article-content">
@@ -101,19 +102,47 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#description"><span class="toc-number">1.</span> <span class="toc-text">description:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMS使用中遇到的问题"><span class="toc-number"></span> <span class="toc-text">JMS使用中遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用spring的消息转换器时提示的安全问题"><span class="toc-number">1.</span> <span class="toc-text">使用spring的消息转换器时提示的安全问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMS事务管理之JNDI数据源配置"><span class="toc-number"></span> <span class="toc-text">JMS事务管理之JNDI数据源配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Tomcat容器"><span class="toc-number">1.</span> <span class="toc-text">Tomcat容器</span></a></li></ol>
 		</div>
 		
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-  
+		<p>﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿—<br>title: jms学习遇到的坑<br>date: 2017-12-30 10:45:02<br>categories:<br>tags:</p>
+<h2 id="description"><a href="#description" class="headerlink" title="description:"></a>description:</h2><h1 id="JMS使用中遇到的问题"><a href="#JMS使用中遇到的问题" class="headerlink" title="JMS使用中遇到的问题"></a>JMS使用中遇到的问题</h1><h2 id="使用spring的消息转换器时提示的安全问题"><a href="#使用spring的消息转换器时提示的安全问题" class="headerlink" title="使用spring的消息转换器时提示的安全问题"></a>使用spring的消息转换器时提示的安全问题</h2><p>自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对应的jms消息对象，但在转发消息时候出现如下日志提示的错误。</p>
+<p>错误日志：</p>
+<p><code>Failed to build body from content. Serializable class not available to broker. Reason: java.lang.ClassNotFoundException: Forbidden class com.daniel.study.jms.model.Email! This class is not trusted to be serialized as ObjectMessage payload. Please take a look at http://activemq.apache.org/objectmessage.html for more information on how to configure trusted classes.</code></p>
+<p>导致的原因是在5.12.2 and 5.13.0版本后为了传输的对象是安全的，强制要求用户指定需要传输的对象所在的包（package），只有在指定的包下的类的对象才能使用ObjectMessage进行安全转换，也就是要指定能进行转换的对象的类所在包作为一个白名单。有两种配置白名单的方式：</p>
+<ol>
+<li>客户端配置，该方式是在5.12.2和5.13.1及之后的版本中提供的配置方式，这种方式是常用的。</li>
+</ol>
+<p>Spring配置文件中配置，配置方式如下：</p>
+<pre><code>&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  
+        &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;
+        &lt;!-- 指定可以通过ObjectMessage进行安全转换的对象的类所在的包 --&gt;
+        &lt;property name=&quot;trustedPackages&quot;&gt;
+            &lt;list&gt;
+                &lt;value&gt;com.daniel.study.jms.model&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;  
+&lt;/bean&gt;
+</code></pre><p>或</p>
+<pre><code>&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  
+        &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;
+        &lt;property name=&quot;trustAllPackages&quot; value=&quot;true&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>如上的配置就是把com.daniel.study.jms.model下的所有类都加入白名单，在该白名单下的类的对象都是可以通过spring提供的转换器进行转换的。<a href="http://activemq.apache.org/objectmessage.html" target="_blank" rel="external">参考</a></p>
+<p>java代码中设置：</p>
+<pre><code>ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);
+factory.setTrustedPackages(new ArrayList(Arrays.asList(&quot;org.apache.activemq.test,org.apache.camel.test&quot;.split(&quot;,&quot;))));
+</code></pre><p>或者</p>
+<pre><code>ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);
+factory.setTrustAllPackages(true);
+</code></pre><ol>
+<li>还可以在服务端（activeMq broker）中进行配置，这种方式的配置开始于activeMq的5.12.2和5.13.0版本，在${ACTIVEMQ_HOME}/bin/env中配置activeMq的系统属性ACTIVEMQ_OPTS：</li>
+</ol>
+<pre><code>Dorg.apache.activemq.SERIALIZABLE_PACKAGES=java.lang,javax.security,java.util,org.apache.activemq,org.fusesource.hawtbuf,com.thoughtworks.xstream.mapper,com.daniel.study.jms.model
+</code></pre><p>或</p>
+<pre><code>-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*`
+</code></pre><p>如上的设置，其中com.daniel.study.jms.model是加入白名单的包，对于broker的，其余的包默认是必须的。</p>
+<h1 id="JMS事务管理之JNDI数据源配置"><a href="#JMS事务管理之JNDI数据源配置" class="headerlink" title="JMS事务管理之JNDI数据源配置"></a>JMS事务管理之JNDI数据源配置</h1><h2 id="Tomcat容器"><a href="#Tomcat容器" class="headerlink" title="Tomcat容器"></a>Tomcat容器</h2>  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -122,7 +151,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/10/20/hello-world/" data-title="Hello World | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2017/12/30/jms学习遇到的坑/" data-title="山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -132,18 +161,18 @@ var _hmt = _hmt || [];
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/12/10/eclipse下Java Web开发环境搭建/" title="eclipse下javaweb 开发环境搭建">
+ <a href="/2017/12/31/日志系统/" title="日志系统">
   <strong>新一篇:</strong><br/>
   <span>
-  eclipse下javaweb 开发环境搭建</span>
+  日志系统</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/08/30/jdk-源码阅读/"  title="jdk 源码阅读">
+<a href="/2017/12/10/git-常用命令总结/"  title="git 常用命令总结">
  <strong>旧一篇:</strong><br/> 
- <span>jdk 源码阅读
+ <span>git 常用命令总结
 </span>
 </a>
 </div>
@@ -153,7 +182,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Hello World" data-thread-key="hello-world" data-author-key="Daniel" data-url="http://yoursite.com/post/hello-world"></div>
+	<div class="ds-thread" data-title="" data-thread-key="jms学习遇到的坑" data-author-key="Daniel" data-url="http://yoursite.com/post/jms学习遇到的坑"></div>
 	
 </section>
 

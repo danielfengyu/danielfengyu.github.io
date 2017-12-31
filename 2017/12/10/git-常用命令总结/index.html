@@ -4,12 +4,19 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | 山间听雨者主页</title>
+    <title>git 常用命令总结 | 山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in ">
+    <meta name="description" content="配置设置换行符转换由于不同操作系统的换行符不同，因此如果本地使用window开发，而远程仓库是Linux系统，导致提交不成功。
+1. 不同操作系统的换行符
+CR回车 LF换行
+Windows/Dos CRLF \r\n
+Linux/Unix LF \n
+MacOS CR \r
+
+2. 解决换行符不一">
     
     
     
@@ -90,10 +97,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/10/20/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2017/12/10/git-常用命令总结/" title="git 常用命令总结" itemprop="url">git 常用命令总结</a>
   </h1>
   <p class="article-time">
-    <time datetime="2017-10-20T12:49:03.277Z" itemprop="datePublished">2017-10-20</time>
+    <time datetime="2017-12-10T09:07:03.000Z" itemprop="datePublished">2017-12-10</time>
   </p>
 </header>
 	<div class="article-content">
@@ -101,18 +108,24 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-number">1.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置换行符转换"><span class="toc-number">1.1.</span> <span class="toc-text">设置换行符转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-不同操作系统的换行符"><span class="toc-number">1.2.</span> <span class="toc-text">1. 不同操作系统的换行符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-解决换行符不一致的设置方式"><span class="toc-number">1.3.</span> <span class="toc-text">2. 解决换行符不一致的设置方式</span></a></li></ol></li></ol>
 		</div>
 		
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+		<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="设置换行符转换"><a href="#设置换行符转换" class="headerlink" title="设置换行符转换"></a>设置换行符转换</h2><p>由于不同操作系统的换行符不同，因此如果本地使用window开发，而远程仓库是Linux系统，导致提交不成功。</p>
+<h2 id="1-不同操作系统的换行符"><a href="#1-不同操作系统的换行符" class="headerlink" title="1. 不同操作系统的换行符"></a>1. 不同操作系统的换行符</h2><ul>
+<li>CR回车 LF换行</li>
+<li>Windows/Dos CRLF \r\n</li>
+<li>Linux/Unix LF \n</li>
+<li>MacOS CR \r</li>
+</ul>
+<h2 id="2-解决换行符不一致的设置方式"><a href="#2-解决换行符不一致的设置方式" class="headerlink" title="2. 解决换行符不一致的设置方式"></a>2. 解决换行符不一致的设置方式</h2><ul>
+<li>提交时转换为LF，检出时转换为CRLF：git config –global core.autocrlf true</li>
+<li>提交时转换为LF，检出时不转换：git config –global core.autocrlf input</li>
+<li>提交检出均不转换：git config –global core.autocrlf false</li>
+<li>拒绝提交包含混合换行符的文件：git config –global core.safecrlf true</li>
+<li>允许提交包含混合换行符的文件：git config –global core.safecrlf false</li>
+<li>提交包含混合换行符的文件时给出警告：git config –global core.safecrlf warn</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -122,7 +135,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/10/20/hello-world/" data-title="Hello World | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2017/12/10/git-常用命令总结/" data-title="git 常用命令总结 | 山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -132,18 +145,18 @@ var _hmt = _hmt || [];
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/12/10/eclipse下Java Web开发环境搭建/" title="eclipse下javaweb 开发环境搭建">
+ <a href="/2017/12/30/jms学习遇到的坑/" title="">
   <strong>新一篇:</strong><br/>
   <span>
-  eclipse下javaweb 开发环境搭建</span>
+  (no title)</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/08/30/jdk-源码阅读/"  title="jdk 源码阅读">
+<a href="/2017/12/10/eclipse下Java Web开发环境搭建/"  title="eclipse下javaweb 开发环境搭建">
  <strong>旧一篇:</strong><br/> 
- <span>jdk 源码阅读
+ <span>eclipse下javaweb 开发环境搭建
 </span>
 </a>
 </div>
@@ -153,7 +166,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Hello World" data-thread-key="hello-world" data-author-key="Daniel" data-url="http://yoursite.com/post/hello-world"></div>
+	<div class="ds-thread" data-title="git 常用命令总结" data-thread-key="git-常用命令总结" data-author-key="Daniel" data-url="http://yoursite.com/post/git-常用命令总结"></div>
 	
 </section>
 

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-02T14:57:49.035Z</updated>
+  <updated>2017-12-31T13:02:45.190Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,158 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>日志系统</title>
+    <link href="http://yoursite.com/2017/12/31/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://yoursite.com/2017/12/31/日志系统/</id>
+    <published>2017-12-31T13:02:45.000Z</published>
+    <updated>2017-12-31T13:02:45.190Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title></title>
+    <link href="http://yoursite.com/2017/12/30/jms%E5%AD%A6%E4%B9%A0%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2017/12/30/jms学习遇到的坑/</id>
+    <published>2017-12-30T02:45:02.134Z</published>
+    <updated>2017-12-31T12:47:09.463Z</updated>
+    
+    <content type="html"><![CDATA[<p>﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿—<br>title: jms学习遇到的坑<br>date: 2017-12-30 10:45:02<br>categories:<br>tags:</p>
+<h2 id="description"><a href="#description" class="headerlink" title="description:"></a>description:</h2><h1 id="JMS使用中遇到的问题"><a href="#JMS使用中遇到的问题" class="headerlink" title="JMS使用中遇到的问题"></a>JMS使用中遇到的问题</h1><h2 id="使用spring的消息转换器时提示的安全问题"><a href="#使用spring的消息转换器时提示的安全问题" class="headerlink" title="使用spring的消息转换器时提示的安全问题"></a>使用spring的消息转换器时提示的安全问题</h2><p>自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对应的jms消息对象，但在转发消息时候出现如下日志提示的错误。</p>
+<p>错误日志：</p>
+<p><code>Failed to build body from content. Serializable class not available to broker. Reason: java.lang.ClassNotFoundException: Forbidden class com.daniel.study.jms.model.Email! This class is not trusted to be serialized as ObjectMessage payload. Please take a look at http://activemq.apache.org/objectmessage.html for more information on how to configure trusted classes.</code></p>
+<p>导致的原因是在5.12.2 and 5.13.0版本后为了传输的对象是安全的，强制要求用户指定需要传输的对象所在的包（package），只有在指定的包下的类的对象才能使用ObjectMessage进行安全转换，也就是要指定能进行转换的对象的类所在包作为一个白名单。有两种配置白名单的方式：</p>
+<ol>
+<li>客户端配置，该方式是在5.12.2和5.13.1及之后的版本中提供的配置方式，这种方式是常用的。</li>
+</ol>
+<p>Spring配置文件中配置，配置方式如下：</p>
+<pre><code>&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  
+        &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;
+        &lt;!-- 指定可以通过ObjectMessage进行安全转换的对象的类所在的包 --&gt;
+        &lt;property name=&quot;trustedPackages&quot;&gt;
+            &lt;list&gt;
+                &lt;value&gt;com.daniel.study.jms.model&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;  
+&lt;/bean&gt;
+</code></pre><p>或</p>
+<pre><code>&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  
+        &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;
+        &lt;property name=&quot;trustAllPackages&quot; value=&quot;true&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>如上的配置就是把com.daniel.study.jms.model下的所有类都加入白名单，在该白名单下的类的对象都是可以通过spring提供的转换器进行转换的。<a href="http://activemq.apache.org/objectmessage.html" target="_blank" rel="external">参考</a></p>
+<p>java代码中设置：</p>
+<pre><code>ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);
+factory.setTrustedPackages(new ArrayList(Arrays.asList(&quot;org.apache.activemq.test,org.apache.camel.test&quot;.split(&quot;,&quot;))));
+</code></pre><p>或者</p>
+<pre><code>ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);
+factory.setTrustAllPackages(true);
+</code></pre><ol>
+<li>还可以在服务端（activeMq broker）中进行配置，这种方式的配置开始于activeMq的5.12.2和5.13.0版本，在${ACTIVEMQ_HOME}/bin/env中配置activeMq的系统属性ACTIVEMQ_OPTS：</li>
+</ol>
+<pre><code>Dorg.apache.activemq.SERIALIZABLE_PACKAGES=java.lang,javax.security,java.util,org.apache.activemq,org.fusesource.hawtbuf,com.thoughtworks.xstream.mapper,com.daniel.study.jms.model
+</code></pre><p>或</p>
+<pre><code>-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*`
+</code></pre><p>如上的设置，其中com.daniel.study.jms.model是加入白名单的包，对于broker的，其余的包默认是必须的。</p>
+<h1 id="JMS事务管理之JNDI数据源配置"><a href="#JMS事务管理之JNDI数据源配置" class="headerlink" title="JMS事务管理之JNDI数据源配置"></a>JMS事务管理之JNDI数据源配置</h1><h2 id="Tomcat容器"><a href="#Tomcat容器" class="headerlink" title="Tomcat容器"></a>Tomcat容器</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿—&lt;br&gt;title: jms学习遇到的坑&lt;br&gt;date: 2017-12-30 10:45:02&lt;br&gt;categories:&lt;br&gt;tags:&lt;/p&gt;
+&lt;h2 id=&quot;description&quot;&gt;&lt;a href=&quot;#description&quot; c
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>git 常用命令总结</title>
+    <link href="http://yoursite.com/2017/12/10/git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/"/>
+    <id>http://yoursite.com/2017/12/10/git-常用命令总结/</id>
+    <published>2017-12-10T09:07:03.000Z</published>
+    <updated>2017-12-10T09:14:13.737Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="设置换行符转换"><a href="#设置换行符转换" class="headerlink" title="设置换行符转换"></a>设置换行符转换</h2><p>由于不同操作系统的换行符不同，因此如果本地使用window开发，而远程仓库是Linux系统，导致提交不成功。</p>
+<h2 id="1-不同操作系统的换行符"><a href="#1-不同操作系统的换行符" class="headerlink" title="1. 不同操作系统的换行符"></a>1. 不同操作系统的换行符</h2><ul>
+<li>CR回车 LF换行</li>
+<li>Windows/Dos CRLF \r\n</li>
+<li>Linux/Unix LF \n</li>
+<li>MacOS CR \r</li>
+</ul>
+<h2 id="2-解决换行符不一致的设置方式"><a href="#2-解决换行符不一致的设置方式" class="headerlink" title="2. 解决换行符不一致的设置方式"></a>2. 解决换行符不一致的设置方式</h2><ul>
+<li>提交时转换为LF，检出时转换为CRLF：git config –global core.autocrlf true</li>
+<li>提交时转换为LF，检出时不转换：git config –global core.autocrlf input</li>
+<li>提交检出均不转换：git config –global core.autocrlf false</li>
+<li>拒绝提交包含混合换行符的文件：git config –global core.safecrlf true</li>
+<li>允许提交包含混合换行符的文件：git config –global core.safecrlf false</li>
+<li>提交包含混合换行符的文件时给出警告：git config –global core.safecrlf warn</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;配置&quot;&gt;&lt;a href=&quot;#配置&quot; class=&quot;headerlink&quot; title=&quot;配置&quot;&gt;&lt;/a&gt;配置&lt;/h1&gt;&lt;h2 id=&quot;设置换行符转换&quot;&gt;&lt;a href=&quot;#设置换行符转换&quot; class=&quot;headerlink&quot; title=&quot;设置换行符转换&quot;&gt;&lt;/
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>eclipse下javaweb 开发环境搭建</title>
+    <link href="http://yoursite.com/2017/12/10/eclipse%E4%B8%8BJava%20Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+    <id>http://yoursite.com/2017/12/10/eclipse下Java Web开发环境搭建/</id>
+    <published>2017-12-10T03:54:47.000Z</published>
+    <updated>2017-12-10T10:36:01.626Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="eclipse安装"><a href="#eclipse安装" class="headerlink" title="eclipse安装"></a>eclipse安装</h1><h1 id="Tomcat安装配置"><a href="#Tomcat安装配置" class="headerlink" title="Tomcat安装配置"></a>Tomcat安装配置</h1><ol>
+<li><a href="https://tomcat.apache.org/" target="_blank" rel="external">下载</a>需要的版本</li>
+<li>解压</li>
+<li>启动，进入/bin目录双击startup.bat，启动后通过在浏览器输入<a href="http://localhost:8080访问Tomcat首页，如果启动成功，就会打开Tomcat首页" target="_blank" rel="external">http://localhost:8080访问Tomcat首页，如果启动成功，就会打开Tomcat首页</a></li>
+<li>配置环境变量</li>
+<li>给eclipse添加本地Tomcat，window-&gt;preferences-&gt;Server-&gt;Runtime Environment。如果eclipse不支持高版本的Tomcat，可以把高版本的Tomcat伪造为eclipse支持的Tomcat。把高版本的Tomcat伪造为低版本的Tomcat：1. <a href="https://www.zhihu.com/question/37809905" target="_blank" rel="external">参考</a>；2. 安装Eclipse Tomcat Plugin</li>
+</ol>
+<h1 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h1><ol>
+<li><a href="http://maven.apache.org/" target="_blank" rel="external">下载</a>需要的版本</li>
+<li>解压</li>
+<li>配置环境变量</li>
+<li>检查安装是否成功：命令行输入mvn -version,看到Maven home字样，说明安装成功。</li>
+<li>配置：在config/settings.xml中配置本地库目录<code>&lt;localRepository&gt;D:\Software App\Java\Maven\mvn_repository&lt;/localRepository&gt;</code> settings.xml文件是用来设置maven的，对maven的配置基本上都是在这个文件中完成。<br>6.</li>
+</ol>
+<h2 id="maven功能简介"><a href="#maven功能简介" class="headerlink" title="maven功能简介"></a>maven功能简介</h2><h2 id="maven基本命令"><a href="#maven基本命令" class="headerlink" title="maven基本命令"></a>maven基本命令</h2><h1 id="创建webApp项目"><a href="#创建webApp项目" class="headerlink" title="创建webApp项目"></a>创建webApp项目</h1><h2 id="创建步骤"><a href="#创建步骤" class="headerlink" title="创建步骤"></a>创建步骤</h2><ol>
+<li>右键-&gt;new-&gt;other,找到maven,选择maven project-&gt;next。</li>
+<li>选择maven-archetype-webapp后，点击next,注意,可以在filter中先输入webapp,这样就能快速找到maven-archetype-webapp选项,如果此时列出来的选择项仍然很多,就盯着version看,找version是release的。</li>
+<li>输入groupid,artifact id和packgage,点击finish,然后耐心等待,第一次新建maven会有很多依赖包要下载,所以会比较慢.取决于你的网速和电脑配置。</li>
+<li>创建中的注意事项：groupId一般分为多个段，这里我只说两段，第一段为域，第二段为公司名称。域又分为org、com、cn等等许多，其中org为非营利组织，com为商业组织。artifactId设置为项目名称依照这个设置，你的包结构最好是（域.公司名称.项目名称）打头的.当然你的package可以不是这个,也可以自由输入,输入后你新建的项目默认就会有对应的包。</li>
+<li>如果项目中的内容未报错，但项目文件夹上有错误，很可能是项目依赖的jdk版本与settings.xml文件中的java版本不同。只需要把settings.xml文件中java版本改为与eclipse引用的java版本相同即可。</li>
+<li>eclipse中使用maven创建项目JDK版本默认是1.5解决方法：1. 修改maven的settings.xml文件。添加以下行，jdk版本改为自己需要的版本：<br>` <profile><br> <id>jdk-1.7</id><br> <activation>  <pre><code>&lt;activeByDefault&gt;true&lt;/activeByDefault&gt;  
+&lt;jdk&gt;1.7&lt;/jdk&gt;  
+</code></pre> </activation><br> <properties>  <pre><code>&lt;maven.compiler.source&gt;1.7&lt;/maven.compiler.source&gt;  
+&lt;maven.compiler.target&gt;1.7&lt;/maven.compiler.target&gt;  
+&lt;maven.compiler.compilerVersion&gt;1.7&lt;/maven.compiler.compilerVersion&gt;  
+</code></pre> </properties><br></profile>`<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><a href="https://www.cnblogs.com/NieXiaoHui/p/5990570.html" target="_blank" rel="external">参考</a></li>
+</ol>
+<h1 id="MySql安装配置"><a href="#MySql安装配置" class="headerlink" title="MySql安装配置"></a>MySql安装配置</h1><ol>
+<li><a href="https://dev.mysql.com/downloads/windows/installer/" target="_blank" rel="external">下载</a>，Windows下只有32位的安装包</li>
+<li>安装，与普通软件的安装并没有区别</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;eclipse安装&quot;&gt;&lt;a href=&quot;#eclipse安装&quot; class=&quot;headerlink&quot; title=&quot;eclipse安装&quot;&gt;&lt;/a&gt;eclipse安装&lt;/h1&gt;&lt;h1 id=&quot;Tomcat安装配置&quot;&gt;&lt;a href=&quot;#Tomcat安装配置&quot; cla
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
@@ -1913,84 +2065,6 @@ hexo server
     
     
       <category term="安装学习" scheme="http://yoursite.com/tags/%E5%AE%89%E8%A3%85%E5%AD%A6%E4%B9%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NodeJs安装</title>
-    <link href="http://yoursite.com/2016/09/03/NodeJs%E5%AE%89%E8%A3%85/"/>
-    <id>http://yoursite.com/2016/09/03/NodeJs安装/</id>
-    <published>2016-09-03T09:05:58.000Z</published>
-    <updated>2016-09-03T11:21:26.537Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Node-js-安装及环境搭建"><a href="#Node-js-安装及环境搭建" class="headerlink" title="Node.js 安装及环境搭建"></a>Node.js 安装及环境搭建</h1><h2 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h2><p>1.NODE<a href="https://nodejs.org/en/" target="_blank" rel="external">下载 </a> ，下载对应的操作系统版本即可。</p>
-<p>2.Windows版本的NODE.js下载之后，双击即可安装，安装方式与普通的window软件相同。安装的时候记住安装的路径。</p>
-<p>3.配置环境变量。</p>
-<p>4.检查是否安装成功。node –version || node -v</p>
-<h2 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h2><p>1.git<a href="https://www.git-scm.com/download/" target="_blank" rel="external">下载</a></p>
-<p>2.和安装一般的window程序并无差异。</p>
-<p>3.设置git的环境变量。</p>
-<p>4.打开cmd窗口，输入 git，检查是否安装配置成功。</p>
-<h2 id="npm安装"><a href="#npm安装" class="headerlink" title="npm安装"></a>npm安装</h2><p>1.确保node和git都在环境变量PATH中</p>
-<p>2.开始-&gt; 打开Git Shell,运行命令：</p>
-<pre><code>mkdir npm
-cd npm
-git config --system http.sslcainfo /bin/curl-ca-bundle.crt
-git clone --recursive git://github.com/isaacs/npm.git
-cd npm
-node cli.js install npm –gf
-</code></pre>
-
-<p>3.git 和npm被墙的解决办法</p>
-<blockquote>
-<ul>
-<li>设置国内镜像  </li>
-<li>git撞墙的解决办法：<br>设置代理服务器，使用一些免费的或者是商用的代理下载  </li>
-<li>npm被墙的解决办法：<br>设置国内镜像 npm config set registry <a href="http://registry.npmjs.vitecho.com" target="_blank" rel="external">http://registry.npmjs.vitecho.com</a></li>
-</ul>
-</blockquote>
-<p>4.配置npm的全局模块的存放路径以及cache的路径</p>
-<blockquote>
-<ul>
-<li>启动cmd  </li>
-<li>npm config set prefix “全局模块的存放路”  </li>
-<li>npm config set cache “cache的路径”</li>
-</ul>
-</blockquote>
-<p>5.例如我的就放在Node主目录下  </p>
-<blockquote>
-<ul>
-<li>npm config set prefix “F:\nodejs\node_global”  </li>
-<li>npm config set cache “F:\nodejs\node_cache”  </li>
-</ul>
-</blockquote>
-<p>6.设置环境变量  </p>
-<blockquote>
-<ul>
-<li>NODE_PATH = F:\nodejs\node_global\node_modules  </li>
-<li>PATH = E:\nodejs\node_global\</li>
-</ul>
-</blockquote>
-<p>7.安装express测试一下npm是否安装成功</p>
-<p><pre><code>npm install express –g</code></pre></p>
-<blockquote>
-<p>-g代表安装到全局目录<br>安装成功后，在前面的node_global目录下多了一个目录node_modules/express，表示express安装成功</p>
-</blockquote>
-<h2 id="安装vue-js"><a href="#安装vue-js" class="headerlink" title="安装vue.js"></a>安装vue.js</h2><p><pre><code>#最新稳定版本<br>$ npm install vue<br></code></pre></p>
-<h1 id="最新稳定-CSP-兼容版本"><a href="#最新稳定-CSP-兼容版本" class="headerlink" title="最新稳定 CSP 兼容版本"></a>最新稳定 CSP 兼容版本</h1><p><pre><code>$ npm install vue@csp<br></code></pre></p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://www.cnblogs.com/pigtail/archive/2013/01/08/2850486.html" target="_blank" rel="external">http://www.cnblogs.com/pigtail/archive/2013/01/08/2850486.html</a><br><a href="http://xiaoyaojones.blog.163.com/blog/static/28370125201351501113581/" target="_blank" rel="external">http://xiaoyaojones.blog.163.com/blog/static/28370125201351501113581/</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Node-js-安装及环境搭建&quot;&gt;&lt;a href=&quot;#Node-js-安装及环境搭建&quot; class=&quot;headerlink&quot; title=&quot;Node.js 安装及环境搭建&quot;&gt;&lt;/a&gt;Node.js 安装及环境搭建&lt;/h1&gt;&lt;h2 id=&quot;Node-js安装&quot;&gt;&lt;a
-    
-    </summary>
-    
-      <category term="UI" scheme="http://yoursite.com/categories/UI/"/>
-    
-    
-      <category term="node.js" scheme="http://yoursite.com/tags/node-js/"/>
     
   </entry>
   
