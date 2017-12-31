@@ -9,8 +9,8 @@
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" content="—title: Jms学习过程中踩过得坑date: 2017-12-30 18:48:09categories: 学习tags: 工具类学习
-description: Jms学习JMS使用中遇到的问题使用spring的消息转换器时提示的安全问题自定义了一个普通的java对象Email,希望通过spr">
+    <meta name="description" content="—title: Jms学习遇到的坑date: 2017-12-30 18:48:09categories: 学习tags: 工具类学习
+description: Jms学习JMS使用中遇到的问题使用spring的消息转换器时提示的安全问题自定义了一个普通的java对象Email,希望通过spring">
     
     
     
@@ -91,7 +91,7 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/12/30/jms学习遇到的坑/" title="" itemprop="url"></a>
+      <a href="/2017/12/30/Jms学习遇到的坑/" title="" itemprop="url"></a>
   </h1>
   <p class="article-time">
     <time datetime="2017-12-30T02:45:02.134Z" itemprop="datePublished">2017-12-30</time>
@@ -105,7 +105,7 @@ var _hmt = _hmt || [];
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#description-Jms学习"><span class="toc-number">1.</span> <span class="toc-text">description: Jms学习</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMS使用中遇到的问题"><span class="toc-number"></span> <span class="toc-text">JMS使用中遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用spring的消息转换器时提示的安全问题"><span class="toc-number">1.</span> <span class="toc-text">使用spring的消息转换器时提示的安全问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMS事务管理之JNDI数据源配置"><span class="toc-number"></span> <span class="toc-text">JMS事务管理之JNDI数据源配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Tomcat容器"><span class="toc-number">1.</span> <span class="toc-text">Tomcat容器</span></a></li></ol>
 		</div>
 		
-		<p>﻿﻿﻿﻿﻿﻿﻿﻿﻿—<br>title: Jms学习过程中踩过得坑<br>date: 2017-12-30 18:48:09<br>categories: 学习<br>tags: 工具类学习</p>
+		<p>﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿—<br>title: Jms学习遇到的坑<br>date: 2017-12-30 18:48:09<br>categories: 学习<br>tags: 工具类学习</p>
 <h2 id="description-Jms学习"><a href="#description-Jms学习" class="headerlink" title="description: Jms学习"></a>description: Jms学习</h2><h1 id="JMS使用中遇到的问题"><a href="#JMS使用中遇到的问题" class="headerlink" title="JMS使用中遇到的问题"></a>JMS使用中遇到的问题</h1><h2 id="使用spring的消息转换器时提示的安全问题"><a href="#使用spring的消息转换器时提示的安全问题" class="headerlink" title="使用spring的消息转换器时提示的安全问题"></a>使用spring的消息转换器时提示的安全问题</h2><p>自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对应的jms消息对象，但在转发消息时候出现如下日志提示的错误。</p>
 <p>错误日志：</p>
 <p><code>Failed to build body from content. Serializable class not available to broker. Reason: java.lang.ClassNotFoundException: Forbidden class com.daniel.study.jms.model.Email! This class is not trusted to be serialized as ObjectMessage payload. Please take a look at http://activemq.apache.org/objectmessage.html for more information on how to configure trusted classes.</code></p>
@@ -151,7 +151,7 @@ factory.setTrustAllPackages(true);
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/12/30/jms学习遇到的坑/" data-title="山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2017/12/30/Jms学习遇到的坑/" data-title="山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -182,7 +182,7 @@ factory.setTrustAllPackages(true);
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="" data-thread-key="jms学习遇到的坑" data-author-key="Daniel" data-url="http://yoursite.com/post/jms学习遇到的坑"></div>
+	<div class="ds-thread" data-title="" data-thread-key="Jms学习遇到的坑" data-author-key="Daniel" data-url="http://yoursite.com/post/Jms学习遇到的坑"></div>
 	
 </section>
 
