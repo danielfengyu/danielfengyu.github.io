@@ -34,7 +34,7 @@
     <link href="http://yoursite.com/2018/01/01/JNDI%E4%BB%8B%E7%BB%8D/"/>
     <id>http://yoursite.com/2018/01/01/JNDI介绍/</id>
     <published>2018-01-01T06:16:00.000Z</published>
-    <updated>2018-01-01T07:01:21.398Z</updated>
+    <updated>2018-01-01T07:05:37.073Z</updated>
     
     <content type="html"><![CDATA[<h1 id="JNDI简介"><a href="#JNDI简介" class="headerlink" title="JNDI简介"></a>JNDI简介</h1><p>JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，类似JDBC都是构建在抽象层上</p>
 <ol>
@@ -67,7 +67,7 @@
     
     <summary type="html">
     
-      &lt;h1 id=&quot;JNDI简介&quot;&gt;&lt;a href=&quot;#JNDI简介&quot; class=&quot;headerlink&quot; title=&quot;JNDI简介&quot;&gt;&lt;/a&gt;JNDI简介&lt;/h1&gt;&lt;p&gt;JNDI(Java Naming and Directory Interface，Java命名和目录接口)是
+      JNDI是一种服务标准，定义的怎么使用服务和怎么提供服务，当然这里的使用服务一般来说是java应用程序
     
     </summary>
     
