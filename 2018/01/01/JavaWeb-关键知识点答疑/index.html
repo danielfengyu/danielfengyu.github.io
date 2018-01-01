@@ -9,6 +9,10 @@
     
     <meta name="author" content="Daniel">
     
+    <meta name="description" content="web.xml的作用web.xml文件并不是web工程必须的，只有你需要配置欢迎页、servlet、filter等的时候，才需要配置它
+web.xml的模式文件是由Sun公司定义的，每个web.xml文件的根元素中，都必须标明这个web.xml使用的是哪些模式文件。
+`&amp;lt;?xml versio">
+    
     
     
     
@@ -99,10 +103,15 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#web-xml的作用"><span class="toc-number">1.</span> <span class="toc-text">web.xml的作用</span></a></li></ol>
 		</div>
 		
-		  
+		<h1 id="web-xml的作用"><a href="#web-xml的作用" class="headerlink" title="web.xml的作用"></a>web.xml的作用</h1><p>web.xml文件并不是web工程必须的，只有你需要配置欢迎页、servlet、filter等的时候，才需要配置它</p>
+<p>web.xml的模式文件是由Sun公司定义的，每个web.xml文件的根元素<web-app>中，都必须标明这个web.xml使用的是哪些模式文件。</web-app></p>
+<p>`&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</p>
+<p><web-app version="2.5" xmlns="http://Java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"><br></web-app>`</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
