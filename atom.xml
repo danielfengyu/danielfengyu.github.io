@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-31T13:02:45.190Z</updated>
+  <updated>2018-01-01T06:16:59.934Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,13 +16,78 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>JavaWeb 关键知识点答疑</title>
+    <link href="http://yoursite.com/2018/01/01/JavaWeb-%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E7%AD%94%E7%96%91/"/>
+    <id>http://yoursite.com/2018/01/01/JavaWeb-关键知识点答疑/</id>
+    <published>2018-01-01T06:16:59.000Z</published>
+    <updated>2018-01-01T06:16:59.934Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JNDI介绍</title>
+    <link href="http://yoursite.com/2018/01/01/JNDI%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://yoursite.com/2018/01/01/JNDI介绍/</id>
+    <published>2018-01-01T06:16:00.000Z</published>
+    <updated>2018-01-01T06:32:41.373Z</updated>
+    
+    <content type="html"><![CDATA[<p>#JNDI简介<br>JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，类似JDBC都是构建在抽象层上</p>
+<ol>
+<li>命名服务将名称和对象联系起来，使得我们可以用名称访问对象。</li>
+<li>目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。也就是说目录服务是一种特殊的命名服务。</li>
+</ol>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><ol>
+<li>JNDI API提供了一种统一的方式，可以在本地或网络上查找和访问服务。各种服务在命名服务器上注册一个名称，需要使用服务的应用程序通过JNDI找到对应服务就可以使用。</li>
+<li>远程服务可以是任何的企业服务。DNS、LDAP(Lightweight Directory AccessProtocol 轻型目录访问协议)、 CORBA对象服务、数据源对象，文件系统、WindowsXP/2000/NT/Me/9x的注册表、RMI、EJB、JMS……</li>
+<li>JNDI主要有两部分组成：应用程序编程接口和服务供应商接口。a) 应用程序编程接口提供了Java应用程序访问各种命名和目录服务的功能(API).b)服务供应商接口为任意一种服务的服务供应商(SPI:service provider interface)提供了使用JNDI的功能</li>
+</ol>
+<h1 id="JDBC与JNDI"><a href="#JDBC与JNDI" class="headerlink" title="JDBC与JNDI"></a>JDBC与JNDI</h1><p>JNDI通过注册能操作数据库的服务（如JDBC）就可以实现同JDBC相同的功能。</p>
+<ol>
+<li>JNDI：可以获得访问数据相关的对象，从而操作数据。本地不需要驱动，也不需要知道数据在哪里，所有需要访问数据库的都可以用</li>
+<li>JDBC：本地有驱动程序，知道数据在哪里，只有一个应用程序能用</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;#JNDI简介&lt;br&gt;JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>日志系统</title>
     <link href="http://yoursite.com/2017/12/31/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/"/>
     <id>http://yoursite.com/2017/12/31/日志系统/</id>
     <published>2017-12-31T13:02:45.000Z</published>
-    <updated>2017-12-31T13:02:45.190Z</updated>
+    <updated>2017-12-31T14:05:15.722Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="slf4j-api、slf4j-log4j12以及log4j之间什么关系？"><a href="#slf4j-api、slf4j-log4j12以及log4j之间什么关系？" class="headerlink" title="slf4j-api、slf4j-log4j12以及log4j之间什么关系？"></a>slf4j-api、slf4j-log4j12以及log4j之间什么关系？</h1><p><code>slf4j:Simple Logging Facade for Java</code>，为java提供的简单日志Facade。Facade：门面，更底层一点说就是接口。他允许用户以自己的喜好，在工程中通过slf4j接入不同的日志系统。更直观一点，slf4j是个数据线，一端嵌入程序，另一端链接日志系统，从而实现将程序中的信息导入到日志系统并记录。</p>
+<p>因此，slf4j入口就是众多接口的集合，他不负责具体的日志实现，只在编译时负责寻找合适的日志系统进行绑定。具体有哪些接口，全部都定义在slf4j-api中。查看slf4j-api源码就可以发现，里面除了public final class LoggerFactory类之外，都是接口定义。因此，slf4j-api本质就是一个接口定义。</p>
+<p>一句话总结：slf4j提供接口，各个日志系统或框架实现这些接口。好处是统一了日志系统的管理</p>
+<center><img src="http://img.my.csdn.net/uploads/201211/18/1353244238_7191.png" alt="三者之间的关系">     </center>
+
+<p>说明：</p>
+<ol>
+<li>以slf4j-api作为应用的日志入口</li>
+<li>在应用编译的时候slf4j-api中public final class LoggerFactor类中的private final static void bind() 方法会寻找具体的日志实现类绑定，主要是通过StaticLoggerBinder.getSingleton();的语句调用。</li>
+<li>slf4j-log4j12作为链接slf4j-api和log4j中间的适配器。它实现了slf4j-api中的StaticLoggerBinder接口，从而使得在编译时绑定的是slf4j-log4j12的getSingleton()方法</li>
+<li>log4j:这个是具体的日志系统。通过slf4j-log4j12初始化Log4j，达到最终日志的输出。</li>
+</ol>
+<h1 id="Logback"><a href="#Logback" class="headerlink" title="Logback"></a>Logback</h1><p> LogBack 作为一个通用可靠、快速灵活的日志框架，将作为Log4j 的替代和SLF4J 组成新的日志系统的完整实现。官网上称具有极佳的性能，在关键路径上执行速度是log4j 的10 倍，且内存消耗更少。</p>
+<h1 id="别的常见的日志方案"><a href="#别的常见的日志方案" class="headerlink" title="别的常见的日志方案"></a>别的常见的日志方案</h1><p>commons-logging+log4j。commons-logging类似于slf4j（slf4j-api）的作用。提供统一的日志接口</p>
+]]></content>
     
     <summary type="html">
+    
+      理清在pom文件中引入的各个与日志相关的包的关系
     
     </summary>
     
@@ -34,7 +99,7 @@
     <link href="http://yoursite.com/2017/12/30/Jms%E5%AD%A6%E4%B9%A0%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
     <id>http://yoursite.com/2017/12/30/Jms学习遇到的坑/</id>
     <published>2017-12-30T02:45:02.134Z</published>
-    <updated>2017-12-31T13:38:51.015Z</updated>
+    <updated>2018-01-01T06:58:43.733Z</updated>
     
     <content type="html"><![CDATA[<p>﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿—<br>title: Jms学习遇到的坑<br>date: 2017-12-30 18:48:09<br>categories: 学习<br>tags: 工具类学习</p>
 <h2 id="description-Jms学习"><a href="#description-Jms学习" class="headerlink" title="description: Jms学习"></a>description: Jms学习</h2><h1 id="JMS使用中遇到的问题"><a href="#JMS使用中遇到的问题" class="headerlink" title="JMS使用中遇到的问题"></a>JMS使用中遇到的问题</h1><h2 id="使用spring的消息转换器时提示的安全问题"><a href="#使用spring的消息转换器时提示的安全问题" class="headerlink" title="使用spring的消息转换器时提示的安全问题"></a>使用spring的消息转换器时提示的安全问题</h2><p>自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对应的jms消息对象，但在转发消息时候出现如下日志提示的错误。</p>
@@ -73,7 +138,58 @@ factory.setTrustAllPackages(true);
 </code></pre><p>或</p>
 <pre><code>-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*`
 </code></pre><p>如上的设置，其中com.daniel.study.jms.model是加入白名单的包，对于broker的，其余的包默认是必须的。</p>
-<h1 id="JMS事务管理之JNDI数据源配置"><a href="#JMS事务管理之JNDI数据源配置" class="headerlink" title="JMS事务管理之JNDI数据源配置"></a>JMS事务管理之JNDI数据源配置</h1><h2 id="Tomcat容器"><a href="#Tomcat容器" class="headerlink" title="Tomcat容器"></a>Tomcat容器</h2>]]></content>
+<h1 id="JMS事务管理之JNDI数据源配置"><a href="#JMS事务管理之JNDI数据源配置" class="headerlink" title="JMS事务管理之JNDI数据源配置"></a>JMS事务管理之JNDI数据源配置</h1><h2 id="什么是jndi"><a href="#什么是jndi" class="headerlink" title="什么是jndi"></a>什么是jndi</h2><p>jndi(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。命名服务将名称和对象联系起来，使得我们可以用名称访问对象。目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。也就是说目录服务是一种特殊的命名服务。</p>
+<h2 id="Tomcat容器"><a href="#Tomcat容器" class="headerlink" title="Tomcat容器"></a>Tomcat容器</h2><h3 id="配置方式"><a href="#配置方式" class="headerlink" title="配置方式"></a>配置方式</h3><p><strong>全局：</strong></p>
+<ol>
+<li>在tomcat的conf文件夹下的context.xml配置文件中加入：<br>` &lt;Resource name=”jndi/mysql”   <pre><code>auth=&quot;Container&quot;   
+type=&quot;javax.sql.DataSource&quot;   
+driverClassName=&quot;com.mysql.jdbc.Driver&quot;   
+url=&quot;jdbc:mysql://localhost:3306/test&quot;   
+username=&quot;root&quot;   
+password=&quot;root&quot;   
+maxActive=&quot;20&quot;   
+maxIdle=&quot;10&quot;   
+maxWait=&quot;10000&quot;/&gt; 
+</code></pre>`</li>
+<li>在项目的web.xml中加入资源引用：<br><code>&lt;resource-ref&gt;  
+&lt;description&gt;JNDI DataSource&lt;/description&gt;  
+&lt;res-ref-name&gt;jndi/mysql&lt;/res-ref-name&gt;  
+&lt;res-ref-type&gt;javax.sql.DataSource&lt;/res-ref-type&gt;  
+&lt;res-auth&gt;Container&lt;/res-auth&gt;  
+&lt;/resource-ref&gt;</code></li>
+<li>在mybatis配置文件中加入:<br>`<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"><pre><code>&lt;property name=&quot;jndiName&quot;&gt;
+    &lt;value&gt;java:comp/env/jdbc/mysql&lt;/value&gt;
+&lt;/property&gt;
+</code></pre> </bean><br>`<br><strong>单个项目：</strong></li>
+<li>在META-INF中创建一个名为context.xml文件，在其中加入：<br>`&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br><context><br> &lt;Resource  name=”jdbc/mysql” auth=”Container” <pre><code>type=&quot;javax.sql.DataSource&quot;                                                     
+driverClassName=&quot;com.mysql.jdbc.Driver&quot;                                 
+url=&quot;jdbc:mysql://localhost:3306/test?useUnicode=true&quot;
+username=&quot;root&quot;
+password=&quot;root&quot;
+maxActive=&quot;50&quot;
+maxIdle=&quot;30&quot;
+maxWait=&quot;10000&quot; /&gt;
+</code></pre></context><br>`</li>
+<li>其他的同全局配置</li>
+</ol>
+<h2 id="JBoss"><a href="#JBoss" class="headerlink" title="JBoss"></a>JBoss</h2><h3 id="配置方式-1"><a href="#配置方式-1" class="headerlink" title="配置方式"></a>配置方式</h3><h2 id="WebLogic"><a href="#WebLogic" class="headerlink" title="WebLogic"></a>WebLogic</h2><h3 id="配置方式-2"><a href="#配置方式-2" class="headerlink" title="配置方式"></a>配置方式</h3><h2 id="IIS"><a href="#IIS" class="headerlink" title="IIS"></a>IIS</h2><h3 id="配置方式-3"><a href="#配置方式-3" class="headerlink" title="配置方式"></a>配置方式</h3><h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h2><p>事务是指一个工作单元，它包含了一组添加，删除，修改等具有逻辑关系的多个操作,作为一个单元整体执行，这组命令要么都执行成功，要么全部恢复</p>
+<h2 id="什么是分布式事务"><a href="#什么是分布式事务" class="headerlink" title="什么是分布式事务"></a>什么是分布式事务</h2><p>分布式事务是指事务的参与者、支持事务的服务器、资源管理器以及事务管理器分别位于分布式系统的不同节点之上<br>在两个或多个网络计算机资源上访问并且更新数据。将对两个或多个网络计算机的数据进行的多次操作作为一个整体进行处理。如：不同银行账户之间转账。</p>
+<p>一个分布式事务(distributed  transaction)包括一个事务管理器(transaction  manager)和一个或多个资源管理器(resource manager)</p>
+<ol>
+<li>一个资源管理器(resource  manager)是任意类型的持久化数据存储(数据库)。</li>
+<li>事务管理器(transaction manager)承担着所有事务参与单元者的相互通讯的责任。</li>
+</ol>
+<h2 id="分布式事务处理流程"><a href="#分布式事务处理流程" class="headerlink" title="分布式事务处理流程"></a>分布式事务处理流程</h2><p>分布式事务处理允许JDBC驱动程序支持两段式提交协议</p>
+<p>阶段一：开始向事务涉及到的全部资源发送提交前信息。此时，事务涉及到的资源还有最后一次机会来结束事务。如果任意一个资源决定结束事务，则整个事务取消，不会进行资源的更新。否则，事务将正常执行。为了防止发生资源更新失败，所有资源的更新都会写入到日志中。这些日志是永久性的，因此，这些日志在更新失败之后可以重新对所有资源进行恢复。(更新内存数据)</p>
+<p>阶段二：只在阶段一没有异常结束的时候才会发生。此时，所有的资源管理器都开始执行真正的数据更新。 (更新数据库数据)</p>
+<p>能实现分布式事务管理的事务管理器：</p>
+<ol>
+<li>JTA允许应用程序执行分布式事务处理。支持JTA的JDBC驱动程序极大地增强了数据访问能力。如果计划使用JTA来处理分布式事务,需要一个实现了以下接口的JDBC驱动</li>
+</ol>
+<p><code>javax.sql.XADataSource:获得XAConnection对象的工厂
+javax.sql.XAConnection:继承PooledConnection,为分布式事务提供支持，事务管理器(通常为中间层服务器的一部分)通过XAResource对象管理XAConnection对象
+javax.sql.DataSource</code></p>
+]]></content>
     
     <summary type="html">
     
@@ -1901,170 +2017,6 @@ return map[condition];
     
     
       <category term="总结" scheme="http://yoursite.com/tags/%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一些疑问</title>
-    <link href="http://yoursite.com/2016/09/04/%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE/"/>
-    <id>http://yoursite.com/2016/09/04/一些疑问/</id>
-    <published>2016-09-04T11:18:20.000Z</published>
-    <updated>2016-09-11T12:42:02.120Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="1-什么是回调函数？"><a href="#1-什么是回调函数？" class="headerlink" title="1.什么是回调函数？"></a>1.什么是回调函数？</h1><blockquote>
-<p>回调函数就是你写好一个函数，让预先写好的系统来调用。你去调用系统的函数，是直调。让系统调用你的函数，就是回调。回调函数可以看成，让别人做事，传进去的额外信息。</p>
-<p>简单一点说：回调函数是调用者传递给被调用者的函数。做什么事只有调用者知道，但调用者不能直接去“做”，因为调用者可能不具备执行这个动作的全部条件；但是被调用者具有执行这个动作的所有条件，只是他不知道该怎么去做。调用者调用被调用者时传递回调函数给被调用者，就告诉被调用者用其所具备的条件去执行这个动作。其中：做什么样的事就是回调函数。</p>
-<p>在动态语言中表现为直接传递一个方法（或函数）；在静态语言中可能是通过函数指针来传递的（例如C），也可能是通过interface实现的（例如Java）</p>
-<p>实现这种机制的原理：函数接受的参数，我们通常叫做“数据”，其实这是不完全正确的，其实我们传递给函数的参数实质都是二进制代码。基本类型的数据可以看成是二进制，函数类型的数据也是可以看做二进制的。总之代码和数据都是一个性质，共性都是信息。</p>
-</blockquote>
-<h1 id="2-CSS中的绝对定位和相对定位"><a href="#2-CSS中的绝对定位和相对定位" class="headerlink" title="2.CSS中的绝对定位和相对定位"></a>2.CSS中的绝对定位和相对定位</h1><p><strong>相对定位</strong>：就是一个元素本身自己位置的变化，如一个元素开始时设置其position的值为relative，那么它就会在文档流中占据一个自己本身的位置，当设置了其top和left值后就会相对于它本身的位置偏移。在使用相对定位时，无论是否进行移动，元素仍然占据原来的空间。因此，移动元素会导致它覆盖其它框。那么我们就会想了怎么让框三把框二覆盖呢，很自然的想到把框3的z-index设为一个优先级高的值如100，但是这样并不能得到我们想要的结果，必须把框2的z-index设为优先级低的如-1。相对定位就是文旦流的默认定位方式。</p>
-<p><strong>绝对定位</strong>：使用的绝对定位（position:absolute）的元素不存在文档流中，普通流中其它元素的布局就像绝对定位的元素不存在一样，所以在文档流中不占据空间。因此如果一个元素的position设置为absolute，会影响它的兄弟元素的相对定位（默认定位）从而改变它的兄弟节点在文档流中的位置。绝对定位的元素的位置相对于最近的已定位（拥有position属性）祖先元素，如果元素没有已定位的祖先元素，那么它的位置相对于最初的包含块。</p>
-<p>总之，相对定位是“相对于”元素在文档中的初始位置，而绝对定位是“相对于”最近的已定位祖先元素，如果不存在已定位的祖先元素，那么“相对于”最初的包含块。</p>
-<p>扩展，还可以使用margin属性来进行绝对定位，这时元素也脱离了文档流，不管它的祖先元素有没有定位，都是以文档流中原来所在的位置上偏移参照物。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      解答编码中遇到的一些疑难、重点知识。
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="编码学习" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>个人博客——基于hexo的Github.page</title>
-    <link href="http://yoursite.com/2016/09/03/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8Ehexo%E7%9A%84Github%20Page/"/>
-    <id>http://yoursite.com/2016/09/03/个人博客——基于hexo的Github Page/</id>
-    <published>2016-09-03T11:45:37.000Z</published>
-    <updated>2016-09-04T08:58:32.610Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="个人博客——基于hexo的Github-page"><a href="#个人博客——基于hexo的Github-page" class="headerlink" title="个人博客——基于hexo的Github.page"></a>个人博客——基于hexo的Github.page</h1><h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><ul>
-<li>安装NodeJs</li>
-<li>安装Git</li>
-</ul>
-<h2 id="在github上创建仓库"><a href="#在github上创建仓库" class="headerlink" title="在github上创建仓库"></a>在github上创建仓库</h2><p>建立与你用户名对应的仓库，仓库名必须为【yourusername.github.io】</p>
-<center><br><img src="http://i2.buimg.com/567571/b5aabb76dc5a87c2.png" alt="Alt loading" title="新建仓库"><br></center>
-
-<center><br><img src="http://i4.buimg.com/567571/3b507106c15b47a5.png" alt="Alt loading" title="填写新建仓库的信息"><br></center>
-
-<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><pre><code>//全局安装hexo,安装完成后可以在nodejs/node_gloabal/node_modules下看到
-$ npm install hexo-cli -g
-</code></pre><h2 id="快速启动"><a href="#快速启动" class="headerlink" title="快速启动"></a>快速启动</h2><pre><code>$ hexo init &lt;floder&gt; #初始化blog所在的文件夹
-$ cd blog #进入你所设置的blog文件夹
-$ npm install
-$ hexo server #启动hexo
-$ hexo new &quot;Hello Hexo&quot; #新建一个名叫 Hello Hexo的博文
-$ hexo generate #生成通用的静态文件
-</code></pre><p>进入blog目录：</p>
-<center><br><img src="http://i2.buimg.com/567571/1cf76e414967c4d6.png" alt="Alt loading" title="运行hexo init &lt;floder&gt;生成的blog的目录结构"><br></center>
-
-<p>启动hexo生成的blog：</p>
-<center><br><img src="http://i2.buimg.com/567571/6eb68cc3c7a76fd9.png" alt="Alt loading" title="成功启动hexo"><br></center>
-
-<p>访问<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a>:</p>
-<center><br><img src="http://i2.buimg.com/567571/7de0d6da7ae949a8.png" alt="ALt loading" title="浏览器中成功访问生成的blog"><br></center>
-
-<h2 id="Hexo常用的命令"><a href="#Hexo常用的命令" class="headerlink" title="Hexo常用的命令"></a>Hexo常用的命令</h2><pre><code>hexo new &quot;postName&quot; #新建文章
-hexo new page &quot;pageName&quot; #新建页面
-hexo generate #生成静态页面至public目录
-hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）
-hexo deploy #将.deploy目录部署到GitHub
-hexo help  # 查看帮助
-hexo version  #查看Hexo的版本
-hexo clean #清空public目录下生成的内容
-</code></pre><h2 id="修改配置文件-config-yml"><a href="#修改配置文件-config-yml" class="headerlink" title="修改配置文件 _config.yml"></a>修改配置文件 _config.yml</h2><p>该文件中多数选项都有说明，按照说明配置即可。这里主要介绍如何把Hexo构建的blog部署到github page上。</p>
-<p>部署方式配置前：</p>
-<center><br><img src="http://i2.buimg.com/567571/cb0cd68f7c7bed4e.png" alt="ALt loading" title="部署方式配置前"><br></center>
-
-<p>部署方式配置后,（仓库地址获取于github上新建的名称为yourusename.github.io的库）</p>
-<center><br><img src="http://i2.buimg.com/567571/bd2ca1fcf811e9cf.png" alt="Alt loading" title="部署方式配置后"><br></center>
-
-<center><br><img src="http://i2.buimg.com/567571/113d87f21a6a3502.png" alt="Alt loading" title="获取仓库地址"><br></center>
-
-<h2 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h2><p>这里主要讲解设置主题：Tinnypp</p>
-<p>1.安装Tinnypp</p>
-<pre><code>cd themes
-git clone git@github.com:levonlin/Tinnypp.git
-</code></pre><center><br><img src="http://i2.buimg.com/567571/e86eb329acd6f195.png" alt="Alt loading" title="安装Tinnypp主题"><br></center>
-
-<p>2.修改_config.yml配置文件中的主题设置为：Tinnypp</p>
-<center><br><img src="http://i4.buimg.com/567571/4a28326b980d9290.png" alt="Alt loading" title="修改主题"><br></center>
-
-<p>3.更新主题</p>
-<pre><code>cd themes/Tinnypp
-git pull
-</code></pre><p>4.设置主题配置信息</p>
-<p>（1）设置blog首页的按钮，如果直接使用默认配置，点击按钮会出现404错误，原因是blog部署后按钮所指向目录就是根目录。</p>
-<center><br><img src="http://i2.buimg.com/567571/98bc8d9a49063abe.png" alt="Alt loading" title="按钮的URL设置前"><br></center>
-
-<center><br><img src="http://i4.buimg.com/567571/2b36fd9a01bfe314.png" alt="Alt loading" title="按钮的URL设置后"><br></center>
-
-<p>（2）已经设置/atom.xml为rss源。要使用rss,先安装hexo的rss插件：</p>
-<pre><code>$npm install hexo-generator-feed --save
-</code></pre><p> 修改Tinnypp配置文件_config.yml中的RSS设置，因为安装rss源是在根目录下/atom.xml，但是默认的配置文件中的RSS 地址是: /Tinnypp/atom.xml</p>
-<center><br><img src="http://i2.buimg.com/567571/69b0a373a5c0a75f.png" alt="Alt loading" title="修改前"><br></center>
-
-<center><br><img src="http://i2.buimg.com/567571/97bb747d68ce2823.png" alt="Alt loading" title="修改后"><br></center>
-
-<p>5.主题切换后 blog的首页</p>
-<center><br><img src="http://i2.buimg.com/567571/7c1868648614812c.png" alt="Alt loading" title="切换主题后的首页"><br></center>
-
-<p>6.设置tags和categories</p>
-<p>(1).tags设置</p>
-<p>在themes/Tinnypp/source/下新建文件夹tags，在文件夹中新建文件index.md，在index.md文件中新增内容：</p>
-<center><br><img src="http://i4.buimg.com/567571/22b36d60fb766cc9.png" alt="Alt loading" title="index.md中的内容"><br></center>
-
-<p>(2).categories设置<br>在themes/Tinnypp/source/下新建文件夹categories，在文件夹中新建文件index.md，在index.md文件中新增内容：</p>
-<center><br><img src="http://i4.buimg.com/567571/22b36d60fb766cc9.png" alt="Alt loading" title="index.md中的内容"><br></center>
-
-<p>设置后的目录结构：</p>
-<center><br><img src="http://i1.piimg.com/567571/ba893bb91a362072.png" alt="Alt loading" title="tags和categories设置"><br></center>
-
-<p>7.新建blog文章</p>
-<pre><code>hexo new &quot;Test&quot;
-</code></pre><p>打开blog目录下的../source/_posts/Test.md文件</p>
-<center><br><img src="http://i1.piimg.com/567571/caa7baa5aab508de.png" alt="Alt loading" title="默认内容"><br></center>
-
-<p>修改默认内容后</p>
-<center><br><img src="http://i2.buimg.com/567571/f204735ba668d05e.png" alt="Alt loading" title="修改后的默认内容"><br></center>
-
-<p>8.重新启动hexo查看设置情况</p>
-<pre><code>hexo clean
-hexo generator
-hexo server
-</code></pre><center><br><img src="http://i1.piimg.com/567571/5aadbc05c5aca7fa.png" alt="Alt loading" title="tags和categories设置后的blog首页"><br></center>
-
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
-<li><a href="https://github.com/hexojs/hexo" target="_blank" rel="external">hexo安装配置</a></li>
-<li><a href="http://www.isetsuna.com/hexo/introduction/" target="_blank" rel="external">hexo安装配置1</a></li>
-<li><a href="http://www.isetsuna.com/hexo/install-config/" target="_blank" rel="external">hexo安装配置2</a></li>
-<li><a href="http://www.isetsuna.com/hexo/theme-plugin/" target="_blank" rel="external">hexo安装配置3</a></li>
-<li><a href="http://www.isetsuna.com/hexo/writing-image/" target="_blank" rel="external">hexo安装配置4</a></li>
-<li><a href="http://www.isetsuna.com/hexo/deploy-github-gitcafe/" target="_blank" rel="external">hexo安装配置5</a></li>
-<li><a href="http://www.isetsuna.com/hexo/deploy-qiniu/" target="_blank" rel="external">hexo安装配置6</a></li>
-<li><a href="http://www.isetsuna.com/hexo/domain-dns/" target="_blank" rel="external">hexo安装配置7</a></li>
-<li><a href="https://github.com/levonlin/Tinnypp" target="_blank" rel="external">博客主题切换</a></li>
-<li><a href="http://blog.csdn.net/poem_of_sunshine/article/details/29369785/" target="_blank" rel="external"> hexo部署个人博客全</a></li>
-<li><a href="http://www.jerryfu.net/post/search-engine-for-hexo-with-swiftype-v2.html" target="_blank" rel="external">利用swiftype为hexo添加站内搜索v2.0</a></li>
-<li><a href="http://blog.fens.me/hexo-blog-github/" target="_blank" rel="external">个人blog搭建全</a></li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      通过Hexo生成、部署个人博客到Github Page上，本文涉及到Hexo的安装、个人博客网站的生成并对生成的网站代码进行重新配置、主题的切换及部署。
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="安装学习" scheme="http://yoursite.com/tags/%E5%AE%89%E8%A3%85%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   

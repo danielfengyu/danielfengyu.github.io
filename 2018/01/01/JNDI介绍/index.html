@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>日志系统 | 山间听雨者主页</title>
+    <title>JNDI介绍 | 山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" itemprop="description" content="理清在pom文件中引入的各个与日志相关的包的关系">
+    <meta name="description" content="#JNDI简介JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。为开发人员提">
     
     
     
@@ -90,10 +90,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/12/31/日志系统/" title="日志系统" itemprop="url">日志系统</a>
+      <a href="/2018/01/01/JNDI介绍/" title="JNDI介绍" itemprop="url">JNDI介绍</a>
   </h1>
   <p class="article-time">
-    <time datetime="2017-12-31T13:02:45.000Z" itemprop="datePublished">2017-12-31</time>
+    <time datetime="2018-01-01T06:16:00.000Z" itemprop="datePublished">2018-01-01</time>
   </p>
 </header>
 	<div class="article-content">
@@ -101,23 +101,24 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#slf4j-api、slf4j-log4j12以及log4j之间什么关系？"><span class="toc-number">1.</span> <span class="toc-text">slf4j-api、slf4j-log4j12以及log4j之间什么关系？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Logback"><span class="toc-number">2.</span> <span class="toc-text">Logback</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#别的常见的日志方案"><span class="toc-number">3.</span> <span class="toc-text">别的常见的日志方案</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#工作原理"><span class="toc-number">1.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JDBC与JNDI"><span class="toc-number">2.</span> <span class="toc-text">JDBC与JNDI</span></a></li></ol>
 		</div>
 		
-		<h1 id="slf4j-api、slf4j-log4j12以及log4j之间什么关系？"><a href="#slf4j-api、slf4j-log4j12以及log4j之间什么关系？" class="headerlink" title="slf4j-api、slf4j-log4j12以及log4j之间什么关系？"></a>slf4j-api、slf4j-log4j12以及log4j之间什么关系？</h1><p><code>slf4j:Simple Logging Facade for Java</code>，为java提供的简单日志Facade。Facade：门面，更底层一点说就是接口。他允许用户以自己的喜好，在工程中通过slf4j接入不同的日志系统。更直观一点，slf4j是个数据线，一端嵌入程序，另一端链接日志系统，从而实现将程序中的信息导入到日志系统并记录。</p>
-<p>因此，slf4j入口就是众多接口的集合，他不负责具体的日志实现，只在编译时负责寻找合适的日志系统进行绑定。具体有哪些接口，全部都定义在slf4j-api中。查看slf4j-api源码就可以发现，里面除了public final class LoggerFactory类之外，都是接口定义。因此，slf4j-api本质就是一个接口定义。</p>
-<p>一句话总结：slf4j提供接口，各个日志系统或框架实现这些接口。好处是统一了日志系统的管理</p>
-<center><img src="http://img.my.csdn.net/uploads/201211/18/1353244238_7191.png" alt="三者之间的关系">     </center>
-
-<p>说明：</p>
+		<p>#JNDI简介<br>JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，类似JDBC都是构建在抽象层上</p>
 <ol>
-<li>以slf4j-api作为应用的日志入口</li>
-<li>在应用编译的时候slf4j-api中public final class LoggerFactor类中的private final static void bind() 方法会寻找具体的日志实现类绑定，主要是通过StaticLoggerBinder.getSingleton();的语句调用。</li>
-<li>slf4j-log4j12作为链接slf4j-api和log4j中间的适配器。它实现了slf4j-api中的StaticLoggerBinder接口，从而使得在编译时绑定的是slf4j-log4j12的getSingleton()方法</li>
-<li>log4j:这个是具体的日志系统。通过slf4j-log4j12初始化Log4j，达到最终日志的输出。</li>
+<li>命名服务将名称和对象联系起来，使得我们可以用名称访问对象。</li>
+<li>目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。也就是说目录服务是一种特殊的命名服务。</li>
 </ol>
-<h1 id="Logback"><a href="#Logback" class="headerlink" title="Logback"></a>Logback</h1><p> LogBack 作为一个通用可靠、快速灵活的日志框架，将作为Log4j 的替代和SLF4J 组成新的日志系统的完整实现。官网上称具有极佳的性能，在关键路径上执行速度是log4j 的10 倍，且内存消耗更少。</p>
-<h1 id="别的常见的日志方案"><a href="#别的常见的日志方案" class="headerlink" title="别的常见的日志方案"></a>别的常见的日志方案</h1><p>commons-logging+log4j。commons-logging类似于slf4j（slf4j-api）的作用。提供统一的日志接口</p>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><ol>
+<li>JNDI API提供了一种统一的方式，可以在本地或网络上查找和访问服务。各种服务在命名服务器上注册一个名称，需要使用服务的应用程序通过JNDI找到对应服务就可以使用。</li>
+<li>远程服务可以是任何的企业服务。DNS、LDAP(Lightweight Directory AccessProtocol 轻型目录访问协议)、 CORBA对象服务、数据源对象，文件系统、WindowsXP/2000/NT/Me/9x的注册表、RMI、EJB、JMS……</li>
+<li>JNDI主要有两部分组成：应用程序编程接口和服务供应商接口。a) 应用程序编程接口提供了Java应用程序访问各种命名和目录服务的功能(API).b)服务供应商接口为任意一种服务的服务供应商(SPI:service provider interface)提供了使用JNDI的功能</li>
+</ol>
+<h1 id="JDBC与JNDI"><a href="#JDBC与JNDI" class="headerlink" title="JDBC与JNDI"></a>JDBC与JNDI</h1><p>JNDI通过注册能操作数据库的服务（如JDBC）就可以实现同JDBC相同的功能。</p>
+<ol>
+<li>JNDI：可以获得访问数据相关的对象，从而操作数据。本地不需要驱动，也不需要知道数据在哪里，所有需要访问数据库的都可以用</li>
+<li>JDBC：本地有驱动程序，知道数据在哪里，只有一个应用程序能用</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -127,7 +128,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/12/31/日志系统/" data-title="日志系统 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2018/01/01/JNDI介绍/" data-title="JNDI介绍 | 山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -137,18 +138,18 @@ var _hmt = _hmt || [];
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2018/01/01/JNDI介绍/" title="JNDI介绍">
+ <a href="/2018/01/01/JavaWeb-关键知识点答疑/" title="JavaWeb 关键知识点答疑">
   <strong>新一篇:</strong><br/>
   <span>
-  JNDI介绍</span>
+  JavaWeb 关键知识点答疑</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/12/30/Jms学习遇到的坑/"  title="">
+<a href="/2017/12/31/日志系统/"  title="日志系统">
  <strong>旧一篇:</strong><br/> 
- <span>(no title)
+ <span>日志系统
 </span>
 </a>
 </div>
@@ -158,7 +159,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="日志系统" data-thread-key="日志系统" data-author-key="Daniel" data-url="http://yoursite.com/post/日志系统"></div>
+	<div class="ds-thread" data-title="JNDI介绍" data-thread-key="JNDI介绍" data-author-key="Daniel" data-url="http://yoursite.com/post/JNDI介绍"></div>
 	
 </section>
 
