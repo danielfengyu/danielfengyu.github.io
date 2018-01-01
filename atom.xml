@@ -34,9 +34,9 @@
     <link href="http://yoursite.com/2018/01/01/JNDI%E4%BB%8B%E7%BB%8D/"/>
     <id>http://yoursite.com/2018/01/01/JNDI介绍/</id>
     <published>2018-01-01T06:16:00.000Z</published>
-    <updated>2018-01-01T06:32:41.373Z</updated>
+    <updated>2018-01-01T07:01:21.398Z</updated>
     
-    <content type="html"><![CDATA[<p>#JNDI简介<br>JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，类似JDBC都是构建在抽象层上</p>
+    <content type="html"><![CDATA[<h1 id="JNDI简介"><a href="#JNDI简介" class="headerlink" title="JNDI简介"></a>JNDI简介</h1><p>JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，类似JDBC都是构建在抽象层上</p>
 <ol>
 <li>命名服务将名称和对象联系起来，使得我们可以用名称访问对象。</li>
 <li>目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。也就是说目录服务是一种特殊的命名服务。</li>
@@ -48,14 +48,26 @@
 </ol>
 <h1 id="JDBC与JNDI"><a href="#JDBC与JNDI" class="headerlink" title="JDBC与JNDI"></a>JDBC与JNDI</h1><p>JNDI通过注册能操作数据库的服务（如JDBC）就可以实现同JDBC相同的功能。</p>
 <ol>
-<li>JNDI：可以获得访问数据相关的对象，从而操作数据。本地不需要驱动，也不需要知道数据在哪里，所有需要访问数据库的都可以用</li>
-<li>JDBC：本地有驱动程序，知道数据在哪里，只有一个应用程序能用</li>
+<li>JNDI：可以获得访问数据相关的对象，从而操作数据。本地不需要驱动，也不需要知道数据在哪里，所有需要访问数据库的都可以用。</li>
+<li>JDBC：本地有驱动程序，知道数据在哪里，只有一个应用程序能用。</li>
 </ol>
+<h2 id="JNDI中的数据访问"><a href="#JNDI中的数据访问" class="headerlink" title="JNDI中的数据访问"></a>JNDI中的数据访问</h2><ol>
+<li>驱动代码的加载由服务提供方负责</li>
+<li>应用程序需要URL找到指定的服务</li>
+<li>JNDI  API使应用程序可以通过逻辑名称获得指定的数据源</li>
+<li>JNDI  API提供数据库源服务需要以下内容<br>a. 与数据源关联的数据库驱动程序<br>b. 数据源对象的引用名称<h2 id="JDBC访问数据库"><a href="#JDBC访问数据库" class="headerlink" title="JDBC访问数据库"></a>JDBC访问数据库</h2></li>
+<li>javax.sql.DataSource接口是在Java程序设计时使用JNDI获得数据库连接的工具</li>
+<li>用程序使用JNDI通过注册名称获得的就是DataSource实现类对象</li>
+<li>通过DataSource实现类对象可以获得数据库连接对象(Connection)：所有需要访问数据库的应用程序都可以使用此服务，所以需要同时返回多个连接对象—连接池</li>
+<li>由驱动程序供应商实现：实现DataSource接口的对象在基于JNDI  API的命名服务中注册后，应用程序就可以通过JNDI获得相关对象，从而访问数据库服务器。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>JDBC与JNDI：使用JDBC创建一个访问数据库的对象，此对象在JNDI服务器中注册一个逻辑名称，通过JNDI查找到该名称就可以获得相关对象。使得多个应用程序都可以访问数据库。</p>
+<p>JNDI能注册各种各样可用的服务，使用JDBC实现的数据访问服务是其中之一</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;#JNDI简介&lt;br&gt;JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。是一种应用程序设计标准和规范，现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提
+      &lt;h1 id=&quot;JNDI简介&quot;&gt;&lt;a href=&quot;#JNDI简介&quot; class=&quot;headerlink&quot; title=&quot;JNDI简介&quot;&gt;&lt;/a&gt;JNDI简介&lt;/h1&gt;&lt;p&gt;JNDI(Java Naming and Directory Interface，Java命名和目录接口)是
     
     </summary>
     
