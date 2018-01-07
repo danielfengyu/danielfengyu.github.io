@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-01T14:42:17.573Z</updated>
+  <updated>2018-01-07T02:19:48.596Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,13 +20,126 @@
     <link href="http://yoursite.com/2018/01/01/JavaWeb-%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E7%AD%94%E7%96%91/"/>
     <id>http://yoursite.com/2018/01/01/JavaWeb-关键知识点答疑/</id>
     <published>2018-01-01T06:16:59.000Z</published>
-    <updated>2018-01-01T14:42:17.573Z</updated>
+    <updated>2018-01-07T02:19:48.596Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="web-xml的作用"><a href="#web-xml的作用" class="headerlink" title="web.xml的作用"></a>web.xml的作用</h1><p>web.xml文件并不是web工程必须的，只有你需要配置欢迎页、servlet、filter等的时候，才需要配置它</p>
-<p>web.xml的模式文件是由Sun公司定义的，每个web.xml文件的根元素<web-app>中，都必须标明这个web.xml使用的是哪些模式文件。</web-app></p>
-<p>`&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</p>
-<p><web-app version="2.5" xmlns="http://Java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://java.sun.com/xml/ns/javaee
-http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"><br></web-app>`</p>
+    <content type="html"><![CDATA[<h1 id="web-xml的作用"><a href="#web-xml的作用" class="headerlink" title="web.xml的作用"></a>web.xml的作用</h1><p>web.xml文件并不是web工程必须的，只有你需要配置欢迎页、servlet、filter等的时候，才需要配置它。web.xml的模式文件是由Sun公司定义的，每个web.xml文件的根元素<web-app>中，都必须标明这个web.xml使用的是哪些模式文件。</web-app></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app version=&quot;2.5&quot;
+    xmlns=&quot;http://Java.sun.com/xml/ns/javaee&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;&gt;
+&lt;/web-app&gt;
+</code></pre><p>Tomcat加载欢迎页面的顺序：</p>
+<ol>
+<li>如果web中的web.xml文件中配置了欢迎页面，访问web的时候，就返回那个指定的欢迎页面</li>
+<li>如果web中没有web.xml，或者web.xml中没有指定欢迎页面，Tomcat默认先查询index.html</li>
+<li>如果第2步没有找到index.html，那就会去找index.jsp</li>
+<li>如果以上步骤都没有找到合适的欢迎页面，那就返回<code>resource (/XXX) is not available</code></li>
+</ol>
+<h2 id="web-xml中命名与定制URL"><a href="#web-xml中命名与定制URL" class="headerlink" title="web.xml中命名与定制URL"></a>web.xml中命名与定制URL</h2><p>命名必须在定制URL之前</p>
+<ol>
+<li><p>servlet命名</p>
+<pre><code>&lt;servlet&gt;
+    &lt;servlet-name&gt;servlet1&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;net.test.TestServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+</code></pre></li>
+<li><p>为servlet定制URL</p>
+<pre><code>&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;servlet1&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre></li>
+</ol>
+<h2 id="web-xml的加载顺序"><a href="#web-xml的加载顺序" class="headerlink" title="web.xml的加载顺序"></a>web.xml的加载顺序</h2><h3 id="根据节点确定加载顺序"><a href="#根据节点确定加载顺序" class="headerlink" title="根据节点确定加载顺序"></a>根据节点确定加载顺序</h3><ol>
+<li>启动一个WEB项目的时候，WEB容器会去读取它的配置文件web.xml，读取<listener>和<context-param>两个结点。</context-param></listener></li>
+<li>紧急着，容器创建一个ServletContext（servlet上下文），这个web项目的所有部分都将共享这个上下文。</li>
+<li>容器将<context-param>转换为键值对，并交给servletContext。</context-param></li>
+<li>容器创建<listener>中的类实例，创建监听器。</listener></li>
+</ol>
+<h3 id="根据oad-on-startup-元素的值确定加载顺序"><a href="#根据oad-on-startup-元素的值确定加载顺序" class="headerlink" title="根据oad-on-startup 元素的值确定加载顺序"></a>根据oad-on-startup 元素的值确定加载顺序</h3><p>oad-on-startup 元素在web应用启动的时候指定了servlet被加载的顺序，它的值必须是一个整数。如果它的值是一个负整数或是这个元素不存在，那么容器会在该servlet被调用的时候，加载这个servlet 。如果值是正整数或零，容器在配置的时候就加载并初始化这个servlet，容器必须保证值小的先被加载。如果值相等，容器可以自动选择先加载谁。</p>
+<h3 id="加载优先级的一些补充"><a href="#加载优先级的一些补充" class="headerlink" title="加载优先级的一些补充"></a>加载优先级的一些补充</h3><p>首先可以肯定的是，加载顺序与它们在 web.xml 文件中的先后顺序无关。即不会因为 filter 写在 listener 的前面而会先加载 filter。</p>
+<p>按元素节点加载的顺序：context-param -&gt; listener -&gt;filter -&gt; servlet 。但对于同一类的元素节点，加载的顺序是和在web.xml中的配置顺序有关的</p>
+<h1 id="servlet基础知识"><a href="#servlet基础知识" class="headerlink" title="servlet基础知识"></a>servlet基础知识</h1><h2 id="实现一个用户自己的servlet"><a href="#实现一个用户自己的servlet" class="headerlink" title="实现一个用户自己的servlet"></a>实现一个用户自己的servlet</h2><ol>
+<li>所有用户自定义的servlet都必须要么继承javax.servlet.GenericServlet ，要么继承 javax.servlet.http.HttpServlet。前者是普通的servlet，后者是和HTTP相关servlet，这里介绍的和web相关的servlet一般都是继承自HttpServlet</li>
+<li>在用户自定义的servlet中需要重写doGet和doPost方法，当一个GET或者POST请求到来后会映射到相应的方法。</li>
+<li>可以重写别的一些方法，它们可以用来在运行时控制用</li>
+<li>HttpServletRequest 和 HttpServletResponse 是所有doXXX()方法的默认参数。</li>
+<li>为了发送内容给客户端，你需要使用从 HttpServletResponse 里获取的 PrintWriter 对象。任何写到这个对象的内容都会被写进outputstream里，并会把内容发送回给客户端。</li>
+</ol>
+<h2 id="Servlet的生命周期"><a href="#Servlet的生命周期" class="headerlink" title="Servlet的生命周期"></a>Servlet的生命周期</h2><ol>
+<li>初始阶段，web容器通过调用init()方法来初始化Servlet实例。这个方法在Servlet实例的生命周期里只调用一次。</li>
+<li>处理客户端请求，web容器调用Servlet的service()方法来处理每一个请求。service() 方法定义了能够处理的请求类型并且调用适当方法来处理这些请求。编写Servlet的开发者必须实现这些请求对应的方法，否则就会调用父类对应的方法</li>
+<li>消亡期，web容器调用destroy()方法来终结Servlet。如果你想在Servlet的生命周期内关闭或者销毁一些文件系统或者网络资源，你可以调用这个方法来实现。destroy() 方法和init()方法一样，在Servlet的生命周期里只能调用一次。</li>
+</ol>
+<h2 id="Servlet的优势"><a href="#Servlet的优势" class="headerlink" title="Servlet的优势"></a>Servlet的优势</h2><ol>
+<li>Java Servlets如此有用的原因之一是Servlet能动态显示网页内容。</li>
+<li>Servlet可以轻松创建一个基于请求和响应生命周期的web应用。</li>
+<li>它们能够提供HTTP响应并且可以使用同一段代码来处理业务逻辑。处理业务逻辑的能力使Servlet比标准的HTML代码更强大。</li>
+</ol>
+<h2 id="容器的概念"><a href="#容器的概念" class="headerlink" title="容器的概念"></a>容器的概念</h2><ol>
+<li>什么是服务器？</li>
+</ol>
+<p>就是应用运行的环境</p>
+<ol>
+<li>什么是servlet容器？</li>
+</ol>
+<p>如果服务器是一个Java web服务器，那么这个web服务器中就必须包含一个Servlet容器。</p>
+<h3 id="容器事件监听器"><a href="#容器事件监听器" class="headerlink" title="容器事件监听器"></a>容器事件监听器</h3><p>为了创建一个基于容器事件执行动作的监听器，你必须创建一个实现 ServletContextListener 接口的类。这个类必须实现的方法有 contextInitialized() 和 contextDestroyed()。这两个方法都需要 ServletContextEvent 作为参数，并且在每次初始化或者关闭Servlet容器时都会被自动调用。</p>
+<h2 id="servlet过滤器"><a href="#servlet过滤器" class="headerlink" title="servlet过滤器"></a>servlet过滤器</h2><p>Web过滤器在给定的URL被访问时对请求进行预处理并调用相应的功能是很有用的。相 比于直接调用给定URL请求的Servlet，包含相同URL模式的过滤器（filter）会在Servlet调用前被调用。过滤器必须要实现 javax.servlet.Filter 接口。这个接口包含了init()，descriptor()和doFilter()这些方法。init()和destroy()方法会被容器调用。 doFilter()方法用来在过滤器类里实现逻辑任务。如果你想把过滤器组成过滤链（chain filter）或者存在多匹配给定URL模式的个过滤器，它们就会根据web.xml里的配置顺序被调用。过滤器的URL必须对应需要过滤的servlet，两者的URL必须一模一样，在进入servlet前，web容器都会先调用相应的filter。</p>
+<h1 id="MIME"><a href="#MIME" class="headerlink" title="MIME"></a>MIME</h1><p>MIME(Multipurpose Internet Mail Extensions)多用途互联网邮件扩展类型。用来告诉客户端所获取的文件的类型，使得客户端可以调用相应的插件或应用来处理这个请求相应回来的文件。</p>
+<h1 id="请求转发和请求重定向"><a href="#请求转发和请求重定向" class="headerlink" title="请求转发和请求重定向"></a>请求转发和请求重定向</h1><h2 id="请求转发"><a href="#请求转发" class="headerlink" title="请求转发"></a>请求转发</h2><p>有时候，你的应用需要把一个Servlet要处理的请求转让给另外的Servlet来处理并完成任务。而且，转让请求时不能重定向客户端的URL。即浏览器地址栏上的URL不会改变。在 ServletContext 里已经内置了实现上面需求的方法。所以，当你获取了 ServletContext 的引用，你就可以简单地调用getRequestDispatcher() 方法去获取用来转发请求的 RequestDispatcher 对象。当调用 getRequestDispatcher() 方法时，需要传递包含servlet名的字符串，这个Servlet就是你用来处理转让请求的Servlet。获取 RequestDispatcher 对象后，通过传递 HttpServletRequest 和HttpServletResponse 对象给它来调用转发方法。转发方法负责对请求进行转发。</p>
+<pre><code>RequestDispatcher rd = servletContext.getRequestDispatcher(&quot;/NextServlet&quot;);
+rd.forward(request, response);
+</code></pre><h2 id="请求重定向"><a href="#请求重定向" class="headerlink" title="请求重定向"></a>请求重定向</h2><p>尽管有时候，你不想在Servlet发送重定向时通知用户，就像我们在上面那段看到的一样。但是在某些情况下，我们确实想要通知用户。当应用内的特定URL被访问时，你想把浏览器的URL重定向到另外一个。<br>要实现这种功能，你需要调用 HttpServletResponse 对象的sendRedirect()方法。</p>
+<pre><code>httpServletResponse.sendRedirect(&quot;/anotherURL&quot;);
+</code></pre><h1 id="Web服务器，应用服务器，Web容器"><a href="#Web服务器，应用服务器，Web容器" class="headerlink" title="Web服务器，应用服务器，Web容器"></a>Web服务器，应用服务器，Web容器</h1><h2 id="Web服务器和应用服务器"><a href="#Web服务器和应用服务器" class="headerlink" title="Web服务器和应用服务器"></a>Web服务器和应用服务器</h2><p>在以前这两者是有明显的区别，但是现在这两者的区别逐渐合并，甚至于在某些情况下可以把二者看为一件事物了（实体）。</p>
+<p>一开始，<strong>web服务器</strong>足够简单，只提供基于HTTP协议的静态页面内容和图片，在那个时候，大部分的内容都是静态的，HTTP1.0协议只是把静态文件移动来移动去。但是之后很快web server演进到有了CGI的能力，这意味着有效地在每个web请求上启动一个进程来生成动态内容，这个时候的HTTP协议更加成熟，web server变得更加的复杂，其增加了许多的功能，如缓存，安全和会话管理等。随着技术的进一步成熟，我们从Kiva和NetDynamics获得了公司特有的基于java的服务器端技术，这些技术最终都集成到JSP中，这项技术我们今天任然用在大部分的应用开发中。</p>
+<p>与web server对应的应用服务器（application servers）演进和存在了很长时间。一些公司为Unix发布产品，如Tuxedo, TopEnd, Encina ，它们都是基于大型机应用管理和类似IMS和CICS的模拟环境的哲学上的演进思想。这些产品中的大多数都指定了“封闭”的特定于产品的通信协议，将“重量级”客户端与服务器互连。90年代，这些传统的应用服务器产品开始演进出基于HTTP的通信协议的能力，一开始是经由网关，但很快这两种方式的界限就变得模糊不清了。</p>
+<p>与此同时，web server因为能处理更高的加载，更多的并发和更好的特性。应用服务器开始发布越来越多的基于HTTP协议的通信能力，这就导致了web服务和应用服务器的之间的界限越来越窄。</p>
+<p>现今，web服务器和应用服务器已经无多大区别，但有时候人们还会基于一些重要的特征来区别它们。</p>
+<h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><center> <img src="https://howtodoinjava.com/wp-content/uploads/web-server-servlet-container.jpg" alt="web server与web container的区别"> </center>
+
+<p>Web Container，是java中的一种特殊说法，应该指的就是servlet容器。servlet容器就是web服务器的一个组件，它可以与servlet交互。一个web容器负责管理servlet的生命周期，映射一个URL到一个特殊的servlet，并确保这个URL请求有正确的访问权限和更多这样的服务。总之，据以上所述，servlet容器就是servlet的运行环境和它的生命周期的维护位置。</p>
+<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><p>对于java而言，servlet让你可以编写服务端组件，这些组件有助于生成基于请求的动态内容。实际上，servlet是javax.servlet包中的一个接口，其中为一个servlet的生命周期声明了三个重要的方法——init(),service()和destroy()。每个servlet都会实现这三个方法，它们会在servlet的生命周期中的特定时间被调用。servlet是运行与服务端的，独立与平台和协议的技术。</p>
+<center><img src="http://img.blog.csdn.net/20150420163121018" alt="servlet的工作流程"></center>
+
+<p>在浏览器中输入一个URL地址后发生的事：</p>
+<ol>
+<li>根据输入的地址找到服务器</li>
+<li>根据端口找到服务器上对应的在该端口上监听的程序（Tomcat）</li>
+<li>进入找到的服务器程序</li>
+<li>在服务器程序中找到servlet容器</li>
+<li>在servlet容器中根据URL定位到提供服务的servlet的名称</li>
+<li>根据servlet名称找到servlet对应的servlet类</li>
+<li>根据servlet类反射获取指定的方法</li>
+<li>指定的方法动态生成响应</li>
+<li>响应返回给服务器程序</li>
+<li>服务器程序把响应传回给客户端程序（浏览器）</li>
+</ol>
+<p>Servlet类通过类加载器动态地加载到容器中，既可以通过懒加载的方式，也可以通过饿加载的方式。每个请求都有自己的线程，在同一时间，一个servlet可以服务于多个线程。当servlet对象不再使用了就会被JVM垃圾回收。</p>
+<h2 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h2><p>当servlet容器启动时，它会部署和加载所有的应用，当一个应用被加载的时候，servlet容器会为每个应用创建一个ServletContext，且把它保留在内存中。web应用的web.xml会被解析，在web.xml中的每一个Servlet，Filter和Listener都会被创建一次，并也会保留在服务器的内存中。当servlet容器关闭的时候，会卸载所有的应用和ServletContext，所有的Servlet，Filter和Listener也都会被销毁。</p>
+<p>按java文档所描述的，ServletContext定义了一系列servlet用来与它的容器通信的方法，例如过去文件的MIME类型，分发请求，或写日志文件等。在一个web应用在它的发布描述符中标记“分布式”的情况下，每个虚拟机会有一个context实例。在这种情况下，context不能用作共享全局信息的位置（因为信息不是真的全局的）。需要使用一个额外的资源，比如数据库。</p>
+<h2 id="ServletRequest-和-ServletResponse-适合在servlet生命周期的那个阶段使用"><a href="#ServletRequest-和-ServletResponse-适合在servlet生命周期的那个阶段使用" class="headerlink" title="ServletRequest 和 ServletResponse 适合在servlet生命周期的那个阶段使用"></a>ServletRequest 和 ServletResponse 适合在servlet生命周期的那个阶段使用</h2><p>servlet容器绑定到一个web服务器上，该web服务器在某个端口上监听HTTP请求，通常是在80端口上。当一个客户端发送一个HTTP请求，servlet容器会创建一个新的HttpServletRequest 和 HttpServletResponse对象，并通过已经创建的URL模式匹配请求URL的filter和servlet实例来传递它们，所有这些都是在一个线程中完成的。</p>
+<h2 id="Cookie和Session"><a href="#Cookie和Session" class="headerlink" title="Cookie和Session"></a>Cookie和Session</h2><p>当一个客户端第一次访问web应用，HttpSession会通过request.getSession()第一次被获取，servlet容器会创建它，生成一个长的独一无二的ID，并把它存入服务器内存中，Servlet也会为HTTP响应设置一个cookie，JSESSIONID 作为cookie的名称，独一无二的session ID作为cookie的值。</p>
+<p>根据Http cookie的说明文档，只要这个cookie是有效的，在后续的请求中客户端都需要返回这个cookie。servlet容器将确定每一个传入的HTTP请求头，并使用名为JSESSIONID的cookie，使用cookie的值关联server内存中的HttpSession。</p>
+<p>HttpSession一直存在，除非超过一定的时间没有被使用了，这个时间通常可以在web.xml中设置，默认值会是30分钟。因此当客户端超过30分钟没有访问应用时，servlet容器会销毁这个session。后续的每个请求，即便是有指定cookie的，也不再能访问相同session。servlet容器会创建一个新的。</p>
+<p>另一方面，在客户端的session cookie有一个默认的存在时长，与浏览器的运行一样的时长。所以只要客户端关闭浏览器，在客户端的cookie就会被销毁。重新打开浏览器，与这个会话相关的cookie都不会再被发送。新的request.getSession()将会返回一个新的HttpSession，使用一个新的session ID设置一个新的cookie。</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>你应该意识到你不能赋值任何请求或会话作用域的数据为一个servlet或filter的实例的变量。这些变量会在所有的请求会话中共享，这样的话就会导致线程不安全。<br><strong>Servlet在Tomcat中单实例多线程，导致了servlet在多线程下变量共享的线程安全问题。</strong></p>
+<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><p>Servlet输出HTML语句还是采用了老的CGI方式，是一句一句输出，所以，编写和修改HTML非常不方便。为解决这个问题，SUN推出了类似于ASP的镶嵌型的JSP，JSP把TAG嵌套到HTML语句中，就大大简化和方便了网页的设计和修改。</p>
+<ol>
+<li>JSP在本质上就是servlet，但两者的创建方式不一样</li>
+<li>servlet是完全有java语言编写，善于流程控制和事务处理，通过servlet来生成动态网页很不直观</li>
+<li>JSP由HTML代码和JSP标签组成，可以方便的编写动态网页</li>
+</ol>
+<p>基于以上原因，实际应用中多采用servlet来控制业务流程，采用JSP来生成动态网页。在MVC框架中，JSP位于视图层，servlet位于控制层。</p>
+<ol>
+<li>JSP是servlet的技术扩展，本质上就是servlet的简易形式</li>
+<li>JSP编译后就是servlet类</li>
+<li>servlet和JSP的最主要的不同点在于，Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML里分离开来。而JSP是Java和HTML组合成一个扩展名为.jsp的文件</li>
+<li>JSP侧重于视图，Servlet主要用于控制逻辑。</li>
+</ol>
 ]]></content>
     
     <summary type="html">
