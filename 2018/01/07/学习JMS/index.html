@@ -1,0 +1,414 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>学习JMS | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="JMS使用中遇到的问题使用spring的消息转换器时提示的安全问题自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对应的jms消息对象，但在转发消息时候出现如下日志提示的错误。
+错误日志：
+Failed to build body from content.">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/01/07/学习JMS/" title="学习JMS" itemprop="url">学习JMS</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-01-07T02:41:45.000Z" itemprop="datePublished">2018-01-07</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JMS使用中遇到的问题"><span class="toc-number">1.</span> <span class="toc-text">JMS使用中遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用spring的消息转换器时提示的安全问题"><span class="toc-number">1.1.</span> <span class="toc-text">使用spring的消息转换器时提示的安全问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JMS事务管理之JNDI数据源配置"><span class="toc-number">2.</span> <span class="toc-text">JMS事务管理之JNDI数据源配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是jndi"><span class="toc-number">2.1.</span> <span class="toc-text">什么是jndi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tomcat容器"><span class="toc-number">2.2.</span> <span class="toc-text">Tomcat容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置方式"><span class="toc-number">2.2.1.</span> <span class="toc-text">配置方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JBoss"><span class="toc-number">2.3.</span> <span class="toc-text">JBoss</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置方式-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">配置方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebLogic"><span class="toc-number">2.4.</span> <span class="toc-text">WebLogic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置方式-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">配置方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IIS"><span class="toc-number">2.5.</span> <span class="toc-text">IIS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置方式-3"><span class="toc-number">2.5.1.</span> <span class="toc-text">配置方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#事务"><span class="toc-number">3.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是事务"><span class="toc-number">3.1.</span> <span class="toc-text">什么是事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是分布式事务"><span class="toc-number">3.2.</span> <span class="toc-text">什么是分布式事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式事务处理流程"><span class="toc-number">3.3.</span> <span class="toc-text">分布式事务处理流程</span></a></li></ol></li></ol>
+		</div>
+		
+		<h1 id="JMS使用中遇到的问题"><a href="#JMS使用中遇到的问题" class="headerlink" title="JMS使用中遇到的问题"></a>JMS使用中遇到的问题</h1><h2 id="使用spring的消息转换器时提示的安全问题"><a href="#使用spring的消息转换器时提示的安全问题" class="headerlink" title="使用spring的消息转换器时提示的安全问题"></a>使用spring的消息转换器时提示的安全问题</h2><p>自定义了一个普通的java对象Email,希望通过spring提供的消息对象转换器把其转为对应的jms消息对象，但在转发消息时候出现如下日志提示的错误。</p>
+<p>错误日志：</p>
+<p><code>Failed to build body from content. Serializable class not available to broker. Reason: java.lang.ClassNotFoundException: Forbidden class com.daniel.study.jms.model.Email! This class is not trusted to be serialized as ObjectMessage payload. Please take a look at http://activemq.apache.org/objectmessage.html for more information on how to configure trusted classes.</code></p>
+<p>导致的原因是在5.12.2 and 5.13.0版本后为了传输的对象是安全的，强制要求用户指定需要传输的对象所在的包（package），只有在指定的包下的类的对象才能使用ObjectMessage进行安全转换，也就是要指定能进行转换的对象的类所在包作为一个白名单。有两种配置白名单的方式：</p>
+<ol>
+<li>客户端配置，该方式是在5.12.2和5.13.1及之后的版本中提供的配置方式，这种方式是常用的。</li>
+</ol>
+<p>Spring配置文件中配置，配置方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  </div><div class="line">	    &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;</div><div class="line">	    &lt;!-- 指定可以通过ObjectMessage进行安全转换的对象的类所在的包 --&gt;</div><div class="line">	    &lt;property name=&quot;trustedPackages&quot;&gt;</div><div class="line">	        &lt;list&gt;</div><div class="line">	            &lt;value&gt;com.daniel.study.jms.model&lt;/value&gt;</div><div class="line">	        &lt;/list&gt;</div><div class="line">        &lt;/property&gt;  </div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  </div><div class="line">	    &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;</div><div class="line">	    &lt;property name=&quot;trustAllPackages&quot; value=&quot;true&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>如上的配置就是把com.daniel.study.jms.model下的所有类都加入白名单，在该白名单下的类的对象都是可以通过spring提供的转换器进行转换的。<a href="http://activemq.apache.org/objectmessage.html" target="_blank" rel="external">参考</a></p>
+<p>java代码中设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);</div><div class="line">factory.setTrustedPackages(new ArrayList(Arrays.asList(&quot;org.apache.activemq.test,org.apache.camel.test&quot;.split(&quot;,&quot;))));</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);</div><div class="line">factory.setTrustAllPackages(true);</div></pre></td></tr></table></figure>
+<ol>
+<li>还可以在服务端（activeMq broker）中进行配置，这种方式的配置开始于activeMq的5.12.2和5.13.0版本，在${ACTIVEMQ_HOME}/bin/env中配置activeMq的系统属性ACTIVEMQ_OPTS：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Dorg.apache.activemq.SERIALIZABLE_PACKAGES=java.lang,javax.security,java.util,org.apache.activemq,org.fusesource.hawtbuf,com.thoughtworks.xstream.mapper,com.daniel.study.jms.model</div></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*`</div></pre></td></tr></table></figure>
+<p>如上的设置，其中com.daniel.study.jms.model是加入白名单的包，对于broker的，其余的包默认是必须的。</p>
+<h1 id="JMS事务管理之JNDI数据源配置"><a href="#JMS事务管理之JNDI数据源配置" class="headerlink" title="JMS事务管理之JNDI数据源配置"></a>JMS事务管理之JNDI数据源配置</h1><h2 id="什么是jndi"><a href="#什么是jndi" class="headerlink" title="什么是jndi"></a>什么是jndi</h2><p>jndi(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。命名服务将名称和对象联系起来，使得我们可以用名称访问对象。目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。也就是说目录服务是一种特殊的命名服务。</p>
+<h2 id="Tomcat容器"><a href="#Tomcat容器" class="headerlink" title="Tomcat容器"></a>Tomcat容器</h2><h3 id="配置方式"><a href="#配置方式" class="headerlink" title="配置方式"></a>配置方式</h3><p><strong>全局：</strong></p>
+<ol>
+<li>在tomcat的conf文件夹下的context.xml配置文件中加入：<br>` &lt;Resource name=”jndi/mysql”   <pre><code>auth=&quot;Container&quot;   
+type=&quot;javax.sql.DataSource&quot;   
+driverClassName=&quot;com.mysql.jdbc.Driver&quot;   
+url=&quot;jdbc:mysql://localhost:3306/test&quot;   
+username=&quot;root&quot;   
+password=&quot;root&quot;   
+maxActive=&quot;20&quot;   
+maxIdle=&quot;10&quot;   
+maxWait=&quot;10000&quot;/&gt; 
+</code></pre>`</li>
+<li>在项目的web.xml中加入资源引用：<br><code>&lt;resource-ref&gt;  
+&lt;description&gt;JNDI DataSource&lt;/description&gt;  
+&lt;res-ref-name&gt;jndi/mysql&lt;/res-ref-name&gt;  
+&lt;res-ref-type&gt;javax.sql.DataSource&lt;/res-ref-type&gt;  
+&lt;res-auth&gt;Container&lt;/res-auth&gt;  
+&lt;/resource-ref&gt;</code></li>
+<li>在mybatis配置文件中加入:<br>`<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"><pre><code>&lt;property name=&quot;jndiName&quot;&gt;
+    &lt;value&gt;java:comp/env/jdbc/mysql&lt;/value&gt;
+&lt;/property&gt;
+</code></pre> </bean><br>`<br><strong>单个项目：</strong></li>
+<li>在META-INF中创建一个名为context.xml文件，在其中加入：<br>`&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br><context><br> &lt;Resource  name=”jdbc/mysql” auth=”Container” <pre><code>type=&quot;javax.sql.DataSource&quot;                                                     
+driverClassName=&quot;com.mysql.jdbc.Driver&quot;                                 
+url=&quot;jdbc:mysql://localhost:3306/test?useUnicode=true&quot;
+username=&quot;root&quot;
+password=&quot;root&quot;
+maxActive=&quot;50&quot;
+maxIdle=&quot;30&quot;
+maxWait=&quot;10000&quot; /&gt;
+</code></pre></context><br>`</li>
+<li>其他的同全局配置</li>
+</ol>
+<h2 id="JBoss"><a href="#JBoss" class="headerlink" title="JBoss"></a>JBoss</h2><h3 id="配置方式-1"><a href="#配置方式-1" class="headerlink" title="配置方式"></a>配置方式</h3><h2 id="WebLogic"><a href="#WebLogic" class="headerlink" title="WebLogic"></a>WebLogic</h2><h3 id="配置方式-2"><a href="#配置方式-2" class="headerlink" title="配置方式"></a>配置方式</h3><h2 id="IIS"><a href="#IIS" class="headerlink" title="IIS"></a>IIS</h2><h3 id="配置方式-3"><a href="#配置方式-3" class="headerlink" title="配置方式"></a>配置方式</h3><h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h2><p>事务是指一个工作单元，它包含了一组添加，删除，修改等具有逻辑关系的多个操作,作为一个单元整体执行，这组命令要么都执行成功，要么全部恢复</p>
+<h2 id="什么是分布式事务"><a href="#什么是分布式事务" class="headerlink" title="什么是分布式事务"></a>什么是分布式事务</h2><p>分布式事务是指事务的参与者、支持事务的服务器、资源管理器以及事务管理器分别位于分布式系统的不同节点之上<br>在两个或多个网络计算机资源上访问并且更新数据。将对两个或多个网络计算机的数据进行的多次操作作为一个整体进行处理。如：不同银行账户之间转账。</p>
+<p>一个分布式事务(distributed  transaction)包括一个事务管理器(transaction  manager)和一个或多个资源管理器(resource manager)</p>
+<ol>
+<li>一个资源管理器(resource  manager)是任意类型的持久化数据存储(数据库)。</li>
+<li>事务管理器(transaction manager)承担着所有事务参与单元者的相互通讯的责任。</li>
+</ol>
+<h2 id="分布式事务处理流程"><a href="#分布式事务处理流程" class="headerlink" title="分布式事务处理流程"></a>分布式事务处理流程</h2><p>分布式事务处理允许JDBC驱动程序支持两段式提交协议</p>
+<p>阶段一：开始向事务涉及到的全部资源发送提交前信息。此时，事务涉及到的资源还有最后一次机会来结束事务。如果任意一个资源决定结束事务，则整个事务取消，不会进行资源的更新。否则，事务将正常执行。为了防止发生资源更新失败，所有资源的更新都会写入到日志中。这些日志是永久性的，因此，这些日志在更新失败之后可以重新对所有资源进行恢复。(更新内存数据)</p>
+<p>阶段二：只在阶段一没有异常结束的时候才会发生。此时，所有的资源管理器都开始执行真正的数据更新。 (更新数据库数据)</p>
+<p>能实现分布式事务管理的事务管理器：</p>
+<ol>
+<li>JTA允许应用程序执行分布式事务处理。支持JTA的JDBC驱动程序极大地增强了数据访问能力。如果计划使用JTA来处理分布式事务,需要一个实现了以下接口的JDBC驱动</li>
+</ol>
+<p><code>javax.sql.XADataSource:获得XAConnection对象的工厂
+javax.sql.XAConnection:继承PooledConnection,为分布式事务提供支持，事务管理器(通常为中间层服务器的一部分)通过XAResource对象管理XAConnection对象
+javax.sql.DataSource</code></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/01/07/学习JMS/" data-title="学习JMS | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/01/01/JavaWeb-关键知识点答疑/"  title="JavaWeb 关键知识点答疑">
+ <strong>旧一篇:</strong><br/> 
+ <span>JavaWeb 关键知识点答疑
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="学习JMS" data-thread-key="学习JMS" data-author-key="Daniel" data-url="http://yoursite.com/post/学习JMS"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>
