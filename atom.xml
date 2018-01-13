@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-07T02:42:26.513Z</updated>
+  <updated>2018-01-07T15:26:53.683Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,53 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java Socket 编程</title>
+    <link href="http://yoursite.com/2018/01/07/Java-Socket-%E7%BC%96%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/01/07/Java-Socket-编程/</id>
+    <published>2018-01-07T05:17:58.000Z</published>
+    <updated>2018-01-07T15:26:53.683Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><p><center><img src="http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></center><br>基于TCP/IP协议族的网络，工分四层：</p>
+<ol>
+<li>应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的</li>
+<li>传输层</li>
+<li>网际层</li>
+<li>网络接口层</li>
+</ol>
+<p>Socket是位于应用层之下，传输层之上的接口，也就是操作系统提供给用户访问网络的系统接口。我们可以借助于Socket接口层，对传输层，网际层以及网络接口层进行操作，来实现我们不同的应用层协议。对于应用层，我们想实现网络功能，归根究底都是要通过Socket来实现的，否则，我们无法访问处于操作系统的传输层，网际层以及网络接口层。</p>
+<p>TCP/UDP，两者最大的区别在于，TCP是可靠的，也就是说，我们通过TCP发送的数据，网络协议栈会保证数据可靠的传输到对端，而UDP是不可靠的，如果出现丢包，协议栈不会做任何处理，可靠性的保证交由应用层处理。因此，TCP的性能会比UDP低，但是可靠性会比UDP好很多。除此之外，两者在传输数据时，也有形式上的不同，TCP的数据是流，大家可以类比文件流，而UDP则是基于数据包，也就是说数据会被打成包发送。流和数据包的最大区别在于流没有数据便捷，数据包有数据边界，UDP每次发送的数据都独立成包。</p>
+<h2 id="服务器模型"><a href="#服务器模型" class="headerlink" title="服务器模型"></a>服务器模型</h2><p>目前常见的服务器模型主要有三种：</p>
+<ol>
+<li>阻塞服务器</li>
+<li>并发服务器</li>
+<li>异步服务器</li>
+</ol>
+<ul>
+<li>阻塞式服务器是最好实现的服务器，也是问题最多的服务器。客户端发送到服务端的请求会进行排队，服务器会一次处理这些请求，前一个请求没有处理完，就不会处理下一个请求，这种服务器很容易受到攻击，只需要发送一个处理时间很长的请求就可以阻塞其他的请求。因此这种服务器也只能作为理论上的模型。</li>
+<li>并发式服务器。这种服务器处理请求的时候，会为每个接收到的请求创建独立的线程来处理该请求。好处是不会出现请求被阻塞的情况，但也存在一些问题，如果线程过多会把服务器的资源耗尽，导致服务器不能提供服务。不过好在有别的方式可以规避这种情况，就是在服务端建立线程池来处理请求。线程池虽然避免了服务器资源耗尽的问题，但是也存在一些自身的不足，比如线程池资源被用完后，后续的请求也会出现阻塞的情况。</li>
+<li>异步服务器。这种服务器借助系统的异步IO机制，当一个请求到来，我们可以先将请求注册，当有数据可以读取时，会得到通知，这时我们处理请求，这样服务器没有必要阻塞线程，也不会存在很大的系统开销，因此对于并发量比较高的服务器，一般都采用这种方式。</li>
+</ul>
+<h1 id="Java异步编程"><a href="#Java异步编程" class="headerlink" title="Java异步编程"></a>Java异步编程</h1><p>JAVA平台,实现异步调用的角色有如下三个角色：</p>
+<ol>
+<li>调用者</li>
+<li>取货凭证</li>
+<li>真实数据</li>
+</ol>
+<p>一个调用者在调用耗时操作,不能立即返回数据时,先返回一个取货凭证.然后在过一断时间后凭取货凭证来获取真正的数据。所以连结调用者和真实数据之间的桥梁是取货凭证。</p>
+<h2 id="Java中的回调"><a href="#Java中的回调" class="headerlink" title="Java中的回调"></a>Java中的回调</h2><p>java中的回调就是将规定一个接口，然后设计一个类（该类与接口存在关联或者依赖关系），最后，当使用这个类的时候，实现之前规定的接口，这就是java中的回调。简单的说，在Java中，通常就是编写下层的人规定一个接口，由上层来实现这个接口；然后上层就可以把这个接口的一个对象作为参数传给下层，下层就会通过那个接口来调用由上层编写的函数。</p>
+<p>java的回调是以接口的形式实现的。从类之间的关系角度看，有关联与依赖之分。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Socket在网络编程中所处的位置&quot;&gt;&lt;a href=&quot;#Socket在网络编程中所处的位置&quot; class=&quot;headerlink&quot; title=&quot;Socket在网络编程中所处的位置&quot;&gt;&lt;/a&gt;Socket在网络编程中所处的位置&lt;/h1&gt;&lt;h2 id=&quot;网络分层&quot;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>学习JMS</title>
@@ -112,7 +159,7 @@ javax.sql.DataSource</code></p>
     <link href="http://yoursite.com/2018/01/01/JavaWeb-%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E7%AD%94%E7%96%91/"/>
     <id>http://yoursite.com/2018/01/01/JavaWeb-关键知识点答疑/</id>
     <published>2018-01-01T06:16:59.000Z</published>
-    <updated>2018-01-07T02:19:48.596Z</updated>
+    <updated>2018-01-07T05:00:24.375Z</updated>
     
     <content type="html"><![CDATA[<h1 id="web-xml的作用"><a href="#web-xml的作用" class="headerlink" title="web.xml的作用"></a>web.xml的作用</h1><p>web.xml文件并不是web工程必须的，只有你需要配置欢迎页、servlet、filter等的时候，才需要配置它。web.xml的模式文件是由Sun公司定义的，每个web.xml文件的根元素<web-app>中，都必须标明这个web.xml使用的是哪些模式文件。</web-app></p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
@@ -203,7 +250,7 @@ rd.forward(request, response);
 <li>根据端口找到服务器上对应的在该端口上监听的程序（Tomcat）</li>
 <li>进入找到的服务器程序</li>
 <li>在服务器程序中找到servlet容器</li>
-<li>在servlet容器中根据URL定位到提供服务的servlet的名称</li>
+<li>在servlet容器中根据URL定位到提供服务的servlet的名称,如果没有找到对应的servlet类，就会调用Tomcat定义的DefaultServlet来直接访问webapp目录下的金泰资源</li>
 <li>根据servlet名称找到servlet对应的servlet类</li>
 <li>根据servlet类反射获取指定的方法</li>
 <li>指定的方法动态生成响应</li>
@@ -219,6 +266,7 @@ rd.forward(request, response);
 <p>HttpSession一直存在，除非超过一定的时间没有被使用了，这个时间通常可以在web.xml中设置，默认值会是30分钟。因此当客户端超过30分钟没有访问应用时，servlet容器会销毁这个session。后续的每个请求，即便是有指定cookie的，也不再能访问相同session。servlet容器会创建一个新的。</p>
 <p>另一方面，在客户端的session cookie有一个默认的存在时长，与浏览器的运行一样的时长。所以只要客户端关闭浏览器，在客户端的cookie就会被销毁。重新打开浏览器，与这个会话相关的cookie都不会再被发送。新的request.getSession()将会返回一个新的HttpSession，使用一个新的session ID设置一个新的cookie。</p>
 <h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>你应该意识到你不能赋值任何请求或会话作用域的数据为一个servlet或filter的实例的变量。这些变量会在所有的请求会话中共享，这样的话就会导致线程不安全。<br><strong>Servlet在Tomcat中单实例多线程，导致了servlet在多线程下变量共享的线程安全问题。</strong></p>
+<p>注：servlet的设计不是singleto模式，知识说servlet容器只创建其一次。</p>
 <h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><p>Servlet输出HTML语句还是采用了老的CGI方式，是一句一句输出，所以，编写和修改HTML非常不方便。为解决这个问题，SUN推出了类似于ASP的镶嵌型的JSP，JSP把TAG嵌套到HTML语句中，就大大简化和方便了网页的设计和修改。</p>
 <ol>
 <li>JSP在本质上就是servlet，但两者的创建方式不一样</li>
@@ -232,6 +280,94 @@ rd.forward(request, response);
 <li>servlet和JSP的最主要的不同点在于，Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML里分离开来。而JSP是Java和HTML组合成一个扩展名为.jsp的文件</li>
 <li>JSP侧重于视图，Servlet主要用于控制逻辑。</li>
 </ol>
+<h3 id="web服务器使用JSP创建网页"><a href="#web服务器使用JSP创建网页" class="headerlink" title="web服务器使用JSP创建网页"></a>web服务器使用JSP创建网页</h3><ol>
+<li>对于一个正常的页面，浏览器发送一个HTTP请求到万维网服务器。</li>
+<li>网站服务器识别HTTP请求是一个JSP页面，并将其转发给JSP引擎。这是通过使用URL或JSP页面，而这个页面使用 .jsp 后缀，而不是 .html 后缀。</li>
+<li>JSP引擎从磁盘加载JSP页面，并将其转换成servlet的内容。这种转换是很简单的，所有的模板文本被转换给println()语句，所有JSP元素被转换为实现该页面相应动态行为的Java代码。</li>
+<li>JSP引擎编译成servlet的一个可执行类并转发原始请求到servlet引擎。</li>
+<li>一部分Web服务器调用servlet引擎加载Servlet类并执行它。在执行期间，Servlet产生HTML的格式输出，其servlet引擎传递到web服务器响应HTTP请求。</li>
+<li>Web服务器响应HTTP转发静态的HTML内容到浏览器。</li>
+<li>最后的 web 浏览器处理HTTP响应动态生成的HTML页面完全就像一个静态页面内容。</li>
+</ol>
+<p><strong><em>JSP可通过servlet引擎动态的编译为静态页面</em></strong></p>
+<ol>
+<li><p>JSP脚本，JSP语法：</p>
+<pre><code>&lt;% code fragment %&gt;
+</code></pre><p>或XML语法：</p>
+<pre><code>&lt;jsp:scriptlet&gt;
+       code fragment
+&lt;/jsp:scriptlet&gt;
+</code></pre></li>
+<li><p>JSP声明，JSP语法：</p>
+<pre><code>&lt;%! declaration; [ declaration; ]+ ... %&gt;
+</code></pre><p>或XML语法：</p>
+<pre><code>&lt;jsp:declaration&gt;
+       code fragment
+&lt;/jsp:declaration&gt;
+</code></pre></li>
+<li><p>JSP表达式，JSP语法：</p>
+<pre><code>&lt;%= expression %&gt;
+</code></pre><p>或XML语法：</p>
+<pre><code>&lt;jsp:expression&gt;
+       expression
+&lt;/jsp:expression&gt;
+</code></pre></li>
+<li><p>JSP注释，JSP语法：</p>
+<pre><code>&lt;%-- This is JSP comment --%&gt;
+</code></pre></li>
+<li><p>JSP指令</p>
+<pre><code>&lt;%@ directive attribute=&quot;value&quot; %&gt;
+</code></pre><p>有三种类型的指令标记：</p>
+<pre><code>&lt;%@ page ... %&gt;&lt;!--定义页面依赖属性，例如脚本语言，错误页面和缓冲的要求--&gt;
+&lt;%@ include ... %&gt;&lt;!--包括在转换阶段的文件--&gt;
+&lt;%@ taglib ... %&gt;&lt;!--声明了一个标签库，包含自定义动作，用在页面中--&gt;
+</code></pre></li>
+<li><p>JSP动作，JSP动作使用XML语法结构来控制Servlet引擎的行为。可以动态地插入文件，重用JavaBeans组件，用户转发到另一个页面，或为Java插件生成HTML。语法：</p>
+<pre><code>&lt;jsp:action_name attribute=&quot;value&quot; /&gt;    
+</code></pre></li>
+<li>JSP隐式对象</li>
+</ol>
+<p>JSP支持九种自动定义的变量，这也被称为隐式对象。这些变量是：</p>
+<ul>
+<li>request：这是与请求相关联的HttpServletRequest对象</li>
+<li>response：这是用于响应客户端相关联的HttpServletResponse对象</li>
+<li>out：这是用于将输出发送给客户端的PrintWriter对象</li>
+<li>session：这是与请求相关联的HttpSession对象</li>
+<li>application：这是应用程序上下文关联的ServletContext对象</li>
+<li>config：这是与页面关联的ServletConfig对象</li>
+<li>pageContext：这封装采用类似更高的性能JspWriters服务器特定的功能</li>
+<li>page：这是一个简单的代名词，是用来调用由转换servlet类中定义的方法</li>
+<li>Exception：Exception对象允许例外的数据由JSP指定访问</li>
+</ul>
+<h2 id="JSP对象的范围"><a href="#JSP对象的范围" class="headerlink" title="JSP对象的范围"></a>JSP对象的范围</h2><ul>
+<li>page范围：使用此JSP对象可以在其中创建的页面内使用。</li>
+<li>Request 范围：使用该JSP对象可以在请求服务任何地方使用。</li>
+<li>Session 范围:使用该JSP的对象可用于在属于同一个会话页面。</li>
+<li>Application 范围：使用该JSP的对象可以在整个应用程序页面中使用。</li>
+</ul>
+<h2 id="JSP中使用Javabean"><a href="#JSP中使用Javabean" class="headerlink" title="JSP中使用Javabean"></a>JSP中使用Javabean</h2><p>嵌入一个Java bean到JSP网页，有三个基本动作或标签：<jsp:usebean>, <jsp:setproperty>, <jsp:getproperty></jsp:getproperty></jsp:setproperty></jsp:usebean></p>
+<ul>
+<li><jsp:usebean>：这个标签是用来给bean指定“id”和“scope”属性相关联。</jsp:usebean></li>
+<li><jsp:setproperty>：这个标签被用于设置一个beans属性的值，主要使用“name”属性已经定义的Javabean对象的ID。其他属性是 “property”, “param”, “value”</jsp:setproperty></li>
+<li><jsp:getproperty>：个标签是用来获取引用Bean实例属性并将其存储到隐式out对象。</jsp:getproperty></li>
+</ul>
+<p>bean的规则：</p>
+<ul>
+<li>包应该是java bean的第一行</li>
+<li>Bean应该有一个空的构造</li>
+<li>所有的bean中的变量应该设置有“get”，“set”方法。</li>
+<li>属性名应以大写字母开头在使用“set”，“get”方法时。</li>
+<li>例如变量“名称”的get，set方法就是getName(), setName(String)</li>
+<li>设置方法应该返回像一个空(void)值： “return void()”</li>
+</ul>
+<h2 id="JSP的运行机制"><a href="#JSP的运行机制" class="headerlink" title="JSP的运行机制"></a>JSP的运行机制</h2><center><img src="http://www.blogjava.net/images/blogjava_net/fancydeepin/myself/jsp.png" alt=""></center>
+
+<ol>
+<li>当客户端浏览器向服务器请求一个 JSP 页面时，服务器收到该请求后，首先检查所请求的这个JSP 文件内容 ( 代码 ) 是否已经被更新，或者是否是 JSP 文件创建后的第一次被访问</li>
+<li>如果是，那么，这个 JSP 文件就会在服务器端的 JSP 引擎作用下转化为一个 Servlet 类的 Java 源代码文件。紧接着，这个 Servlet 类会在 Java 编译器的作用下被编译成一个字节码文件，并装载到 jvm 解释执行。剩下的就等同于 Servlet 的处理过程了。</li>
+<li>如果被请求的 JSP 文件内容 ( 代码 ) 没有被修改，那么它的处理过程也等同于一个 Servlet 的处理过程。即直接由服务器检索出与之对应的 Servlet 实例来处理。</li>
+</ol>
+<p><em>注：JSP 文件不是在服务器启动的时候转换成 Servlet 类的。而是在被客户端访问的时候才可能发生转换的 ( 如 JSP 文件内容没有被更新等，就不再发生 Servlet 转换 )。</em><br>对Tomcat而言，打开目录 %Tomcat%/work/%您的工程文件目录%，在里面会有一个子目录：org/apache/jsp，如果没有这个目录，说明项目的JSP文件还没有被访问过。如果有该目录，进入其中会发现一些<em>_jsp.java 和 </em>_jsp.class 文件，这就是 JSP 文件被转换成Servlet 类的源文件和字节码文件了。</p>
 ]]></content>
     
     <summary type="html">
@@ -2063,79 +2199,6 @@ console.log(&quot;程序执行完毕。&quot;);
     
     
       <category term="编码学习" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>编码过程中的注意事项</title>
-    <link href="http://yoursite.com/2016/09/14/%E7%BC%96%E7%A0%81%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
-    <id>http://yoursite.com/2016/09/14/编码过程中的注意事项/</id>
-    <published>2016-09-14T15:20:54.000Z</published>
-    <updated>2016-09-15T03:48:38.608Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在工作中发现最令我苦恼的居然是怎么给一个变量、方法或函数命名，有时候会纠结我一个上午，甚至一天之后还会耿耿于怀。所以一直希望总结一下怎么给变量、方法或函数命名。</p>
-<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><p>言归正传，目前比较流行的命名规则有：帕斯卡命名法和驼峰命名法。帕斯卡命名的规则是从名称的第一个字单词开始，每一个单词的首字母大写；驼峰命名的规则是名称的第一个单词全部字母小写，之后的每个单词的首字母大写。一般来说类名称采用帕斯卡命名法，变量名和方法或函数名采用驼峰法命名规则。</p>
-<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
-<li>见名知意：通常来说，一个变量的名称应该能表现它的使用场景、范围、性质等，一个方法或函数的名称应该尽可能描述其功用和动作。</li>
-<li>对于方法或函数的命名通常要用动词，因为方法或函数表现得就应该是一个动作（这里的一个动作很重要，不要一个方法包含过多的动作，方法的职责应该单一）。</li>
-<li>命名是不要用一些太泛泛的单词，而应该具体点，最好根据使用场景命名。例如对于获取数据，很多人都是用getSomething,这有点泛泛。为了命名的精准，应该多积累词汇。对于获取数据：如果只是简单的返回数据，使用getSomething；如果是从远程获取数据，使用fetchSomething；如果只是从本地加载数据，使用loadSomething；如果是从缓存中获取数据，使用findSomething；如果是通过某些数据衍生而来，可以使用createSomething(data)，buildSomething(data)，parseSomething(data)。</li>
-<li>不同的项目，因为使用场景的、使用技术不同，很可能命名规则也不同。在项目进行前，应该先规范整个团队的命名规则。</li>
-<li>函数使用者在调用函数时，参数名称应该跟函数定义者给的形参的名称一致。</li>
-</ul>
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="函数传参"><a href="#函数传参" class="headerlink" title="函数传参"></a>函数传参</h2><ul>
-<li>不要用boolean变量作为函数的参数，如果出现这种情况，需要考虑重写函数。</li>
-<li>不要修改传入函数中的参数。</li>
-<li>返回不能是传入的参数，否则意味着一个函数中实现了不止一个功能，要进来达到单一职责原则。</li>
-</ul>
-<h2 id="函数体编写"><a href="#函数体编写" class="headerlink" title="函数体编写"></a>函数体编写</h2><ul>
-<li>必须是相关的操作放在一起构成一个函数，而不是一个函数只求功能齐全，而不注重复用，函数就是复用的最小单元。</li>
-<li><p>尽量减少代码嵌套</p>
-<blockquote>
-<ol>
-<li>函数最容易终止的判断分支放在判断的最前面。</li>
-<li>如果使用判断语句，发现判断分支太多，就不应该使用判断，换一种方法实现同样的功能，例如使用表驱动法。</li>
-</ol>
-</blockquote>
-<p>  if(condition == “case1”){ </p>
-<pre><code>return 1; 
-</code></pre><p>  } elseif(condition == “case2”){</p>
-<pre><code>return 2; 
-</code></pre><p>  } elseif(condition == “case3”){</p>
-<pre><code>return 3;
-</code></pre><p>  } elseif(condition == “case4”){</p>
-<pre><code>return 4; 
-</code></pre><p>  }</p>
-</li>
-</ul>
-<blockquote>
-<p>表驱动方法</p>
-</blockquote>
-<pre><code>var map = { 
-    &quot;case1&quot;:1,
-    &quot;case2&quot;:2, 
-    &quot;case3&quot;:3, 
-    &quot;case4&quot;:4 
-} 
-return map[condition];
-</code></pre><blockquote>
-<p>3.多层嵌套时，可以提取内层嵌套为一个函数或方法进行调用。</p>
-<p>4.for循环的嵌套层数应该尽可能的少</p>
-</blockquote>
-<ul>
-<li>提取复杂逻辑，语义化</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      工作中关于变量、方法或函数命名规范的总结。
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="总结" scheme="http://yoursite.com/tags/%E6%80%BB%E7%BB%93/"/>
     
   </entry>
   
