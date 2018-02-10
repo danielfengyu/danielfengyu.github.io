@@ -4,19 +4,18 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Java Socket 编程 | 山间听雨者主页</title>
+    <title>gradle 版本依赖工具 | 山间听雨者主页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" content="Socket在网络编程中所处的位置网络分层基于TCP/IP协议族的网络，工分四层：
-
-应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的
-传输层
-网际层
-网络接口层
-
-Socket是位于应用层之下，传输层之上的接口，也就是操作系统提供给用户访问网络的系统接口。我们可以借助于Socke">
+    <meta name="description" content="安装
+下载
+安装指导或如果你下载的包中包含有文档，在解压后的根目录下有个文件getting-started.html，双击，使用浏览器打开，其中也有安装的指导
+设置环境变量
+检查是否安装成功,如果执行如下命令后看到版本信息，则表明安装成功
+gradle -v
+注意：修改版本包缓存的目录。默认情况下{">
     
     
     
@@ -97,10 +96,10 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/01/07/Java-Socket-编程/" title="Java Socket 编程" itemprop="url">Java Socket 编程</a>
+      <a href="/2018/01/21/gradle-版本依赖工具/" title="gradle 版本依赖工具" itemprop="url">gradle 版本依赖工具</a>
   </h1>
   <p class="article-time">
-    <time datetime="2018-01-07T05:17:58.000Z" itemprop="datePublished">2018-01-07</time>
+    <time datetime="2018-01-21T09:18:26.000Z" itemprop="datePublished">2018-01-21</time>
   </p>
 </header>
 	<div class="article-content">
@@ -108,38 +107,23 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Socket在网络编程中所处的位置"><span class="toc-number">1.</span> <span class="toc-text">Socket在网络编程中所处的位置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络分层"><span class="toc-number">1.1.</span> <span class="toc-text">网络分层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器模型"><span class="toc-number">1.2.</span> <span class="toc-text">服务器模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java异步编程"><span class="toc-number">2.</span> <span class="toc-text">Java异步编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java中的回调"><span class="toc-number">2.1.</span> <span class="toc-text">Java中的回调</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用gradle构建Spring"><span class="toc-number">2.</span> <span class="toc-text">使用gradle构建Spring</span></a></li></ol>
 		</div>
 		
-		<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><p><center><img src="http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></center><br>基于TCP/IP协议族的网络，工分四层：</p>
-<ol>
-<li>应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的</li>
-<li>传输层</li>
-<li>网际层</li>
-<li>网络接口层</li>
+		<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ol>
+<li><a href="http://services.gradle.org/distributions/" target="_blank" rel="external">下载</a></li>
+<li><a href="https://gradle.org/install/#manually" target="_blank" rel="external">安装指导</a>或如果你下载的包中包含有文档，在解压后的根目录下有个文件getting-started.html，双击，使用浏览器打开，其中也有安装的指导</li>
+<li>设置环境变量</li>
+<li><p>检查是否安装成功,如果执行如下命令后看到版本信息，则表明安装成功</p>
+<pre><code>gradle -v
+</code></pre><p>注意：<em>修改版本包缓存的目录。默认情况下{user}/.gradle目录下，我们需要修改到指定的目录下(Windows),在bin/gradle.bat的相应位置设置如下的第二行脚本：</em></p>
+<pre><code># Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script
+set GRADLE_OPTS=-Dgradle.user.home=/yourpath/gradle/gradle_cache
+</code></pre><p>如果使用的是大于4.3的版本，构建project的时候，使用：</p>
+<pre><code>gradle build --scan
+</code></pre></li>
 </ol>
-<p>Socket是位于应用层之下，传输层之上的接口，也就是操作系统提供给用户访问网络的系统接口。我们可以借助于Socket接口层，对传输层，网际层以及网络接口层进行操作，来实现我们不同的应用层协议。对于应用层，我们想实现网络功能，归根究底都是要通过Socket来实现的，否则，我们无法访问处于操作系统的传输层，网际层以及网络接口层。</p>
-<p>TCP/UDP，两者最大的区别在于，TCP是可靠的，也就是说，我们通过TCP发送的数据，网络协议栈会保证数据可靠的传输到对端，而UDP是不可靠的，如果出现丢包，协议栈不会做任何处理，可靠性的保证交由应用层处理。因此，TCP的性能会比UDP低，但是可靠性会比UDP好很多。除此之外，两者在传输数据时，也有形式上的不同，TCP的数据是流，大家可以类比文件流，而UDP则是基于数据包，也就是说数据会被打成包发送。流和数据包的最大区别在于流没有数据便捷，数据包有数据边界，UDP每次发送的数据都独立成包。</p>
-<h2 id="服务器模型"><a href="#服务器模型" class="headerlink" title="服务器模型"></a>服务器模型</h2><p>目前常见的服务器模型主要有三种：</p>
-<ol>
-<li>阻塞服务器</li>
-<li>并发服务器</li>
-<li>异步服务器</li>
-</ol>
-<ul>
-<li>阻塞式服务器是最好实现的服务器，也是问题最多的服务器。客户端发送到服务端的请求会进行排队，服务器会一次处理这些请求，前一个请求没有处理完，就不会处理下一个请求，这种服务器很容易受到攻击，只需要发送一个处理时间很长的请求就可以阻塞其他的请求。因此这种服务器也只能作为理论上的模型。</li>
-<li>并发式服务器。这种服务器处理请求的时候，会为每个接收到的请求创建独立的线程来处理该请求。好处是不会出现请求被阻塞的情况，但也存在一些问题，如果线程过多会把服务器的资源耗尽，导致服务器不能提供服务。不过好在有别的方式可以规避这种情况，就是在服务端建立线程池来处理请求。线程池虽然避免了服务器资源耗尽的问题，但是也存在一些自身的不足，比如线程池资源被用完后，后续的请求也会出现阻塞的情况。</li>
-<li>异步服务器。这种服务器借助系统的异步IO机制，当一个请求到来，我们可以先将请求注册，当有数据可以读取时，会得到通知，这时我们处理请求，这样服务器没有必要阻塞线程，也不会存在很大的系统开销，因此对于并发量比较高的服务器，一般都采用这种方式。</li>
-</ul>
-<h1 id="Java异步编程"><a href="#Java异步编程" class="headerlink" title="Java异步编程"></a>Java异步编程</h1><p>JAVA平台,实现异步调用的角色有如下三个角色：</p>
-<ol>
-<li>调用者</li>
-<li>取货凭证</li>
-<li>真实数据</li>
-</ol>
-<p>一个调用者在调用耗时操作,不能立即返回数据时,先返回一个取货凭证.然后在过一断时间后凭取货凭证来获取真正的数据。所以连结调用者和真实数据之间的桥梁是取货凭证。</p>
-<h2 id="Java中的回调"><a href="#Java中的回调" class="headerlink" title="Java中的回调"></a>Java中的回调</h2><p>java中的回调就是将规定一个接口，然后设计一个类（该类与接口存在关联或者依赖关系），最后，当使用这个类的时候，实现之前规定的接口，这就是java中的回调。简单的说，在Java中，通常就是编写下层的人规定一个接口，由上层来实现这个接口；然后上层就可以把这个接口的一个对象作为参数传给下层，下层就会通过那个接口来调用由上层编写的函数。</p>
-<p>java的回调是以接口的形式实现的。从类之间的关系角度看，有关联与依赖之分。</p>
+<h1 id="使用gradle构建Spring"><a href="#使用gradle构建Spring" class="headerlink" title="使用gradle构建Spring"></a>使用gradle构建Spring</h1><p>一定要使用相应版本的gradle构建，不然会出现难以预料的问题</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -149,7 +133,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/01/07/Java-Socket-编程/" data-title="Java Socket 编程 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2018/01/21/gradle-版本依赖工具/" data-title="gradle 版本依赖工具 | 山间听雨者主页" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -159,18 +143,18 @@ var _hmt = _hmt || [];
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2018/01/13/Spring-boot-学习/" title="Spring-boot 学习">
+ <a href="/2018/01/21/基础网络知识/" title="基础网络知识">
   <strong>新一篇:</strong><br/>
   <span>
-  Spring-boot 学习</span>
+  基础网络知识</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2018/01/07/学习JMS/"  title="学习JMS">
+<a href="/2018/01/13/Spring-boot-学习/"  title="Spring-boot 学习">
  <strong>旧一篇:</strong><br/> 
- <span>学习JMS
+ <span>Spring-boot 学习
 </span>
 </a>
 </div>
@@ -180,7 +164,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Java Socket 编程" data-thread-key="Java-Socket-编程" data-author-key="Daniel" data-url="http://yoursite.com/post/Java-Socket-编程"></div>
+	<div class="ds-thread" data-title="gradle 版本依赖工具" data-thread-key="gradle-版本依赖工具" data-author-key="Daniel" data-url="http://yoursite.com/post/gradle-版本依赖工具"></div>
 	
 </section>
 

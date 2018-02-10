@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>MySQL | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="索引创建索引-- ALTER 增加索引
+ALTER table user_t add index first_index(id);
+
+ALTER table user_t add UNIQUE second_index(id)
+
+ALTER TABLE user_t ADD PRIMARY KEY(">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/02/09/MySQL/" title="MySQL" itemprop="url">MySQL</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-02-09T11:11:00.000Z" itemprop="datePublished">2018-02-09</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建索引"><span class="toc-number">1.1.</span> <span class="toc-text">创建索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除索引"><span class="toc-number">1.2.</span> <span class="toc-text">删除索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引类型"><span class="toc-number">1.3.</span> <span class="toc-text">索引类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看索引"><span class="toc-number">1.4.</span> <span class="toc-text">查看索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引方式"><span class="toc-number">1.5.</span> <span class="toc-text">索引方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL的索引的原理"><span class="toc-number">1.6.</span> <span class="toc-text">MySQL的索引的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#索引数据结构B-Tree-和-B-Tree"><span class="toc-number">1.6.1.</span> <span class="toc-text">索引数据结构B-Tree 和 B+Tree</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引实现"><span class="toc-number">1.7.</span> <span class="toc-text">索引实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MyISAM-索引"><span class="toc-number">1.7.1.</span> <span class="toc-text">MyISAM 索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB索引"><span class="toc-number">1.7.2.</span> <span class="toc-text">InnoDB索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的使用策略"><span class="toc-number">1.8.</span> <span class="toc-text">索引的使用策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最左前缀原理"><span class="toc-number">1.9.</span> <span class="toc-text">最左前缀原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#事务"><span class="toc-number">2.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的特征"><span class="toc-number">2.1.</span> <span class="toc-text">事务的特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的问题"><span class="toc-number">2.2.</span> <span class="toc-text">事务的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原子性、稳定性和持久性实现原理"><span class="toc-number">2.3.</span> <span class="toc-text">原子性、稳定性和持久性实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-日志文件"><span class="toc-number">2.3.1.</span> <span class="toc-text">undo 日志文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redo-undo-日志文件"><span class="toc-number">2.3.2.</span> <span class="toc-text">redo/undo 日志文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟不同的事务级别对数据安全的影响"><span class="toc-number">2.4.</span> <span class="toc-text">模拟不同的事务级别对数据安全的影响</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验步骤"><span class="toc-number">2.5.</span> <span class="toc-text">实验步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试read-uncommitted-级别"><span class="toc-number">2.5.1.</span> <span class="toc-text">测试read uncommitted 级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-committed-级别"><span class="toc-number">2.5.2.</span> <span class="toc-text">read committed 级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repeatable-read级别"><span class="toc-number">2.5.3.</span> <span class="toc-text">Repeatable read级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serializable级别"><span class="toc-number">2.5.4.</span> <span class="toc-text">serializable级别</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><pre><code>-- ALTER 增加索引
+ALTER table user_t add index first_index(id);
+
+ALTER table user_t add UNIQUE second_index(id)
+
+ALTER TABLE user_t ADD PRIMARY KEY(id);
+
+-- create方式增加索引
+CREATE INDEX create_first_index on user_t (user_name);
+
+create UNIQUE INDEX create_second_index on user_t (password,user_name,id);
+</code></pre><p>在主键上创建索引不用给定名称，因为主键对于一张表来说是唯一的。</p>
+<h2 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h2><pre><code>-- 删除索引
+DROP INDEX first_index on user_t;
+ALTER TABLE user_t DROP INDEX first_index;
+ALTER TABLE user_t drop PRIMARY KEY;
+</code></pre><p>删除 primary key不用指定名称，因为一张表上只可能有一个 primary key索引。执行第三条语句的时候，如果表上没有创建primary key索引，但表具有一个或多个UNIQUE索引，则MySQL将删除第一个UNIQUE索引。如果从表中删除了某列，会对索引有影响。对于多列组合的索引，如果删除其中的某列，则该列也会从索引中删除。如果删除组成索引的所有列，则整个索引将被删除。</p>
+<h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><ol>
+<li>索引不包含重复值，则索引应该创建为 primary Key或Unique。对于单列唯一性约束来说，保证单列不包含重复值，对于多列唯一性索引，多列的值的组合不重复。PRIMARY KEY索引和UNIQUE索引非常类似。事实上，PRIMARY KEY索引仅是一个具有名称PRIMARY的UNIQUE索引</li>
+</ol>
+<h2 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h2><pre><code>show index from user_t;
+</code></pre><p>结果：</p>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foaffzkkpfj21aa09b0u8.jpg" alt=""></center>
+
+
+<ul>
+<li>Table 表的名称。</li>
+<li>Non_unique 如果索引不能包括重复词，则为0。如果可以，则为1。</li>
+<li>Key_name 索引的名称。</li>
+<li>Seq_in_index 索引中的列序列号，从1开始。</li>
+<li>Column_name 列名称。</li>
+<li>Collation 列以什么方式存储在索引中。在MySQL中，有值‘A’（升序）或NULL（无分类）。</li>
+<li>Cardinality 索引中唯一值的数目的估计值。通过运行ANALYZE TABLE或myisamchk -a可以更新。基数根据被存储为整数的统计数据来计数，所以即使对于小型表，该值也没有必要是精确的。基数越大，当进行联合时，MySQL使用该索引的机会就越大。</li>
+<li>Sub_part 如果列只是被部分地编入索引，则为被编入索引的字符的数目。如果整列被编入索引，则为NULL。</li>
+<li>Packed 指示关键字如何被压缩。如果没有被压缩，则为NULL。</li>
+<li>Null 如果列含有NULL，则含有YES。如果没有，则该列含有NO。</li>
+<li>Index_type 用过的索引方法（BTREE, FULLTEXT, HASH, RTREE）。</li>
+<li>Comment</li>
+</ul>
+<h2 id="索引方式"><a href="#索引方式" class="headerlink" title="索引方式"></a>索引方式</h2><ol>
+<li>BTREE, </li>
+<li>FULLTEXT, </li>
+<li>HASH, </li>
+<li>RTREE</li>
+</ol>
+<h2 id="MySQL的索引的原理"><a href="#MySQL的索引的原理" class="headerlink" title="MySQL的索引的原理"></a>MySQL的索引的原理</h2><h3 id="索引数据结构B-Tree-和-B-Tree"><a href="#索引数据结构B-Tree-和-B-Tree" class="headerlink" title="索引数据结构B-Tree 和 B+Tree"></a>索引数据结构B-Tree 和 B+Tree</h3><p>MySQL使用的是B+Tree作为索引的数据结构。一般来说，索引本身也很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上，所以评价一个数据结构作为索引的优劣最重要的指标就是在查找过程中磁盘I/O操作次数的渐进复杂度。应该尽量减少磁盘I/O次数。</p>
+<ol>
+<li><p>数据库系统的设计者巧妙利用了磁盘预读原理，将一个节点的大小设为等于一个页，这样每个节点只需要一次I/O就可以完全载入。为了达到这个目的，在实际实现B-Tree还需要使用如下技巧：<br>每次新建节点时，直接申请一个页的空间，这样就保证一个节点物理上也存储在一个页里，加之计算机存储分配都是按页对齐的，就实现了一个node只需一次I/O。</p>
+</li>
+<li><p>B-Tree中一次检索最多需要h-1次I/O（根节点常驻内存），渐进复杂度为O(h)=O(logdN)O(h)=O(logdN)。一般实际应用中，出度d是非常大的数字，通常超过100，因此h非常小（通常不超过3）。</p>
+</li>
+</ol>
+<p>B+Tree:</p>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foah7rvrxmj20f6089gli.jpg" alt="B+Tree"></center>
+
+<p>B-Tree:</p>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foahaxvy5oj20m406kjrc.jpg" alt="B-Tree"></center>
+
+<p>比较B-Tree和B+Tree,B+Tree更适合外存索引，原因和内节点出度d有关。从上面分析可以看到，d越大索引的性能越好，而出度的上限取决于节点内key和data的大小：</p>
+<pre><code>dmax=floor(pagesize/(keysize+datasize+pointsize))
+</code></pre><p>floor表示向下取整。由于B+Tree内节点去掉了data域，因此可以拥有更大的出度，拥有更好的性能。</p>
+<h2 id="索引实现"><a href="#索引实现" class="headerlink" title="索引实现"></a>索引实现</h2><p>在MySQL中，索引属于存储引擎级别的概念，不同存储引擎对索引的实现方式是不同的。</p>
+<h3 id="MyISAM-索引"><a href="#MyISAM-索引" class="headerlink" title="MyISAM 索引"></a>MyISAM 索引</h3><p>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址。在MyISAM中，主索引和辅助索引（Secondary key）在结构上没有任何区别，只是主索引要求key是唯一的，而辅助索引的key可以重复。因此，MyISAM中索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。</p>
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/8.png" alt="主索引"></center>
+
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png" alt="辅助索引"></center>
+
+<p>主索引与辅助索引在结构上没有什么区别。主索引要求key是唯一的，而辅助索引的key可以重复。</p>
+<h3 id="InnoDB索引"><a href="#InnoDB索引" class="headerlink" title="InnoDB索引"></a>InnoDB索引</h3><p>虽然InnoDB也使用B+Tree作为索引结构，但具体实现方式却与MyISAM截然不同。</p>
+<ol>
+<li>第一个重大区别是InnoDB的数据文件本身就是索引文件。 而在InnoDB中，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录。</li>
+</ol>
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png" alt="主索引"></center>
+
+<p>可以看到叶节点包含了完整的数据记录。这种索引叫做聚集索引。<strong>因为InnoDB的数据文件本身要按主键聚集，所以InnoDB要求表必须有主键</strong>（MyISAM可以没有），如果没有显式指定，则MySQL系统会自动选择一个可以唯一标识数据记录的列作为主键，如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整形。</p>
+<ol>
+<li>第二个与MyISAM索引的不同是InnoDB的辅助索引<strong>data域存储相应记录主键的值</strong>而不是地址。换句话说，InnoDB的所有辅助索引都引用主键作为data域。</li>
+</ol>
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png" alt="辅助索引"></center>
+
+<p>聚集索引这种实现方式使得按主键的搜索十分高效，但是辅助索引搜索需要检索两遍索引：首先检索辅助索引获得主键，然后用主键到主索引中检索获得记录。所以一般来说INNODB的索引都是创建在主键上。</p>
+<p>根据INNODB的特征，不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择</p>
+<h2 id="索引的使用策略"><a href="#索引的使用策略" class="headerlink" title="索引的使用策略"></a>索引的使用策略</h2><p>既然索引可以加快查询速度，那么是不是只要是查询语句需要，就建上索引？答案是否定的。因为索引虽然加快了查询速度，但索引也是有代价的：索引文件本身要消耗存储空间，同时索引会加重插入、删除和修改记录时的负担，另外，MySQL在运行时也要消耗资源维护索引，因此索引并不是越多越好。一般两种情况下不建议建索引。</p>
+<ol>
+<li>表记录比较少，例如一两千条甚至只有几百条记录的表，没必要建索引。</li>
+<li>另一种不建议建索引的情况是索引的选择性较低。所谓索引的选择性（Selectivity），是指不重复的索引值（也叫基数，Cardinality）与表记录数（#T）的比值： Index Selectivity = Cardinality / #T。显然选择性的取值范围为(0, 1]，选择性越高的索引价值越大，这是由B+Tree的性质决定的。</li>
+</ol>
+<p>查询中只有用到条件，索引才会起作用。而且索引列要起作用还必须是查询的条件之一。</p>
+<p>有一种与索引选择性有关的索引优化策略叫做前缀索引，就是用列的前缀代替整个列作为索引key，当前缀长度合适时，可以做到既使得前缀索引的选择性接近全列索引，同时因为索引key变短而减少了索引文件的大小和维护开销</p>
+<h2 id="最左前缀原理"><a href="#最左前缀原理" class="headerlink" title="最左前缀原理"></a>最左前缀原理</h2><p>MySQL中的索引可以以一定顺序引用多个列，这种索引叫做联合索引，一般的，一个联合索引是一个有序元组<a1, a2,="" …,="" an="">，其中各个元素均为数据表的一列。另外，单列索引可以看成联合索引元素数为1的特例。如果在进行精确匹配的时候，使用的是隔断精确匹配，则只有最前面的连续的几个字段的索引会陪用到。</a1,></p>
+<p>什么时候索引会被用到？</p>
+<ol>
+<li>当按照索引中所有列进行精确匹配时，索引可以被用到。这里的所谓精确匹配是指使用‘=’和‘IN’进行匹配。</li>
+<li>当查询条件精确匹配索引的左边连续一个或几个列时,索引可以被用到,但是只能用到一部分，即条件所组成的最左前缀。如果使用索引中的列不连续，只会用到最左边连续的几个。后面的索引因为隔断将不会被使用。</li>
+<li>如果查询条件没有指定索引第一列，这样的查询就会用不到索引。</li>
+<li>范围列可以用到索引（必须是最左前缀），但是范围列后面的列无法用到索引。这里的范围就是’&lt;’,’&gt;’等条件。索引最多用于一个范围列，因此如果查询条件中有两个范围列则无法全用到索引。</li>
+<li>如果查询条件中含有函数或表达式，则MySQL不会为这列使用索引。</li>
+</ol>
+<p><strong>在使用InnoDB存储引擎时，如果没有特别的需要，请永远使用一个与业务无关的自增字段作为主键。</strong></p>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>不是所有的数据库引擎都支持事务，MySQL支持事务的引擎有InnoDB,但MyISAM不支持事务。</p>
+<h2 id="事务的特征"><a href="#事务的特征" class="headerlink" title="事务的特征"></a>事务的特征</h2><ol>
+<li>事务不支持嵌套功能，当用户在未结束第一个事务又重新打开一个事务，则前一个事务会自动提交。</li>
+<li>事务的性质：“ACID”原则即原子性（A）、稳定性（C）、隔离性（I）和持久性（D）。<ul>
+<li>原子性：构成事务的的所有操作必须是一个逻辑单元，要么全部执行，要么全部不执行。 </li>
+<li>稳定性：数据库在事务执行前后状态都必须是稳定的。 </li>
+<li>隔离性：事务之间不会相互影响。 </li>
+<li>持久性：事务执行成功后必须全部写入磁盘。</li>
+</ul>
+</li>
+</ol>
+<h2 id="事务的问题"><a href="#事务的问题" class="headerlink" title="事务的问题"></a>事务的问题</h2><p>数据库事务会导致脏读、不可重复读和幻影读等问题。</p>
+<ol>
+<li>脏读：事务还没提交，他的修改已经被其他事务看到。 </li>
+<li>不可重复读：同一事务中两个相同SQL读取的内容可能不同。两次读取之间其他事务提交了修改可能会造成读取数据不一致。 </li>
+<li>幻读：同一个事务突然发现他以前没发现的数据，两次读取数据之间其他事务提交了新的数据。</li>
+</ol>
+<p>为了解决以上问题，INNODB引入了四种不同的机制保证数据的隔离性。事务的四种隔离级别：</p>
+<ol>
+<li>READ UNCOMMIT（读未提交），允许某个事务看到其他事务并没有提交的数据。可能会导致脏读、不可重复读、幻影数据。这种隔离级别不会采用任何锁。</li>
+<li>READ COMMIT（读已提交），允许某个事务看到其他事务已经提交的数据。可能会导致不可重复读和幻读。这种隔离级别，数据的读是不加锁的，但是数据的写入、修改、删除加锁，避免了脏读。</li>
+<li>REPEATABLE READ（可重复读），同一个事务的两次相同读取肯定是一样的（对行来说），其他事务的提交的insert和delete可能会对本次事务有影响。这种级别的隔离，数据的读、写都会加锁（行级锁），当前事务如果占据了锁，其他事务必须等待本次事务提交完成释放锁后才能对相同的<strong>数据行</strong>进行操作。这种级别的隔离会导致幻读。</li>
+<li>SERIALIZABLE（序列化），这种级别的隔离是在表上加锁，锁粒度比较到，可以完美的避免脏读、不可重复读和幻读，但是由于锁级别是在表上，影响数据库的效率。</li>
+</ol>
+<p><strong><em>注意：幻读出现的情况应该是针对插入（insert）和删除(delete)。可重复读对应的是更新（update）。</em></strong></p>
+<h2 id="原子性、稳定性和持久性实现原理"><a href="#原子性、稳定性和持久性实现原理" class="headerlink" title="原子性、稳定性和持久性实现原理"></a>原子性、稳定性和持久性实现原理</h2><p>原子性、稳定性和持久性是通过redo 和 undo 日志文件实现的，不管是redo还是undo文件都会有一个缓存我们称之为redo_buf和undo_buf。同样，数据库文件也会有缓存称之为data_buf。</p>
+<h3 id="undo-日志文件"><a href="#undo-日志文件" class="headerlink" title="undo 日志文件"></a>undo 日志文件</h3><p><center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fob9zgu8xij208w0i3glj.jpg" alt="undo日志文件保证原子性、稳定性和持久性的原理图"></center><br>说明：</p>
+<ol>
+<li>如果事务在F之前崩溃由于数据还没写入磁盘，所以数据不会被破坏。 </li>
+<li>如果事务在G之前崩溃或者回滚则可以根据undo恢复到初始状态。</li>
+<li>数据在任务提交之前写到磁盘保证了持久性。但是单纯使用undo保证原子性和持久性需要在事务提交之前将数据写到磁盘，浪费大量I/O。</li>
+</ol>
+<h3 id="redo-undo-日志文件"><a href="#redo-undo-日志文件" class="headerlink" title="redo/undo 日志文件"></a>redo/undo 日志文件</h3><p><center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobaafvyt4j20ag0m93yj.jpg" alt="undo/redo日志文件保证原子性、稳定性和持久性的原理图"></center><br>说明：</p>
+<ol>
+<li>通过undo保证事务的原子性，redo保证持久性。</li>
+<li>F之前崩溃由于所有数据都在内存，恢复后重新冲磁盘载入之前的数据，数据没有被破坏。 </li>
+<li>FG之间的崩溃可以使用redo来恢复。 </li>
+<li>G之前的回滚都可以使用undo来完成。</li>
+</ol>
+<h2 id="模拟不同的事务级别对数据安全的影响"><a href="#模拟不同的事务级别对数据安全的影响" class="headerlink" title="模拟不同的事务级别对数据安全的影响"></a>模拟不同的事务级别对数据安全的影响</h2><p>实验准备：</p>
+<ol>
+<li>安装mysql数据库</li>
+<li>打开两个mysql命令行客户端，模拟多用户多事务场景。</li>
+<li>导入官方推荐的数据库 employees。<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="测试read-uncommitted-级别"><a href="#测试read-uncommitted-级别" class="headerlink" title="测试read uncommitted 级别"></a>测试read uncommitted 级别</h3></li>
+<li><p>查看当前的数据库隔离级别</p>
+<pre><code>mysql&gt; select @@tx_isolation;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcqcxqidj20a3051dfo.jpg" alt="查看数据库的当前的隔离级别"></p>
+</li>
+<li><p>在A客户端（打开的mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted</p>
+<pre><code>set session transaction isolation level read uncommitted；
+start transaction;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcr48xktj20hy0d2jrn.jpg" alt=""></p>
+</li>
+<li><p>在B客户端（打开的另一个mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted，并更新数据。</p>
+<pre><code>set session transaction isolation level read uncommitted;
+start transaction;
+update salaries set salary=salary+100 where emp_no = 100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrinkm2j20ix06raa2.jpg" alt=""></p>
+</li>
+<li><p>在A中再次执行相同的查询数据</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrsldjtj20eo09c0sq.jpg" alt=""></p>
+</li>
+</ol>
+<p>结论：一个事务没有提交，但是在另外的事务中却可以查看到这个事务没有提交的数据。这是所有隔离级别中最低级的一种。<br>导致的问题：可以读取到事务未提交的数据，俗称<strong>脏读</strong></p>
+<h3 id="read-committed-级别"><a href="#read-committed-级别" class="headerlink" title="read committed 级别"></a>read committed 级别</h3><ol>
+<li><p>查询B客户端的当前会话的事务的级别</p>
+<pre><code>select @@tx_isolation;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdrdhmn2j20b704jdfo.jpg" alt=""></p>
+</li>
+<li><p>将B客户端的当前会话的事务级别设置为read committed，查询当前的数据。</p>
+<pre><code>set session transaction isolation level read committed;
+start transaction;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdu7zrmvj20f00baaa4.jpg" alt=""></p>
+</li>
+<li><p>在A客户端的会话中启动事务，对数据进行修改</p>
+<pre><code>start transaction;
+select * from salaries where emp_no=100000;
+update salaries set salary=salary-200 where emp_no=100000;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdulbvghj20k50qadgo.jpg" alt=""></p>
+</li>
+<li><p>在B客户端的会话中查询</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobduz0fusj20fn09wwel.jpg" alt=""></p>
+</li>
+<li><p>提交A客户端中会话的事务</p>
+<pre><code>commit
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+</li>
+<li><p>在B客户端会话中查看数据</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+</li>
+</ol>
+<p>结论：可见在A中修改的数据，在A中的事务被提交前，在B中是看不见的。一旦A提交，B中再次查询就可以看见了。如果当前会话的隔离级别是 read committed的，当前会话只能读取到其他事务提交的数据，未提交的数据是读不到的。<br>导致的问题：两次读取的结果不同，导致了<strong>不可重复读</strong>。</p>
+<h3 id="Repeatable-read级别"><a href="#Repeatable-read级别" class="headerlink" title="Repeatable read级别"></a>Repeatable read级别</h3><p>这个是MySQL的默认事务级别。</p>
+<ol>
+<li><p>查询B客户端的当前会话的事务的级别</p>
+<pre><code>select @@tx_isolation;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobep7am6xj20az05qjr8.jpg" alt=""></p>
+</li>
+<li><p>设置B客户端中的会话的隔离级别为repeatable read(可重复读，保证了两次读取的数据一致)。</p>
+<pre><code>set session transaction isolation level repeatable read;
+start transaction;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobepmfqibj20i00dx3ys.jpg" alt=""></p>
+</li>
+<li><p>在客户端A中的会话中启动一个事务,在事务里执行添加一条记录,并提交该事务。</p>
+<pre><code>start transaction;
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,21232323,&apos;2017-06-29&apos;,&apos;2018-07-01&apos;);
+select * from salaries where emp_no=100000;
+commit;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfphq7lxj20vc0efaah.jpg" alt=""></p>
+</li>
+<li><p>在客户端B的会话中查询数据，</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfq8jd5mj20i50azdfz.jpg" alt=""></p>
+</li>
+<li><p>在客户端B的会话中插入一条与第三步插入的记录的<code>emp_no</code>和<code>from_date</code>都相同的数据</p>
+<pre><code>insert into salaries (emp_no,salary,from_date,to_date) value(100000,1000000,&apos;2017-06-29&apos;,&apos;2020-07-01&apos;);
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfqkg9znj20vg02iwed.jpg" alt=""></p>
+</li>
+<li><p>在客户端B的会话中查询数据，</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foberfvn12j20f209imx6.jpg" alt=""></p>
+</li>
+</ol>
+<p>结论：会话使用事务的级别为repeatable read，保证了在事务提交前的每次查询数据都是一样的，避免了不可重复读的问题，<br>导致的问题：从上述的实验中不难看出问题，就是在第五步出现的该问题，明明在当前会话中查询的数据没有与要提交的的数据冲突，可是在插入的时候却提示已经有该主键的数据记录了。看不见记录，却提示已存在该记录，这种情况称为<strong>幻读</strong>。</p>
+<h3 id="serializable级别"><a href="#serializable级别" class="headerlink" title="serializable级别"></a>serializable级别</h3><p>serializable级别是隔离级别最高的，是最安全的，但也是最耗资源的。</p>
+<ol>
+<li><p>查询B客户端的当前会话的事务的级别</p>
+<pre><code>select @@tx_isolation;
+</code></pre></li>
+<li><p>设置B客户端会话的事务级别为 serializable</p>
+<pre><code>set session transaction isolation level serializable;
+-- 启动事务
+start transaction;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgq6qmduj20i903hjr9.jpg" alt=""></p>
+</li>
+<li><p>在B客户端的会话中查询数据</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""></p>
+</li>
+<li><p>在A客户端会话中启动事务，查询数据，并插入一条数据。</p>
+<pre><code>start transaction
+select * from salaries where emp_no=100000;
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""><br> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgrek0cnj20uz031wed.jpg" alt=""></p>
+<p> 可以看到插入数据并没有成功，尽管库中并没有相同主键的记录。</p>
+</li>
+<li><p>在A客户端插入数据的时候，同时在B客户端提交事务。</p>
+<pre><code>-- 客户端A
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
+</code></pre></li>
+</ol>
+<pre><code>    -- 客户端B
+    commit
+![](https://ws1.sinaimg.cn/large/af2f0e07gy1fobgx2jlpbj20v508e74c.jpg)
+由上面的结果看，A中的insert语句在等待执行期间，如果B客户端的事务执行了commit，那么A中的insert就会执成功，否则就会超时。
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/02/09/MySQL/" data-title="MySQL | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/02/01/Spring/"  title="Spring">
+ <strong>旧一篇:</strong><br/> 
+ <span>Spring
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="MySQL" data-thread-key="MySQL" data-author-key="Daniel" data-url="http://yoursite.com/post/MySQL"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-07T15:26:53.683Z</updated>
+  <updated>2018-02-10T09:17:48.815Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,550 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MySQL</title>
+    <link href="http://yoursite.com/2018/02/09/MySQL/"/>
+    <id>http://yoursite.com/2018/02/09/MySQL/</id>
+    <published>2018-02-09T11:11:00.000Z</published>
+    <updated>2018-02-10T09:17:48.815Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><pre><code>-- ALTER 增加索引
+ALTER table user_t add index first_index(id);
+
+ALTER table user_t add UNIQUE second_index(id)
+
+ALTER TABLE user_t ADD PRIMARY KEY(id);
+
+-- create方式增加索引
+CREATE INDEX create_first_index on user_t (user_name);
+
+create UNIQUE INDEX create_second_index on user_t (password,user_name,id);
+</code></pre><p>在主键上创建索引不用给定名称，因为主键对于一张表来说是唯一的。</p>
+<h2 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h2><pre><code>-- 删除索引
+DROP INDEX first_index on user_t;
+ALTER TABLE user_t DROP INDEX first_index;
+ALTER TABLE user_t drop PRIMARY KEY;
+</code></pre><p>删除 primary key不用指定名称，因为一张表上只可能有一个 primary key索引。执行第三条语句的时候，如果表上没有创建primary key索引，但表具有一个或多个UNIQUE索引，则MySQL将删除第一个UNIQUE索引。如果从表中删除了某列，会对索引有影响。对于多列组合的索引，如果删除其中的某列，则该列也会从索引中删除。如果删除组成索引的所有列，则整个索引将被删除。</p>
+<h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><ol>
+<li>索引不包含重复值，则索引应该创建为 primary Key或Unique。对于单列唯一性约束来说，保证单列不包含重复值，对于多列唯一性索引，多列的值的组合不重复。PRIMARY KEY索引和UNIQUE索引非常类似。事实上，PRIMARY KEY索引仅是一个具有名称PRIMARY的UNIQUE索引</li>
+</ol>
+<h2 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h2><pre><code>show index from user_t;
+</code></pre><p>结果：</p>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foaffzkkpfj21aa09b0u8.jpg" alt=""></center>
+
+
+<ul>
+<li>Table 表的名称。</li>
+<li>Non_unique 如果索引不能包括重复词，则为0。如果可以，则为1。</li>
+<li>Key_name 索引的名称。</li>
+<li>Seq_in_index 索引中的列序列号，从1开始。</li>
+<li>Column_name 列名称。</li>
+<li>Collation 列以什么方式存储在索引中。在MySQL中，有值‘A’（升序）或NULL（无分类）。</li>
+<li>Cardinality 索引中唯一值的数目的估计值。通过运行ANALYZE TABLE或myisamchk -a可以更新。基数根据被存储为整数的统计数据来计数，所以即使对于小型表，该值也没有必要是精确的。基数越大，当进行联合时，MySQL使用该索引的机会就越大。</li>
+<li>Sub_part 如果列只是被部分地编入索引，则为被编入索引的字符的数目。如果整列被编入索引，则为NULL。</li>
+<li>Packed 指示关键字如何被压缩。如果没有被压缩，则为NULL。</li>
+<li>Null 如果列含有NULL，则含有YES。如果没有，则该列含有NO。</li>
+<li>Index_type 用过的索引方法（BTREE, FULLTEXT, HASH, RTREE）。</li>
+<li>Comment</li>
+</ul>
+<h2 id="索引方式"><a href="#索引方式" class="headerlink" title="索引方式"></a>索引方式</h2><ol>
+<li>BTREE, </li>
+<li>FULLTEXT, </li>
+<li>HASH, </li>
+<li>RTREE</li>
+</ol>
+<h2 id="MySQL的索引的原理"><a href="#MySQL的索引的原理" class="headerlink" title="MySQL的索引的原理"></a>MySQL的索引的原理</h2><h3 id="索引数据结构B-Tree-和-B-Tree"><a href="#索引数据结构B-Tree-和-B-Tree" class="headerlink" title="索引数据结构B-Tree 和 B+Tree"></a>索引数据结构B-Tree 和 B+Tree</h3><p>MySQL使用的是B+Tree作为索引的数据结构。一般来说，索引本身也很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上，所以评价一个数据结构作为索引的优劣最重要的指标就是在查找过程中磁盘I/O操作次数的渐进复杂度。应该尽量减少磁盘I/O次数。</p>
+<ol>
+<li><p>数据库系统的设计者巧妙利用了磁盘预读原理，将一个节点的大小设为等于一个页，这样每个节点只需要一次I/O就可以完全载入。为了达到这个目的，在实际实现B-Tree还需要使用如下技巧：<br>每次新建节点时，直接申请一个页的空间，这样就保证一个节点物理上也存储在一个页里，加之计算机存储分配都是按页对齐的，就实现了一个node只需一次I/O。</p>
+</li>
+<li><p>B-Tree中一次检索最多需要h-1次I/O（根节点常驻内存），渐进复杂度为O(h)=O(logdN)O(h)=O(logdN)。一般实际应用中，出度d是非常大的数字，通常超过100，因此h非常小（通常不超过3）。</p>
+</li>
+</ol>
+<p>B+Tree:</p>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foah7rvrxmj20f6089gli.jpg" alt="B+Tree"></center>
+
+<p>B-Tree:</p>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foahaxvy5oj20m406kjrc.jpg" alt="B-Tree"></center>
+
+<p>比较B-Tree和B+Tree,B+Tree更适合外存索引，原因和内节点出度d有关。从上面分析可以看到，d越大索引的性能越好，而出度的上限取决于节点内key和data的大小：</p>
+<pre><code>dmax=floor(pagesize/(keysize+datasize+pointsize))
+</code></pre><p>floor表示向下取整。由于B+Tree内节点去掉了data域，因此可以拥有更大的出度，拥有更好的性能。</p>
+<h2 id="索引实现"><a href="#索引实现" class="headerlink" title="索引实现"></a>索引实现</h2><p>在MySQL中，索引属于存储引擎级别的概念，不同存储引擎对索引的实现方式是不同的。</p>
+<h3 id="MyISAM-索引"><a href="#MyISAM-索引" class="headerlink" title="MyISAM 索引"></a>MyISAM 索引</h3><p>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址。在MyISAM中，主索引和辅助索引（Secondary key）在结构上没有任何区别，只是主索引要求key是唯一的，而辅助索引的key可以重复。因此，MyISAM中索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。</p>
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/8.png" alt="主索引"></center>
+
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png" alt="辅助索引"></center>
+
+<p>主索引与辅助索引在结构上没有什么区别。主索引要求key是唯一的，而辅助索引的key可以重复。</p>
+<h3 id="InnoDB索引"><a href="#InnoDB索引" class="headerlink" title="InnoDB索引"></a>InnoDB索引</h3><p>虽然InnoDB也使用B+Tree作为索引结构，但具体实现方式却与MyISAM截然不同。</p>
+<ol>
+<li>第一个重大区别是InnoDB的数据文件本身就是索引文件。 而在InnoDB中，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录。</li>
+</ol>
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png" alt="主索引"></center>
+
+<p>可以看到叶节点包含了完整的数据记录。这种索引叫做聚集索引。<strong>因为InnoDB的数据文件本身要按主键聚集，所以InnoDB要求表必须有主键</strong>（MyISAM可以没有），如果没有显式指定，则MySQL系统会自动选择一个可以唯一标识数据记录的列作为主键，如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整形。</p>
+<ol>
+<li>第二个与MyISAM索引的不同是InnoDB的辅助索引<strong>data域存储相应记录主键的值</strong>而不是地址。换句话说，InnoDB的所有辅助索引都引用主键作为data域。</li>
+</ol>
+<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png" alt="辅助索引"></center>
+
+<p>聚集索引这种实现方式使得按主键的搜索十分高效，但是辅助索引搜索需要检索两遍索引：首先检索辅助索引获得主键，然后用主键到主索引中检索获得记录。所以一般来说INNODB的索引都是创建在主键上。</p>
+<p>根据INNODB的特征，不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择</p>
+<h2 id="索引的使用策略"><a href="#索引的使用策略" class="headerlink" title="索引的使用策略"></a>索引的使用策略</h2><p>既然索引可以加快查询速度，那么是不是只要是查询语句需要，就建上索引？答案是否定的。因为索引虽然加快了查询速度，但索引也是有代价的：索引文件本身要消耗存储空间，同时索引会加重插入、删除和修改记录时的负担，另外，MySQL在运行时也要消耗资源维护索引，因此索引并不是越多越好。一般两种情况下不建议建索引。</p>
+<ol>
+<li>表记录比较少，例如一两千条甚至只有几百条记录的表，没必要建索引。</li>
+<li>另一种不建议建索引的情况是索引的选择性较低。所谓索引的选择性（Selectivity），是指不重复的索引值（也叫基数，Cardinality）与表记录数（#T）的比值： Index Selectivity = Cardinality / #T。显然选择性的取值范围为(0, 1]，选择性越高的索引价值越大，这是由B+Tree的性质决定的。</li>
+</ol>
+<p>查询中只有用到条件，索引才会起作用。而且索引列要起作用还必须是查询的条件之一。</p>
+<p>有一种与索引选择性有关的索引优化策略叫做前缀索引，就是用列的前缀代替整个列作为索引key，当前缀长度合适时，可以做到既使得前缀索引的选择性接近全列索引，同时因为索引key变短而减少了索引文件的大小和维护开销</p>
+<h2 id="最左前缀原理"><a href="#最左前缀原理" class="headerlink" title="最左前缀原理"></a>最左前缀原理</h2><p>MySQL中的索引可以以一定顺序引用多个列，这种索引叫做联合索引，一般的，一个联合索引是一个有序元组<a1, a2,="" …,="" an="">，其中各个元素均为数据表的一列。另外，单列索引可以看成联合索引元素数为1的特例。如果在进行精确匹配的时候，使用的是隔断精确匹配，则只有最前面的连续的几个字段的索引会陪用到。</a1,></p>
+<p>什么时候索引会被用到？</p>
+<ol>
+<li>当按照索引中所有列进行精确匹配时，索引可以被用到。这里的所谓精确匹配是指使用‘=’和‘IN’进行匹配。</li>
+<li>当查询条件精确匹配索引的左边连续一个或几个列时,索引可以被用到,但是只能用到一部分，即条件所组成的最左前缀。如果使用索引中的列不连续，只会用到最左边连续的几个。后面的索引因为隔断将不会被使用。</li>
+<li>如果查询条件没有指定索引第一列，这样的查询就会用不到索引。</li>
+<li>范围列可以用到索引（必须是最左前缀），但是范围列后面的列无法用到索引。这里的范围就是’&lt;’,’&gt;’等条件。索引最多用于一个范围列，因此如果查询条件中有两个范围列则无法全用到索引。</li>
+<li>如果查询条件中含有函数或表达式，则MySQL不会为这列使用索引。</li>
+</ol>
+<p><strong>在使用InnoDB存储引擎时，如果没有特别的需要，请永远使用一个与业务无关的自增字段作为主键。</strong></p>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>不是所有的数据库引擎都支持事务，MySQL支持事务的引擎有InnoDB,但MyISAM不支持事务。</p>
+<h2 id="事务的特征"><a href="#事务的特征" class="headerlink" title="事务的特征"></a>事务的特征</h2><ol>
+<li>事务不支持嵌套功能，当用户在未结束第一个事务又重新打开一个事务，则前一个事务会自动提交。</li>
+<li>事务的性质：“ACID”原则即原子性（A）、稳定性（C）、隔离性（I）和持久性（D）。<ul>
+<li>原子性：构成事务的的所有操作必须是一个逻辑单元，要么全部执行，要么全部不执行。 </li>
+<li>稳定性：数据库在事务执行前后状态都必须是稳定的。 </li>
+<li>隔离性：事务之间不会相互影响。 </li>
+<li>持久性：事务执行成功后必须全部写入磁盘。</li>
+</ul>
+</li>
+</ol>
+<h2 id="事务的问题"><a href="#事务的问题" class="headerlink" title="事务的问题"></a>事务的问题</h2><p>数据库事务会导致脏读、不可重复读和幻影读等问题。</p>
+<ol>
+<li>脏读：事务还没提交，他的修改已经被其他事务看到。 </li>
+<li>不可重复读：同一事务中两个相同SQL读取的内容可能不同。两次读取之间其他事务提交了修改可能会造成读取数据不一致。 </li>
+<li>幻读：同一个事务突然发现他以前没发现的数据，两次读取数据之间其他事务提交了新的数据。</li>
+</ol>
+<p>为了解决以上问题，INNODB引入了四种不同的机制保证数据的隔离性。事务的四种隔离级别：</p>
+<ol>
+<li>READ UNCOMMIT（读未提交），允许某个事务看到其他事务并没有提交的数据。可能会导致脏读、不可重复读、幻影数据。这种隔离级别不会采用任何锁。</li>
+<li>READ COMMIT（读已提交），允许某个事务看到其他事务已经提交的数据。可能会导致不可重复读和幻读。这种隔离级别，数据的读是不加锁的，但是数据的写入、修改、删除加锁，避免了脏读。</li>
+<li>REPEATABLE READ（可重复读），同一个事务的两次相同读取肯定是一样的（对行来说），其他事务的提交的insert和delete可能会对本次事务有影响。这种级别的隔离，数据的读、写都会加锁（行级锁），当前事务如果占据了锁，其他事务必须等待本次事务提交完成释放锁后才能对相同的<strong>数据行</strong>进行操作。这种级别的隔离会导致幻读。</li>
+<li>SERIALIZABLE（序列化），这种级别的隔离是在表上加锁，锁粒度比较到，可以完美的避免脏读、不可重复读和幻读，但是由于锁级别是在表上，影响数据库的效率。</li>
+</ol>
+<p><strong><em>注意：幻读出现的情况应该是针对插入（insert）和删除(delete)。可重复读对应的是更新（update）。</em></strong></p>
+<h2 id="原子性、稳定性和持久性实现原理"><a href="#原子性、稳定性和持久性实现原理" class="headerlink" title="原子性、稳定性和持久性实现原理"></a>原子性、稳定性和持久性实现原理</h2><p>原子性、稳定性和持久性是通过redo 和 undo 日志文件实现的，不管是redo还是undo文件都会有一个缓存我们称之为redo_buf和undo_buf。同样，数据库文件也会有缓存称之为data_buf。</p>
+<h3 id="undo-日志文件"><a href="#undo-日志文件" class="headerlink" title="undo 日志文件"></a>undo 日志文件</h3><p><center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fob9zgu8xij208w0i3glj.jpg" alt="undo日志文件保证原子性、稳定性和持久性的原理图"></center><br>说明：</p>
+<ol>
+<li>如果事务在F之前崩溃由于数据还没写入磁盘，所以数据不会被破坏。 </li>
+<li>如果事务在G之前崩溃或者回滚则可以根据undo恢复到初始状态。</li>
+<li>数据在任务提交之前写到磁盘保证了持久性。但是单纯使用undo保证原子性和持久性需要在事务提交之前将数据写到磁盘，浪费大量I/O。</li>
+</ol>
+<h3 id="redo-undo-日志文件"><a href="#redo-undo-日志文件" class="headerlink" title="redo/undo 日志文件"></a>redo/undo 日志文件</h3><p><center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobaafvyt4j20ag0m93yj.jpg" alt="undo/redo日志文件保证原子性、稳定性和持久性的原理图"></center><br>说明：</p>
+<ol>
+<li>通过undo保证事务的原子性，redo保证持久性。</li>
+<li>F之前崩溃由于所有数据都在内存，恢复后重新冲磁盘载入之前的数据，数据没有被破坏。 </li>
+<li>FG之间的崩溃可以使用redo来恢复。 </li>
+<li>G之前的回滚都可以使用undo来完成。</li>
+</ol>
+<h2 id="模拟不同的事务级别对数据安全的影响"><a href="#模拟不同的事务级别对数据安全的影响" class="headerlink" title="模拟不同的事务级别对数据安全的影响"></a>模拟不同的事务级别对数据安全的影响</h2><p>实验准备：</p>
+<ol>
+<li>安装mysql数据库</li>
+<li>打开两个mysql命令行客户端，模拟多用户多事务场景。</li>
+<li>导入官方推荐的数据库 employees。<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="测试read-uncommitted-级别"><a href="#测试read-uncommitted-级别" class="headerlink" title="测试read uncommitted 级别"></a>测试read uncommitted 级别</h3></li>
+<li><p>查看当前的数据库隔离级别</p>
+<pre><code>mysql&gt; select @@tx_isolation;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcqcxqidj20a3051dfo.jpg" alt="查看数据库的当前的隔离级别"></p>
+</li>
+<li><p>在A客户端（打开的mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted</p>
+<pre><code>set session transaction isolation level read uncommitted；
+start transaction;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcr48xktj20hy0d2jrn.jpg" alt=""></p>
+</li>
+<li><p>在B客户端（打开的另一个mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted，并更新数据。</p>
+<pre><code>set session transaction isolation level read uncommitted;
+start transaction;
+update salaries set salary=salary+100 where emp_no = 100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrinkm2j20ix06raa2.jpg" alt=""></p>
+</li>
+<li><p>在A中再次执行相同的查询数据</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrsldjtj20eo09c0sq.jpg" alt=""></p>
+</li>
+</ol>
+<p>结论：一个事务没有提交，但是在另外的事务中却可以查看到这个事务没有提交的数据。这是所有隔离级别中最低级的一种。<br>导致的问题：可以读取到事务未提交的数据，俗称<strong>脏读</strong></p>
+<h3 id="read-committed-级别"><a href="#read-committed-级别" class="headerlink" title="read committed 级别"></a>read committed 级别</h3><ol>
+<li><p>查询B客户端的当前会话的事务的级别</p>
+<pre><code>select @@tx_isolation;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdrdhmn2j20b704jdfo.jpg" alt=""></p>
+</li>
+<li><p>将B客户端的当前会话的事务级别设置为read committed，查询当前的数据。</p>
+<pre><code>set session transaction isolation level read committed;
+start transaction;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdu7zrmvj20f00baaa4.jpg" alt=""></p>
+</li>
+<li><p>在A客户端的会话中启动事务，对数据进行修改</p>
+<pre><code>start transaction;
+select * from salaries where emp_no=100000;
+update salaries set salary=salary-200 where emp_no=100000;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdulbvghj20k50qadgo.jpg" alt=""></p>
+</li>
+<li><p>在B客户端的会话中查询</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobduz0fusj20fn09wwel.jpg" alt=""></p>
+</li>
+<li><p>提交A客户端中会话的事务</p>
+<pre><code>commit
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+</li>
+<li><p>在B客户端会话中查看数据</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+</li>
+</ol>
+<p>结论：可见在A中修改的数据，在A中的事务被提交前，在B中是看不见的。一旦A提交，B中再次查询就可以看见了。如果当前会话的隔离级别是 read committed的，当前会话只能读取到其他事务提交的数据，未提交的数据是读不到的。<br>导致的问题：两次读取的结果不同，导致了<strong>不可重复读</strong>。</p>
+<h3 id="Repeatable-read级别"><a href="#Repeatable-read级别" class="headerlink" title="Repeatable read级别"></a>Repeatable read级别</h3><p>这个是MySQL的默认事务级别。</p>
+<ol>
+<li><p>查询B客户端的当前会话的事务的级别</p>
+<pre><code>select @@tx_isolation;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobep7am6xj20az05qjr8.jpg" alt=""></p>
+</li>
+<li><p>设置B客户端中的会话的隔离级别为repeatable read(可重复读，保证了两次读取的数据一致)。</p>
+<pre><code>set session transaction isolation level repeatable read;
+start transaction;
+select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobepmfqibj20i00dx3ys.jpg" alt=""></p>
+</li>
+<li><p>在客户端A中的会话中启动一个事务,在事务里执行添加一条记录,并提交该事务。</p>
+<pre><code>start transaction;
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,21232323,&apos;2017-06-29&apos;,&apos;2018-07-01&apos;);
+select * from salaries where emp_no=100000;
+commit;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfphq7lxj20vc0efaah.jpg" alt=""></p>
+</li>
+<li><p>在客户端B的会话中查询数据，</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfq8jd5mj20i50azdfz.jpg" alt=""></p>
+</li>
+<li><p>在客户端B的会话中插入一条与第三步插入的记录的<code>emp_no</code>和<code>from_date</code>都相同的数据</p>
+<pre><code>insert into salaries (emp_no,salary,from_date,to_date) value(100000,1000000,&apos;2017-06-29&apos;,&apos;2020-07-01&apos;);
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfqkg9znj20vg02iwed.jpg" alt=""></p>
+</li>
+<li><p>在客户端B的会话中查询数据，</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foberfvn12j20f209imx6.jpg" alt=""></p>
+</li>
+</ol>
+<p>结论：会话使用事务的级别为repeatable read，保证了在事务提交前的每次查询数据都是一样的，避免了不可重复读的问题，<br>导致的问题：从上述的实验中不难看出问题，就是在第五步出现的该问题，明明在当前会话中查询的数据没有与要提交的的数据冲突，可是在插入的时候却提示已经有该主键的数据记录了。看不见记录，却提示已存在该记录，这种情况称为<strong>幻读</strong>。</p>
+<h3 id="serializable级别"><a href="#serializable级别" class="headerlink" title="serializable级别"></a>serializable级别</h3><p>serializable级别是隔离级别最高的，是最安全的，但也是最耗资源的。</p>
+<ol>
+<li><p>查询B客户端的当前会话的事务的级别</p>
+<pre><code>select @@tx_isolation;
+</code></pre></li>
+<li><p>设置B客户端会话的事务级别为 serializable</p>
+<pre><code>set session transaction isolation level serializable;
+-- 启动事务
+start transaction;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgq6qmduj20i903hjr9.jpg" alt=""></p>
+</li>
+<li><p>在B客户端的会话中查询数据</p>
+<pre><code>select * from salaries where emp_no=100000;
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""></p>
+</li>
+<li><p>在A客户端会话中启动事务，查询数据，并插入一条数据。</p>
+<pre><code>start transaction
+select * from salaries where emp_no=100000;
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
+</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""><br> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgrek0cnj20uz031wed.jpg" alt=""></p>
+<p> 可以看到插入数据并没有成功，尽管库中并没有相同主键的记录。</p>
+</li>
+<li><p>在A客户端插入数据的时候，同时在B客户端提交事务。</p>
+<pre><code>-- 客户端A
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
+</code></pre></li>
+</ol>
+<pre><code>    -- 客户端B
+    commit
+![](https://ws1.sinaimg.cn/large/af2f0e07gy1fobgx2jlpbj20v508e74c.jpg)
+由上面的结果看，A中的insert语句在等待执行期间，如果B客户端的事务执行了commit，那么A中的insert就会执成功，否则就会超时。
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;索引&quot;&gt;&lt;a href=&quot;#索引&quot; class=&quot;headerlink&quot; title=&quot;索引&quot;&gt;&lt;/a&gt;索引&lt;/h1&gt;&lt;h2 id=&quot;创建索引&quot;&gt;&lt;a href=&quot;#创建索引&quot; class=&quot;headerlink&quot; title=&quot;创建索引&quot;&gt;&lt;/a&gt;创建索引&lt;/h
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Spring</title>
+    <link href="http://yoursite.com/2018/02/01/Spring/"/>
+    <id>http://yoursite.com/2018/02/01/Spring/</id>
+    <published>2018-02-01T13:19:17.000Z</published>
+    <updated>2018-02-04T13:38:36.510Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Ioc"><a href="#Ioc" class="headerlink" title="Ioc"></a>Ioc</h1><h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><ol>
+<li>BeanFactory</li>
+<li>ApplicationContext</li>
+<li>BeanDefinition</li>
+<li>Resource</li>
+</ol>
+<h2 id="初始化步骤"><a href="#初始化步骤" class="headerlink" title="初始化步骤"></a>初始化步骤</h2><ol>
+<li>Bean定义资源的定位</li>
+<li>Bean定义资源的载入</li>
+<li>Bean定义资源的解析  </li>
+</ol>
+<h2 id="IoC容器初始化的基本步骤"><a href="#IoC容器初始化的基本步骤" class="headerlink" title="IoC容器初始化的基本步骤"></a>IoC容器初始化的基本步骤</h2><ol>
+<li>初始化的入口是通过调用容器中的refresh()方法实现的</li>
+<li>对 bean 定义载入 IOC 容器使用的方法是 loadBeanDefinition，其大致过程：<blockquote>
+<p>通过 ResourceLoader 来完成资源文件位置的定位，DefaultResourceLoader 是默认的实现，同时上下文本身就给出了 ResourceLoader 的实现，可以从类路径，文件系统, URL 等方式来定为资源位置。</p>
+<p>如果是 XmlBeanFactory作为 IOC 容器，那么需要为它指定 bean 定义的资源，也就是说 bean 定义文件时通过抽象成 Resource 来被 IOC 容器处理的。</p>
+<p>容器通过 BeanDefinitionReader来完成定义信息的解析和 Bean 信息的注册,往往使用的是XmlBeanDefinitionReader 来解析 bean 的 xml 定义文件 - 实际的处理过程是委托给 BeanDefinitionParserDelegate 来完成的，从而得到 bean 的定义信息，这些信息在 Spring 中使用 BeanDefinition 对象来表示 - 这个名字可以让我们想到loadBeanDefinition,RegisterBeanDefinition  这些相关的方法 - 他们都是为处理 BeanDefinitin 服务的， 容器解析得到 BeanDefinitionIoC 以后，需要把它在 IOC 容器中注册，这由 IOC 实现 BeanDefinitionRegistry 接口来实现</p>
+<p>注册过程就是在 IOC 容器内部维护的一个HashMap 来保存得到的 BeanDefinition 的过程。这个 HashMap 是 IoC 容器持有 bean 信息的场所，以后对 bean 的操作都是围绕这个HashMap 来实现的.</p>
+</blockquote>
+</li>
+</ol>
+<ol>
+<li>然后我们就可以通过 BeanFactory 和 ApplicationContext 来享受到 Spring IOC 的服务了,在使用 IOC 容器的时候，我们注意到除了少量粘合代码，绝大多数以正确 IoC 风格编写的应用程序代码完全不用关心如何到达工厂，因为容器将把这些对象与容器管理的其他对象钩在一起。基本的策略是把工厂放到已知的地方，最好是放在对预期使用的上下文有意义的地方，以及代码将实际需要访问工厂的地方</li>
+</ol>
+<h2 id="Beanfactory-和-Factory-Bean"><a href="#Beanfactory-和-Factory-Bean" class="headerlink" title="Beanfactory  和 Factory Bean"></a>Beanfactory  和 Factory Bean</h2><ol>
+<li>BeanFactory 指的是 IOC 容器的编程抽象,比如 ApplicationContext， XmlBeanFactory 等。</li>
+<li>FactoryBean 只是一个可以在 IOC而容器中被管理的一个 bean,是对各种处理过程和资源使用的抽象,Factory bean 在需要时产生另一个对象，而不返回 FactoryBean本身,我们可以把它看成是一个抽象工厂，对它的调用返回的是工厂生产的产品。所有的 Factory bean 都实现特殊的org.springframework.beans.factory.FactoryBean 接口，当使用容器中 factory bean 的时候，该容器不会返回 factory bean 本身,而是返回其生成的对象。Spring 包括了大部分的通用资源和服务访问抽象的 Factory bean 的实现，其中包括:对 JNDI 查询的处理，对代理对象的处理，对事务性代理的处理，对 RMI 代理的处理等。也就是说 Spring 通过使用抽象工厂模式为我们准备了一系列工厂来生产一些特定的对象,免除我们手工重复的工作，我们要使用时只需要在 IOC 容器里配置好就能很方便的使用了。</li>
+</ol>
+<h2 id="IoC容器的依赖注入"><a href="#IoC容器的依赖注入" class="headerlink" title="IoC容器的依赖注入"></a>IoC容器的依赖注入</h2><p>当Spring IoC容器完成了Bean定义资源的定位、载入和解析注册以后，IoC容器中已经管理类Bean定义的相关数据，但是此时IoC容器还没有对所管理的Bean进行依赖注入</p>
+<h3 id="依赖注入发生的时机"><a href="#依赖注入发生的时机" class="headerlink" title="依赖注入发生的时机"></a>依赖注入发生的时机</h3><ol>
+<li>用户第一次通过getBean方法向IoC容索要Bean时，IoC容器触发依赖注入。</li>
+<li>当用户在Bean定义资源中为<bean>元素配置了lazy-init属性，即让容器在解析注册Bean定义时进行预实例化，触发依赖注入</bean></li>
+</ol>
+<p>如果Bean定义的单态模式(Singleton)，则容器在创建之前先从缓存中查找，以确保整个容器中只存在一个实例对象。如果Bean定义的是原型模式(Prototype)，则容器每次都会创建一个新的实例对象。除此之外，Bean定义还可以扩展为指定其生命周期范围。</p>
+<p>一般来说依赖注入发生在向容器索取bean的时候，即调用各个getBean方法的时候；但当Bean定义资源的<bean>元素中配置了lazy-init属性时，容器将会在初始化的时候对所配置的Bean进行预实例化，Bean的依赖注入在容器初始化的时候就已经完成</bean></p>
+<h2 id="IOC的高级应用"><a href="#IOC的高级应用" class="headerlink" title="IOC的高级应用"></a>IOC的高级应用</h2><p>Dereference(解引用)：一个在C/C++中应用比较多的术语，在C++中，”*”是解引用符号，而”&amp;”是引用符号，解引用是指变量指向的是所引用对象的本身数据，而不是引用对象的内存地址。</p>
+<p>Spring IoC容器提供了两种管理Bean依赖关系的方式：</p>
+<ol>
+<li>显式管理：通过BeanDefinition的属性值和构造方法实现Bean依赖关系管理。</li>
+<li>autowiring：Spring IoC容器的依赖自动装配功能，不需要对Bean属性的依赖关系做显式的声明，只需要在配置好autowiring属性，IoC容器会自动使用反射查找属性的类型和名称，然后基于属性的类型或者名称来自动匹配容器中管理的Bean，从而自动地完成依赖注入。</li>
+</ol>
+<p>Spring IoC容器的autowiring属性自动依赖注入是一个很方便的特性，可以简化开发时的配置，但是凡是都有两面性，自动属性依赖注入也有不足，首先，Bean的依赖关系在配置文件中无法很清楚地看出来，对于维护造成一定困难。其次，由于自动依赖注入是Spring容器自动执行的，容器是不会智能判断的，如果配置不当，将会带来无法预料的后果，所以自动依赖注入特性在使用时还是综合考虑。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Ioc&quot;&gt;&lt;a href=&quot;#Ioc&quot; class=&quot;headerlink&quot; title=&quot;Ioc&quot;&gt;&lt;/a&gt;Ioc&lt;/h1&gt;&lt;h2 id=&quot;核心&quot;&gt;&lt;a href=&quot;#核心&quot; class=&quot;headerlink&quot; title=&quot;核心&quot;&gt;&lt;/a&gt;核心&lt;/h2&gt;&lt;o
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JVM</title>
+    <link href="http://yoursite.com/2018/01/28/JVM/"/>
+    <id>http://yoursite.com/2018/01/28/JVM/</id>
+    <published>2018-01-28T01:09:55.000Z</published>
+    <updated>2018-01-28T14:38:44.843Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h1><h2 id="JVM内存划分"><a href="#JVM内存划分" class="headerlink" title="JVM内存划分"></a>JVM内存划分</h2><ol>
+<li>虚拟机栈</li>
+<li>本地方法栈</li>
+<li>寄存器（程序计数器）</li>
+<li>堆区</li>
+<li>方法区</li>
+</ol>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07ly1fnw6oozzasj20x80k13z0.jpg" alt="JVM内存模型"></center>
+
+<h2 id="各个内存模块的作用"><a href="#各个内存模块的作用" class="headerlink" title="各个内存模块的作用"></a>各个内存模块的作用</h2><h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><ol>
+<li>程序逻辑运行的区域，可固定，可扩展。如果固定，当其中的某个线程需要执行内存（在栈空间上），而恰好分配的栈区不足就会出现StackOverflowError异常（运行时异常）。如果可扩展，当其中的某个线程需要执行内存（在栈空间上，而恰好内存已经使用完，会出现OutofMemeryError。</li>
+<li>每个线程在其中都开辟了一个栈空间，线程的栈空间为固定大小，其中存储有运行时的方法，本地变量，对象引用等。线程栈是线程独享。</li>
+<li>本质上来说程序的运行时依赖于方法的，所以在运行某个方法的时候都会为该方法创建一个栈帧，栈帧的作用是用来存在这个方法的操作数栈，局部变量表，方法出口，动态链接等信息，并把这个栈帧压入响应的线程栈中。</li>
+<li>线程栈运行时创建，栈帧运行时创建<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3></li>
+<li>本地方法栈是在调用本地方法时本地方法运行的内存空间。严格来说这里结构不由JVM管理，只是由JVM调用。</li>
+</ol>
+<h3 id="寄存器（程序计数器）"><a href="#寄存器（程序计数器）" class="headerlink" title="寄存器（程序计数器）"></a>寄存器（程序计数器）</h3><ol>
+<li>线程独占</li>
+<li>用于记录程序当前执行到的位置（指令地址）</li>
+<li>如果当前某个线程正在执行某个本地方法，则该线程对应的计数器中的值为空。</li>
+</ol>
+<h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><ol>
+<li>线程共享</li>
+<li>启动即创建</li>
+<li>存储数组和对象，数组也是对象</li>
+<li>详细可以划分为，新生代，老年代等</li>
+<li>是垃圾回收的主要场所。</li>
+<li>GC算法就主要是针对堆区设计的。</li>
+</ol>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><ol>
+<li>堆区的一个逻辑分区，本质上也是堆</li>
+<li>线程共享</li>
+<li>主要用于存储类的信息、常量池、方法数据、方法代码等</li>
+<li>这个区也会发生垃圾回收，但是频率很低。</li>
+</ol>
+<p>注：方法区是java虚拟机的一个规范，至于怎么实现，有虚拟机开发者自行确定。</p>
+<h4 id="PermGen（永久代）"><a href="#PermGen（永久代）" class="headerlink" title="PermGen（永久代）"></a>PermGen（永久代）</h4><p>绝大部分 Java 程序员应该都见过 “java.lang.OutOfMemoryError: PermGen space “这个异常。这里的 “PermGen space”其实指的就是<strong>方法区</strong>。不过方法区和“PermGen space”又有着本质的区别。前者是 JVM 的规范，而后者则是 JVM 规范的一种实现，并且<strong>只有 HotSpot 才有PermGen space</strong>，而对于其他类型的虚拟机，如 JRockit（Oracle）、J9（IBM） 并没有“PermGen space”。由于方法区主要存储类的相关信息，所以对于动态生成类的情况比较容易出现永久代的内存溢出。最典型的场景就是，在 jsp 页面比较多的情况，容易出现永久代内存溢出。我们现在通过动态生成类来模拟 “PermGen space”的内存溢出</p>
+<p>注：<em>整个区在java8后就被移除了，即在java8后使用元空间来表示方法区，即元空间是方法区的另一种实现方式。</em></p>
+<h4 id="Metaspace（元空间）"><a href="#Metaspace（元空间）" class="headerlink" title="Metaspace（元空间）"></a>Metaspace（元空间）</h4><p>java8后使用元空间替换了永久代（PermGen）来实现方法区。元空间与永久代的不同：元空间并不在虚拟机中，而是使用本地内存。因此，默认情况下，元空间的大小仅受本地内存限制，但可以通过以下参数来指定元空间的大小：</p>
+<p>-XX:MetaspaceSize，初始空间大小，达到该值就会触发垃圾收集进行类型卸载，同时GC会对该值进行调整：如果释放了大量的空间，就适当降低该值；如果释放了很少的空间，那么在不超过MaxMetaspaceSize时，适当提高该值。</p>
+<p>-XX:MaxMetaspaceSize，最大空间，默认是没有限制的。</p>
+<p>除了上面两个指定大小的选项以外，还有两个与 GC 相关的属性：</p>
+<p>-XX:MinMetaspaceFreeRatio，在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集</p>
+<p>-XX:MaxMetaspaceFreeRatio，在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集</p>
+<h3 id="每个内存区域出现异常的情形"><a href="#每个内存区域出现异常的情形" class="headerlink" title="每个内存区域出现异常的情形"></a>每个内存区域出现异常的情形</h3><center><img src="https://images2015.cnblogs.com/blog/539365/201511/539365-20151119105947202-10960285.png" alt=""></center>
+
+<ol>
+<li>堆或方法区的内存不够分配都会出现OutOfMemoryError。</li>
+<li>栈区只有在多线程的情况下才会出现OutOfMemoryError，在单线程的情况下只会出现StackOverflowError。</li>
+<li>栈区在多线程的情况下会出现StackOverflowError，这是因为某个线程使用的栈深度超过了JVM定义的深度。</li>
+<li>程序计数器理论上回出现OutOfMemoryError，但实际情况下是不会出现的，除非线程栈的大小小于计数器。</li>
+</ol>
+<p>注意：以上所说的各个区并不是在物理上进行分割的，而是在逻辑上进行分割的。比如堆区就可以分配在整个内存区域的不连续的空间中。</p>
+<h1 id="JVM参数设置"><a href="#JVM参数设置" class="headerlink" title="JVM参数设置"></a>JVM参数设置</h1><pre><code>java -Xmx3550m -Xms3550m -Xss128k -XX:NewRatio=4 -XX:SurvivorRatio=4 -XX:MaxPermSize=16m -XX:MaxTenuringThreshold=0
+</code></pre><p>-Xmx128m：设置JVM最大可用内存为128M。</p>
+<p>-Xms128m：设置JVM最小内存为128m。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。</p>
+<p>-Xmn2g：设置年轻代大小为2G。整个堆大小=年轻代大小 + 年老代大小 + 持久代大小。持久代一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。</p>
+<p>-Xss128k：设置每个线程的堆栈大小。 JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更 多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</p>
+<p>-XX:NewRatio=4:设置年轻代（包括Eden和两个Survivor区）与年老代的比值（除去持久代）。设置为4，则年轻代与年老代所占比值为1：4，年轻代占整个堆栈的1/5</p>
+<p>-XX:SurvivorRatio=4：设置年轻代中Eden区与Survivor区的大小比值。设置为4，则两个Survivor区与一个Eden区的比值为2:4，一个Survivor区占整个年轻代的1/6</p>
+<p>-XX:MaxPermSize=16m：设置持久代大小为16m。</p>
+<p>-XX:MaxTenuringThreshold=0：设置垃圾最大年龄。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。<br> – Ratio 比率<br> – Eden 伊甸<br> – Survivor 幸存者</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;JVM的内存模型&quot;&gt;&lt;a href=&quot;#JVM的内存模型&quot; class=&quot;headerlink&quot; title=&quot;JVM的内存模型&quot;&gt;&lt;/a&gt;JVM的内存模型&lt;/h1&gt;&lt;h2 id=&quot;JVM内存划分&quot;&gt;&lt;a href=&quot;#JVM内存划分&quot; class=&quot;header
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>基础网络知识</title>
+    <link href="http://yoursite.com/2018/01/21/%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/"/>
+    <id>http://yoursite.com/2018/01/21/基础网络知识/</id>
+    <published>2018-01-21T13:08:21.000Z</published>
+    <updated>2018-01-21T14:50:27.924Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h1><p>网络七层模型：应用层，会话层，表示层，传输层，网络层，链路层和物理层<br>网络五层模型：应用层，传输层，网络层，链路层，物理层</p>
+<p>其中s的含义：SSL/TSL(Security Socket Layer/)TSL是SSL的一个升级</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>基于公钥加密算法，对称加密/非对称加密。<br>对称加密：加密和解密都是使用的相同的秘钥，可能网络中有很多网络实体是具有这个相同的秘钥的，可能不够安全。<br>非对称加密：公钥加密，私钥解密。公钥由服务器分发。所有客户端都有相同的公钥，但只有服务端有私钥。</p>
+<p>握手：</p>
+<ol>
+<li>客户端先向服务端请求公钥</li>
+<li>服务端给请求的客户端返回双方（客户端和服务端）通信的公钥</li>
+<li>客户端使用私钥加密通信的数据</li>
+<li>服务端用私钥解密公钥加密的数据</li>
+</ol>
+<p>以上的通信方式看似没有安全性问题，其实也存在中间人攻击的可能：</p>
+<ol>
+<li>攻击则可以冒充服务端，分发公钥。</li>
+<li>攻击则可以冒充服务端，拦截数据后，把数据传递给服务端，服务端响应公钥，攻击者获取加密公钥，然后用自己的公钥替换真的公钥返回给客户端，之后客户端响应的数据都是用的攻击者的公钥加密，攻击者可以使用自己的私钥解密加密的报文并进行篡改。同时用真的公钥加密篡改后的数据响应给服务端</li>
+</ol>
+<p>引入数字证书颁发机构：</p>
+<ol>
+<li>客户端向服务端请求公钥，服务端把公钥给到第三方数字证书颁发机构。</li>
+<li>第三方数字证书颁发机构使用自己的私钥对服务端的公钥进行加密，生成数字证书，并把该数字证书发送给客户端。</li>
+<li>客户端使用本地存储的第三方机构的公钥对证书进行解密，获取服务端的公钥，使用该服务端公钥对数据进行加密，把加密后的数据发送给服务端。</li>
+</ol>
+<p>以上的流程其实还是存在被攻击的可能。因为攻击者还是有可能替换其中的公钥为自己的公钥的，因为他也有第三方机构的公钥。为解决该问题就需要保证证书是可以在客户端验证真伪的。这样的证书怎么制作呢？</p>
+<ol>
+<li>第三方证书颁发机构获取到公钥后，使用某种算法依据服务端的公钥生成一个证书编码，这个算法也是证书的一部分。</li>
+<li>当客户端收到第三方颁发的证书后，通过证书中的算法和其中的加密公钥分析出证书编码，分析出的证书编码与证书本身的编码进行比较，如果相同，说明公钥没有被篡改。</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;HTTPS&quot;&gt;&lt;a href=&quot;#HTTPS&quot; class=&quot;headerlink&quot; title=&quot;HTTPS&quot;&gt;&lt;/a&gt;HTTPS&lt;/h1&gt;&lt;p&gt;网络七层模型：应用层，会话层，表示层，传输层，网络层，链路层和物理层&lt;br&gt;网络五层模型：应用层，传输层，网络层，链
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>gradle 版本依赖工具</title>
+    <link href="http://yoursite.com/2018/01/21/gradle-%E7%89%88%E6%9C%AC%E4%BE%9D%E8%B5%96%E5%B7%A5%E5%85%B7/"/>
+    <id>http://yoursite.com/2018/01/21/gradle-版本依赖工具/</id>
+    <published>2018-01-21T09:18:26.000Z</published>
+    <updated>2018-01-21T10:10:56.246Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ol>
+<li><a href="http://services.gradle.org/distributions/" target="_blank" rel="external">下载</a></li>
+<li><a href="https://gradle.org/install/#manually" target="_blank" rel="external">安装指导</a>或如果你下载的包中包含有文档，在解压后的根目录下有个文件getting-started.html，双击，使用浏览器打开，其中也有安装的指导</li>
+<li>设置环境变量</li>
+<li><p>检查是否安装成功,如果执行如下命令后看到版本信息，则表明安装成功</p>
+<pre><code>gradle -v
+</code></pre><p>注意：<em>修改版本包缓存的目录。默认情况下{user}/.gradle目录下，我们需要修改到指定的目录下(Windows),在bin/gradle.bat的相应位置设置如下的第二行脚本：</em></p>
+<pre><code># Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script
+set GRADLE_OPTS=-Dgradle.user.home=/yourpath/gradle/gradle_cache
+</code></pre><p>如果使用的是大于4.3的版本，构建project的时候，使用：</p>
+<pre><code>gradle build --scan
+</code></pre></li>
+</ol>
+<h1 id="使用gradle构建Spring"><a href="#使用gradle构建Spring" class="headerlink" title="使用gradle构建Spring"></a>使用gradle构建Spring</h1><p>一定要使用相应版本的gradle构建，不然会出现难以预料的问题</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;http://services.gradle.org/distributions/&quot; target=&quot;_bla
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Spring-boot 学习</title>
+    <link href="http://yoursite.com/2018/01/13/Spring-boot-%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://yoursite.com/2018/01/13/Spring-boot-学习/</id>
+    <published>2018-01-13T07:03:18.000Z</published>
+    <updated>2018-01-15T13:05:16.611Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="远程调试"><a href="#远程调试" class="headerlink" title="远程调试"></a>远程调试</h1><ol>
+<li>以远程方式启动应用</li>
+<li>在eclipse中配置远程调试：Debug As =&gt; Debug Confirgurations =&gt; Remote Java Application,</li>
+<li>配置好应用运行的环境的IP和监听debug调试的端口</li>
+</ol>
+<h1 id="启动Spring-boot应用"><a href="#启动Spring-boot应用" class="headerlink" title="启动Spring boot应用"></a>启动Spring boot应用</h1><ol>
+<li>在IDE中启动</li>
+<li><p>把应用打成jar，使用命令：</p>
+<pre><code>java -jar myproject.jar //普通的启动
+java -jar myproject.jar --debug //可以在控制台输出相关的debug日志信息
+</code></pre></li>
+</ol>
+<h1 id="外化配置"><a href="#外化配置" class="headerlink" title="外化配置"></a>外化配置</h1><p>Spring Boot 允许你外化你的配置，这样你就可以在不同的环境中使用相同的应用程序代码。你可以使用properties文件，YAML文件，环境变量和命令行参数等外化你的配置。</p>
+<h1 id="使用Spring-Boot开发应用"><a href="#使用Spring-Boot开发应用" class="headerlink" title="使用Spring Boot开发应用"></a>使用Spring Boot开发应用</h1><h2 id="Spring-MVC自配置"><a href="#Spring-MVC自配置" class="headerlink" title="Spring MVC自配置"></a>Spring MVC自配置</h2><p>Spring Boot为Spring MVC提供了自动配置    ，这在大多数程序中都很适用。</p>
+<p>自动配置在Spring默认配置的基础上添加了如下的特性：</p>
+<ol>
+<li>包含<code>ContentNegotiatingViewResolver</code> 和 <code>BeanNameViewResolver</code>  beans。</li>
+<li>支持为静态资源提供服务，包括支持webjar</li>
+<li><code>Converter</code>，<code>GenericConverter</code>和<code>Formatter</code> 的自动注册</li>
+<li>支持<code>HttpMessageConverters</code> </li>
+<li><code>MessageCodesResolver</code> 的自动注册</li>
+<li>静态文件<code>index.html</code>的支持</li>
+<li>支持自定义图标</li>
+<li>自动适用<code>ConfigurableWebBindingInitializer</code> bean</li>
+</ol>
+<p>如果你想保留Spring Boot MVC的特征，且你只想增加附加的MVC配置（如拦截器，格式化和视图控制器等），你可以增加你自己的<code>@Configuration</code> 类类型<code>WebMvcConfigurerAdapter</code>，但是没有<code>@EnableWebMvc</code>。如果你希望提供定制化的<code>RequestMappingHandlerMapping</code>, <code>RequestMappingHandlerAdapter</code> 或<code>ExceptionHandlerExceptionResolver</code> 的实例，你可以声明一个<code>WebMvcRegistrationsAdapter</code> 实例来提供这些组件。</p>
+<p>如果你想要完全控制Spring MVC，你可以使用<code>@EnableWebMvc</code>增加你自己的<code>@Configuration</code>注解。</p>
+<h1 id="RESTful"><a href="#RESTful" class="headerlink" title="RESTful"></a>RESTful</h1><p>REST(Representational State Transfer，表述性状态转移)</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;远程调试&quot;&gt;&lt;a href=&quot;#远程调试&quot; class=&quot;headerlink&quot; title=&quot;远程调试&quot;&gt;&lt;/a&gt;远程调试&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;以远程方式启动应用&lt;/li&gt;
+&lt;li&gt;在eclipse中配置远程调试：Debug As =&amp;gt; Debug 
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Java Socket 编程</title>
@@ -159,7 +703,7 @@ javax.sql.DataSource</code></p>
     <link href="http://yoursite.com/2018/01/01/JavaWeb-%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E7%AD%94%E7%96%91/"/>
     <id>http://yoursite.com/2018/01/01/JavaWeb-关键知识点答疑/</id>
     <published>2018-01-01T06:16:59.000Z</published>
-    <updated>2018-01-07T05:00:24.375Z</updated>
+    <updated>2018-01-19T14:22:37.722Z</updated>
     
     <content type="html"><![CDATA[<h1 id="web-xml的作用"><a href="#web-xml的作用" class="headerlink" title="web.xml的作用"></a>web.xml的作用</h1><p>web.xml文件并不是web工程必须的，只有你需要配置欢迎页、servlet、filter等的时候，才需要配置它。web.xml的模式文件是由Sun公司定义的，每个web.xml文件的根元素<web-app>中，都必须标明这个web.xml使用的是哪些模式文件。</web-app></p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
@@ -368,7 +912,17 @@ rd.forward(request, response);
 <li>如果被请求的 JSP 文件内容 ( 代码 ) 没有被修改，那么它的处理过程也等同于一个 Servlet 的处理过程。即直接由服务器检索出与之对应的 Servlet 实例来处理。</li>
 </ol>
 <p><em>注：JSP 文件不是在服务器启动的时候转换成 Servlet 类的。而是在被客户端访问的时候才可能发生转换的 ( 如 JSP 文件内容没有被更新等，就不再发生 Servlet 转换 )。</em><br>对Tomcat而言，打开目录 %Tomcat%/work/%您的工程文件目录%，在里面会有一个子目录：org/apache/jsp，如果没有这个目录，说明项目的JSP文件还没有被访问过。如果有该目录，进入其中会发现一些<em>_jsp.java 和 </em>_jsp.class 文件，这就是 JSP 文件被转换成Servlet 类的源文件和字节码文件了。</p>
-]]></content>
+<h1 id="java中一些很少用到特性"><a href="#java中一些很少用到特性" class="headerlink" title="java中一些很少用到特性"></a>java中一些很少用到特性</h1><ol>
+<li>import static,静态导入</li>
+</ol>
+<p>import static（静态导入）是JDK1.5中的新特性，一般我们导入一个类都用 import com…..ClassName;而静态导入是这样：import static com…..ClassName.<em>;这里多了个static，还有就是类名ClassName后面多了个 .</em> ，意思是导入这个类里的静态方法。当然，也可以只导入某个静态方法，只要把 .* 换成静态方法名就行了。然后在这个类中，就可以直接用方法名调用静态方法，而不必用ClassName.方法名的方式来调用。</p>
+<h1 id="路径的特殊处理"><a href="#路径的特殊处理" class="headerlink" title="路径的特殊处理"></a>路径的特殊处理</h1><pre><code>URL url = this.getClass().getClassLoader().getResource(&quot;/&quot;)
+</code></pre><p>上面这行代码会获取class目录的路径，如果其所在目录中含有空格等字符，导致通过如下方式</p>
+<pre><code>File dir = new File(url.getFile());
+</code></pre><p>获取不了class目录。</p>
+<p>解决方法：</p>
+<pre><code>File dir = new File(URLDecoder.decode(url.getFile(),&quot;utf-8&quot;));
+</code></pre>]]></content>
     
     <summary type="html">
     
@@ -1934,271 +2488,6 @@ Str
     
     </summary>
     
-    
-  </entry>
-  
-  <entry>
-    <title>Winodws 下搭建wiki知识库</title>
-    <link href="http://yoursite.com/2016/12/31/Winodws-%E4%B8%8B%E6%90%AD%E5%BB%BAwiki%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
-    <id>http://yoursite.com/2016/12/31/Winodws-下搭建wiki知识库/</id>
-    <published>2016-12-31T11:54:54.000Z</published>
-    <updated>2016-12-31T15:59:05.709Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="写本文的起因"><a href="#写本文的起因" class="headerlink" title="写本文的起因"></a>写本文的起因</h1><hr>
-<p>在平时的工作和学习的过程中积累了许多的知识和经验总结，苦于难以管理，时间长了，找到一些之前的总结就比较困难。为此需要一款能够管理成体系的管理知识的工具，我就选定了dokuwiki。</p>
-<h1 id="dokuwiki简介"><a href="#dokuwiki简介" class="headerlink" title="dokuwiki简介"></a>dokuwiki简介</h1><hr>
-<ol>
-<li>一款开源的wiki引擎程序，运行与PHP环境下。</li>
-<li>小巧而功能强大，灵活，适合中小团队和个人网站知识库的管理。</li>
-<li>可以多种CMS程序进行整合，例如<a href="http://baike.baidu.com/subview/23618/23618.htm" target="_blank" rel="external">WordPress</a>、<a href="http://baike.baidu.com/subview/685204/685204.htm" target="_blank" rel="external">XOOPS</a>、PostNuke等。</li>
-<li>不需要数据库，采用文本文件直接存储<h1 id="搭建准备"><a href="#搭建准备" class="headerlink" title="搭建准备"></a>搭建准备</h1></li>
-</ol>
-<hr>
-<ol>
-<li>下载<a href="https://download.dokuwiki.org/" target="_blank" rel="external">dokuwiki</a>.</li>
-<li>下载PHP运行环境：<a href="https://www.apachefriends.org/zh_cn/index.html" target="_blank" rel="external">XAMPP</a><h1 id="安装PHP开发环境-XAMPP"><a href="#安装PHP开发环境-XAMPP" class="headerlink" title="安装PHP开发环境:XAMPP"></a>安装PHP开发环境:XAMPP</h1></li>
-</ol>
-<hr>
-<p>和安装普通的Windows软件并没有区别</p>
-<h1 id="部署dokuwiki"><a href="#部署dokuwiki" class="headerlink" title="部署dokuwiki"></a>部署dokuwiki</h1><hr>
-<p>解压下载的dokuwiki，把整个dokuwiki目录放到XAMPP的安装目录下的htdocs目录下。</p>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><hr>
-<p>在XAMPP的安装目录下打开XAMPP的控制面板，启动Apache（因为dokuwiki运行需要Apache服务器）。<br>在浏览器中输入：<a href="http://localhost/dokuwiki" target="_blank" rel="external">http://localhost/dokuwiki</a> 。就可以访问你部署的dokuwiki了。</p>
-<h1 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h1><hr>
-<p>在浏览器中输入：<a href="http://localhost/dokuwiki/install.php，就可以看到wiki的安装配置项了，在右上角还可以选择语言。" target="_blank" rel="external">http://localhost/dokuwiki/install.php，就可以看到wiki的安装配置项了，在右上角还可以选择语言。</a></p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://www.dabu.info/dokuwiki-installation-and-configuration.html" target="_blank" rel="external">http://www.dabu.info/dokuwiki-installation-and-configuration.html</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      作为一个程序员，在工作或学习的过程中难免遇到许多需要记下的知识点，如果只是很少的知识，我们直接用操作系统自带的文档管理系统，建一些目录就能轻松搞定自己平时的知识的积累，但是当我们的积累的东西过多了之后就会发现我们的积累很难管理。我们这时通常想的是希望有一个能对知识进行结构化管理的工具，wiki就是其中以中工具，具有强大的知识库管理功能。下面我将介绍一下怎么在Windows系统下安装部署wiki。
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="总结" scheme="http://yoursite.com/tags/%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>我的2016</title>
-    <link href="http://yoursite.com/2016/12/31/%E6%88%91%E7%9A%842016/"/>
-    <id>http://yoursite.com/2016/12/31/我的2016/</id>
-    <published>2016-12-31T10:14:14.000Z</published>
-    <updated>2017-01-01T09:14:27.210Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="满怀希望的起航-怅然无措的结束"><a href="#满怀希望的起航-怅然无措的结束" class="headerlink" title="满怀希望的起航 怅然无措的结束"></a>满怀希望的起航 怅然无措的结束</h1><p>过完2016年的春节，没几天，我又踏上了离乡的路途。带着自己的梦想和亲人的寄托，我独自一人又一个去了远方。这一次看似和以前并没有什么不同，但却也有些许变化，这一次春节后离家并不是去另一个温馨的家——校园，而是有一点悲壮之感——去闯荡江湖了。梦想着在这个纷乱复杂的江湖中打下自己的一片天地，成就一番事业。真是一入江湖岁月催，眨眼功夫，还在做着白日梦，还在天真的以为这个江湖就是我大展拳脚的地方，在江湖这片天地中，我定当能成就一番功名。却不成想，也就在今天我快要关上了2016的大门了，我已经不能再次拜访者无所收获的2016了。唯有把这一年的点滴记录下来，以慰即将逝去的2016。2016年一过我又长大一岁了，不！不是长大一岁，而是成熟一岁了，唉！突然发现成长这个词语已经不适用在我的身上了。心中满是仿徨与失望。</p>
-<h1 id="泯然一个市井之徒"><a href="#泯然一个市井之徒" class="headerlink" title="泯然一个市井之徒"></a>泯然一个市井之徒</h1><p>记得2016年的元旦前夕，公司部门采访了个人的新年愿望，我当时无知的把我的新年愿望写为：成为一个技术牛人。眨眼间，我来到了2017年的元旦的前夕。回想当时的新年愿望，觉着我自个真是很傻很天真的标杆人物啊！<br>经过2016一整年，虽然自己在工作中也是一如既往的一丝不苟，但却没有觉着自己的技术有些许进步，相反，我却觉着自己比以前知道的更少、更无知。即便在这平凡的一年中，个人的梦想仍没被时间抹杀分毫，但也不得不面对现实，我确实进步甚少。参加工作一年以来，自己并没有多大进步，却泯然众人矣。<br>我不得承认，我已经从一个意气风发的学生时代的少年变成了一个市井之徒。是环境的原因？是个人的原因？我不得而知，但我觉着我应该寻求改变。</p>
-<h1 id="忙睡觉的月下老人，贪玩的丘比特"><a href="#忙睡觉的月下老人，贪玩的丘比特" class="headerlink" title="忙睡觉的月下老人，贪玩的丘比特"></a>忙睡觉的月下老人，贪玩的丘比特</h1><p>那时我想，我还小，还年轻，不着急恋爱，不着急找一个能懂我的人，况且，找一个懂我的人，那就如同在这浩瀚的宇宙中寻找地外生命一样的难。如今真的觉着自己已经到时间来一场恋爱的洗礼的时候，却发现我周围的资源是少得异乎寻常。<br>我虽然条件不好，但在人海中找不到一个人能看上我？我觉着没有可能。我估摸着是那个老糊涂的，为别人搭线的月下老人在月亮下睡着了。这个老人不靠谱，本指望那个可爱的小孩能拿我的一支箭射中某一个忧郁的怀着丁香般惆怅的姑娘，可惜他好像正在玩耍，也不见得会里一下我。<br>这两位神和我开了一个玩笑。我也觉着两个高高在上的神怎会拿我这样一个小人物来开玩笑呢，但也许我真的不是一个小人物。<br>估计今年回家又不安心了，我老妈，不知从什么时候开始就希望能抱孙子了，反正今年又要对不起妈她老人家了。</p>
-<h1 id="失信于自己"><a href="#失信于自己" class="headerlink" title="失信于自己"></a>失信于自己</h1><p>在2016年的到来的时候，我决定每周看一本书，沉淀自己的知识与提高自己的智商。但在后来2016的旅途中，我找各种理由来阻碍了这个伟大的梦想。我一直坚持做一个不失信与人的人，但我发现对别人承若，我基本都能信守承若，却没有把我自己当一个人来看，我居然失信于我自己了。<br>在2016年的年初，我计划，花几个月的时间来做一个开源的网站，但后来我没有坚持下来，我再次失信于我自己。<br>在2016刚开始的时候，当我遇见我心怡的女孩我一定下手，但当我真的遇到后，我又不忍心了。<br>计划来次牛逼点，规格高点的旅行，但由于死宅，计划没有成行。</p>
-<h1 id="匆忙的2016，慢条斯理的我"><a href="#匆忙的2016，慢条斯理的我" class="headerlink" title="匆忙的2016，慢条斯理的我"></a>匆忙的2016，慢条斯理的我</h1><p>曾经的岁月，自己白长了，直到今天我才发现，这个时间过得太他妈快了，小息一会就要到2017了。我他妈一直以年轻为资本，很多反驳的理由都是还早，但马上翻过2016的时候，我才发现他妈的一点都不早了，他妈的我一点都不小了，相反我发现我有点老了，老得都不知道时间了，老得任性都不知道了。背对2016离开时，我喊了一声，时间，你慢点吧，可回音只在2017的天空徘徊，2016失去了一切响应。</p>
-<h1 id="面对2017"><a href="#面对2017" class="headerlink" title="面对2017"></a>面对2017</h1><p>面对2017我觉着我成熟了不少，我决定不再随便许诺，尤其是对我自己；不再随便敷衍，尤其是对我自己；不再懦弱，尤其是在面对月下老人和丘比特时。我要相信这个世界的规律，人总会老去，很多事不要等着，拖到将来，其实现在就是过去的将来。</p>
-<h1 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h1><p>曾经我们希望成长，而今我们不能成长了，只能成熟了！</p>
-]]></content>
-    
-    <summary type="html">
-    
-      即将跨入2017年，我想想的2016年是不是应该留下些什么，我不想在将来的某一天提到2016，在我的思绪深处却没有什么印象，空白一片，就像2016曾经在我的生命中与我插肩而过一样，没有丝丝留恋；没有分毫经历；故此，在这里记下一笔，即便我的2016年并不想你或者我想的那样精彩，但她毕竟路过了我的生命，我也需要给她一点生气，一点空间。
-    
-    </summary>
-    
-      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
-    
-    
-      <category term="生活" scheme="http://yoursite.com/tags/%E7%94%9F%E6%B4%BB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NodeJs 学习</title>
-    <link href="http://yoursite.com/2016/10/23/NodeJs-%E5%AD%A6%E4%B9%A0/"/>
-    <id>http://yoursite.com/2016/10/23/NodeJs-学习/</id>
-    <published>2016-10-23T08:26:26.000Z</published>
-    <updated>2016-10-23T09:48:33.051Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="NodeJs的回调"><a href="#NodeJs的回调" class="headerlink" title="NodeJs的回调"></a>NodeJs的回调</h1><hr>
-<ul>
-<li><p>Node.js 异步编程的直接体现就是回调。</p>
-</li>
-<li><p>异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了。</p>
-</li>
-<li><p>回调函数在完成任务后就会被调用，Node 使用了大量的回调函数，Node 所有 API 都支持回调函数。</p>
-</li>
-</ul>
-<p><strong><em>注意：异步代表代码是非阻塞的，阻塞按是按顺序执行的，而非阻塞是不需要按顺序的，所以如果需要处理回调函数的参数，我们就需要写在回调函数内。</em></strong></p>
-<h1 id="NodeJs的事件驱动模型"><a href="#NodeJs的事件驱动模型" class="headerlink" title="NodeJs的事件驱动模型"></a>NodeJs的事件驱动模型</h1><hr>
-<ul>
-<li><p>Node.js 是单进程单线程应用程序，但是通过事件和回调支持并发，所以性能非常高。</p>
-</li>
-<li><p>Node.js 的每一个 API 都是异步的，并作为一个独立线程运行，使用异步函数调用，并处理并发。</p>
-</li>
-<li><p>Node.js 基本上所有的事件机制都是用设计模式中观察者模式实现。</p>
-</li>
-<li><p>Node.js 单线程类似进入一个while(true)的事件循环，直到没有事件观察者退出，每个异步事件都生成一个事件观察者，如果有事件发生就调用该回调函数.</p>
-<h2 id="一个简单的事件驱动模型例子"><a href="#一个简单的事件驱动模型例子" class="headerlink" title="一个简单的事件驱动模型例子"></a>一个简单的事件驱动模型例子</h2><p>Node.js 使用事件驱动模型，当web server接收到请求，就把它关闭然后进行处理，然后去服务下一个web请求。当这个请求完成，它被放回处理队列，当到达队列开头，这个结果被返回给用户。这个模型非常高效可扩展性非常强，因为webserver一直接受请求而不等待任何读写操作。（这也被称之为非阻塞式IO或者事件驱动IO）在事件驱动模型中，会生成一个主循环来监听事件，当检测到事件时触发回调函数。</p>
-</li>
-</ul>
-<p><strong><em>注意：这里的观察者模式的观察者（Observer）是事件处理函数，主题（Subject）是事件</em></strong></p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><pre><code>// 引入 events 模块 
-var events = require(&apos;events&apos;);
-// 创建 eventEmitter 对象
-var eventEmitter = new events.EventEmitter();
-// 创建事件处理程序
-var connectHandler = function connected() {
-console.log(&apos;连接成功。&apos;);
-// 触发 data_received 事件 
-eventEmitter.emit(&apos;data_received&apos;);
-}
-// 绑定 connection 事件处理程序
-eventEmitter.on(&apos;connection&apos;, connectHandler);
-// 使用匿名函数绑定 data_received 事件
-eventEmitter.on(&apos;data_received&apos;, function(){
-console.log(&apos;数据接收成功。&apos;);
-});
-// 触发 connection 事件 
-eventEmitter.emit(&apos;connection&apos;);
-console.log(&quot;程序执行完毕。&quot;);
-</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      NodeJs的基础知识的学习，学习NodeJs的基础是需要了解一些JavaScript的知识。
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="编程" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>npm使用介绍</title>
-    <link href="http://yoursite.com/2016/10/20/npm%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/"/>
-    <id>http://yoursite.com/2016/10/20/npm使用介绍/</id>
-    <published>2016-10-20T14:42:16.000Z</published>
-    <updated>2016-10-20T14:44:22.136Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://www.runoob.com/nodejs/nodejs-npm.html" title="npm使用介绍" target="_blank" rel="external">http://www.runoob.com/nodejs/nodejs-npm.html</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      npm使用介绍的相关网站
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="前端编程" scheme="http://yoursite.com/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>hexo部署问题</title>
-    <link href="http://yoursite.com/2016/10/20/hexo%E9%83%A8%E7%BD%B2%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2016/10/20/hexo部署问题/</id>
-    <published>2016-10-20T14:33:23.000Z</published>
-    <updated>2016-10-20T14:39:20.738Z</updated>
-    
-    <content type="html"><![CDATA[<p>hexo发布项目到github上时出了问题，其原因是没有配置git相关的环境变量，而hexo deploy命令需要调用git命令。<br>解决方法：</p>
-<ul>
-<li><p>配置git的环境变量</p>
-</li>
-<li><p>直接使用git的命令窗口运行hexo相关的命令，尤其是hexo deploy命令</p>
-</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;hexo发布项目到github上时出了问题，其原因是没有配置git相关的环境变量，而hexo deploy命令需要调用git命令。&lt;br&gt;解决方法：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;配置git的环境变量&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;直接使用git的命令窗口运行hexo
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="问题" scheme="http://yoursite.com/tags/%E9%97%AE%E9%A2%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用Vue开发大型单页应用的步骤</title>
-    <link href="http://yoursite.com/2016/10/20/%E4%BD%BF%E7%94%A8Vue%E5%BC%80%E5%8F%91%E5%A4%A7%E5%9E%8B%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8%E7%9A%84%E6%AD%A5%E9%AA%A4/"/>
-    <id>http://yoursite.com/2016/10/20/使用Vue开发大型单页应用的步骤/</id>
-    <published>2016-10-20T13:24:13.000Z</published>
-    <updated>2016-10-20T14:06:20.584Z</updated>
-    
-    <content type="html"><![CDATA[<ul>
-<li>首先开发机器上要安装nodejs服务（怎么安装网上有一堆教程）。</li>
-<li><p>安装js包管理器npm。如果你安装的是比较新的nodejs,则npm包管理器已经随之安装，如果使用的是比较旧版的nodejs可能需要自己安装npm包安装管理器。也有可能你觉得随nodejs一起安装的npm比较旧，我们可以通过如下命令安装npm。   </p>
-<blockquote>
-<p>sudo npm install npm -g（Linux系统）</p>
-<p>npm install npm -g （windows系统）</p>
-</blockquote>
-</li>
-<li><p>npm是所谓的包管理器，所以可以通过npm命令安装nodejs模块</p>
-<blockquote>
-<p>npm install &lt; Module Name &gt;</p>
-</blockquote>
-</li>
-<li><p>使用npm安装Vue</p>
-<blockquote>
-<p>npm install vue （本地安装）</p>
-<p>npm install vue -g (全局安装)</p>
-</blockquote>
-</li>
-<li><p>使用npm安装Vuejs官方提供的一个可以快速搭建大型单页应用的命令行工具 vue-cli,该工具其实是一个脚手架</p>
-<blockquote>
-<p>npm install -g vue-cli</p>
-</blockquote>
-</li>
-<li><p>创建一个基于“Webpack”模板的项目</p>
-<blockquote>
-<p>vue init webpack &lt; my-project &gt;</p>
-</blockquote>
-</li>
-<li><p>安装依赖</p>
-<blockquote>
-<p>cd &lt; my-project &gt;</p>
-<p>npm install</p>
-<p>npm run dev(启动应用)</p>
-</blockquote>
-</li>
-<li><p>编译单页应用</p>
-<blockquote>
-<p>npm run build</p>
-</blockquote>
-</li>
-</ul>
-<p><strong>注意：手动编译Vue最新的代码</strong></p>
-<blockquote>
-<p>git clone <a href="https://github.com/vuejs/vue.git" target="_blank" rel="external">https://github.com/vuejs/vue.git</a> node_modules/vue</p>
-<p>cd node_modules/vue</p>
-<p>npm install</p>
-<p>npm run build</p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      本文主要讲解怎么快速构建一个基于Vue的大型的单页应用。
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="编码学习" scheme="http://yoursite.com/tags/%E7%BC%96%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   

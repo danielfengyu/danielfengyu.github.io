@@ -1,0 +1,418 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>JVM | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="JVM的内存模型JVM内存划分
+虚拟机栈
+本地方法栈
+寄存器（程序计数器）
+堆区
+方法区
+
+
+
+各个内存模块的作用虚拟机栈
+程序逻辑运行的区域，可固定，可扩展。如果固定，当其中的某个线程需要执行内存（在栈空间上），而恰好分配的栈区不足就会出现StackOverflowError异常（运行时异常）。如">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/01/28/JVM/" title="JVM" itemprop="url">JVM</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-01-28T01:09:55.000Z" itemprop="datePublished">2018-01-28</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的内存模型"><span class="toc-number">1.</span> <span class="toc-text">JVM的内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM内存划分"><span class="toc-number">1.1.</span> <span class="toc-text">JVM内存划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各个内存模块的作用"><span class="toc-number">1.2.</span> <span class="toc-text">各个内存模块的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#虚拟机栈"><span class="toc-number">1.2.1.</span> <span class="toc-text">虚拟机栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本地方法栈"><span class="toc-number">1.2.2.</span> <span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄存器（程序计数器）"><span class="toc-number">1.2.3.</span> <span class="toc-text">寄存器（程序计数器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆区"><span class="toc-number">1.2.4.</span> <span class="toc-text">堆区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区"><span class="toc-number">1.2.5.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PermGen（永久代）"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">PermGen（永久代）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metaspace（元空间）"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">Metaspace（元空间）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#每个内存区域出现异常的情形"><span class="toc-number">1.2.6.</span> <span class="toc-text">每个内存区域出现异常的情形</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM参数设置"><span class="toc-number">2.</span> <span class="toc-text">JVM参数设置</span></a></li></ol>
+		</div>
+		
+		<h1 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h1><h2 id="JVM内存划分"><a href="#JVM内存划分" class="headerlink" title="JVM内存划分"></a>JVM内存划分</h2><ol>
+<li>虚拟机栈</li>
+<li>本地方法栈</li>
+<li>寄存器（程序计数器）</li>
+<li>堆区</li>
+<li>方法区</li>
+</ol>
+<center><img src="https://ws1.sinaimg.cn/large/af2f0e07ly1fnw6oozzasj20x80k13z0.jpg" alt="JVM内存模型"></center>
+
+<h2 id="各个内存模块的作用"><a href="#各个内存模块的作用" class="headerlink" title="各个内存模块的作用"></a>各个内存模块的作用</h2><h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><ol>
+<li>程序逻辑运行的区域，可固定，可扩展。如果固定，当其中的某个线程需要执行内存（在栈空间上），而恰好分配的栈区不足就会出现StackOverflowError异常（运行时异常）。如果可扩展，当其中的某个线程需要执行内存（在栈空间上，而恰好内存已经使用完，会出现OutofMemeryError。</li>
+<li>每个线程在其中都开辟了一个栈空间，线程的栈空间为固定大小，其中存储有运行时的方法，本地变量，对象引用等。线程栈是线程独享。</li>
+<li>本质上来说程序的运行时依赖于方法的，所以在运行某个方法的时候都会为该方法创建一个栈帧，栈帧的作用是用来存在这个方法的操作数栈，局部变量表，方法出口，动态链接等信息，并把这个栈帧压入响应的线程栈中。</li>
+<li>线程栈运行时创建，栈帧运行时创建<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3></li>
+<li>本地方法栈是在调用本地方法时本地方法运行的内存空间。严格来说这里结构不由JVM管理，只是由JVM调用。</li>
+</ol>
+<h3 id="寄存器（程序计数器）"><a href="#寄存器（程序计数器）" class="headerlink" title="寄存器（程序计数器）"></a>寄存器（程序计数器）</h3><ol>
+<li>线程独占</li>
+<li>用于记录程序当前执行到的位置（指令地址）</li>
+<li>如果当前某个线程正在执行某个本地方法，则该线程对应的计数器中的值为空。</li>
+</ol>
+<h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><ol>
+<li>线程共享</li>
+<li>启动即创建</li>
+<li>存储数组和对象，数组也是对象</li>
+<li>详细可以划分为，新生代，老年代等</li>
+<li>是垃圾回收的主要场所。</li>
+<li>GC算法就主要是针对堆区设计的。</li>
+</ol>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><ol>
+<li>堆区的一个逻辑分区，本质上也是堆</li>
+<li>线程共享</li>
+<li>主要用于存储类的信息、常量池、方法数据、方法代码等</li>
+<li>这个区也会发生垃圾回收，但是频率很低。</li>
+</ol>
+<p>注：方法区是java虚拟机的一个规范，至于怎么实现，有虚拟机开发者自行确定。</p>
+<h4 id="PermGen（永久代）"><a href="#PermGen（永久代）" class="headerlink" title="PermGen（永久代）"></a>PermGen（永久代）</h4><p>绝大部分 Java 程序员应该都见过 “java.lang.OutOfMemoryError: PermGen space “这个异常。这里的 “PermGen space”其实指的就是<strong>方法区</strong>。不过方法区和“PermGen space”又有着本质的区别。前者是 JVM 的规范，而后者则是 JVM 规范的一种实现，并且<strong>只有 HotSpot 才有PermGen space</strong>，而对于其他类型的虚拟机，如 JRockit（Oracle）、J9（IBM） 并没有“PermGen space”。由于方法区主要存储类的相关信息，所以对于动态生成类的情况比较容易出现永久代的内存溢出。最典型的场景就是，在 jsp 页面比较多的情况，容易出现永久代内存溢出。我们现在通过动态生成类来模拟 “PermGen space”的内存溢出</p>
+<p>注：<em>整个区在java8后就被移除了，即在java8后使用元空间来表示方法区，即元空间是方法区的另一种实现方式。</em></p>
+<h4 id="Metaspace（元空间）"><a href="#Metaspace（元空间）" class="headerlink" title="Metaspace（元空间）"></a>Metaspace（元空间）</h4><p>java8后使用元空间替换了永久代（PermGen）来实现方法区。元空间与永久代的不同：元空间并不在虚拟机中，而是使用本地内存。因此，默认情况下，元空间的大小仅受本地内存限制，但可以通过以下参数来指定元空间的大小：</p>
+<p>-XX:MetaspaceSize，初始空间大小，达到该值就会触发垃圾收集进行类型卸载，同时GC会对该值进行调整：如果释放了大量的空间，就适当降低该值；如果释放了很少的空间，那么在不超过MaxMetaspaceSize时，适当提高该值。</p>
+<p>-XX:MaxMetaspaceSize，最大空间，默认是没有限制的。</p>
+<p>除了上面两个指定大小的选项以外，还有两个与 GC 相关的属性：</p>
+<p>-XX:MinMetaspaceFreeRatio，在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集</p>
+<p>-XX:MaxMetaspaceFreeRatio，在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集</p>
+<h3 id="每个内存区域出现异常的情形"><a href="#每个内存区域出现异常的情形" class="headerlink" title="每个内存区域出现异常的情形"></a>每个内存区域出现异常的情形</h3><center><img src="https://images2015.cnblogs.com/blog/539365/201511/539365-20151119105947202-10960285.png" alt=""></center>
+
+<ol>
+<li>堆或方法区的内存不够分配都会出现OutOfMemoryError。</li>
+<li>栈区只有在多线程的情况下才会出现OutOfMemoryError，在单线程的情况下只会出现StackOverflowError。</li>
+<li>栈区在多线程的情况下会出现StackOverflowError，这是因为某个线程使用的栈深度超过了JVM定义的深度。</li>
+<li>程序计数器理论上回出现OutOfMemoryError，但实际情况下是不会出现的，除非线程栈的大小小于计数器。</li>
+</ol>
+<p>注意：以上所说的各个区并不是在物理上进行分割的，而是在逻辑上进行分割的。比如堆区就可以分配在整个内存区域的不连续的空间中。</p>
+<h1 id="JVM参数设置"><a href="#JVM参数设置" class="headerlink" title="JVM参数设置"></a>JVM参数设置</h1><pre><code>java -Xmx3550m -Xms3550m -Xss128k -XX:NewRatio=4 -XX:SurvivorRatio=4 -XX:MaxPermSize=16m -XX:MaxTenuringThreshold=0
+</code></pre><p>-Xmx128m：设置JVM最大可用内存为128M。</p>
+<p>-Xms128m：设置JVM最小内存为128m。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。</p>
+<p>-Xmn2g：设置年轻代大小为2G。整个堆大小=年轻代大小 + 年老代大小 + 持久代大小。持久代一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。</p>
+<p>-Xss128k：设置每个线程的堆栈大小。 JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更 多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</p>
+<p>-XX:NewRatio=4:设置年轻代（包括Eden和两个Survivor区）与年老代的比值（除去持久代）。设置为4，则年轻代与年老代所占比值为1：4，年轻代占整个堆栈的1/5</p>
+<p>-XX:SurvivorRatio=4：设置年轻代中Eden区与Survivor区的大小比值。设置为4，则两个Survivor区与一个Eden区的比值为2:4，一个Survivor区占整个年轻代的1/6</p>
+<p>-XX:MaxPermSize=16m：设置持久代大小为16m。</p>
+<p>-XX:MaxTenuringThreshold=0：设置垃圾最大年龄。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。<br> – Ratio 比率<br> – Eden 伊甸<br> – Survivor 幸存者</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/01/28/JVM/" data-title="JVM | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/02/01/Spring/" title="Spring">
+  <strong>新一篇:</strong><br/>
+  <span>
+  Spring</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2018/01/21/基础网络知识/"  title="基础网络知识">
+ <strong>旧一篇:</strong><br/> 
+ <span>基础网络知识
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="JVM" data-thread-key="JVM" data-author-key="Daniel" data-url="http://yoursite.com/post/JVM"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>
