@@ -254,55 +254,55 @@ ALTER TABLE user_t drop PRIMARY KEY;
 <li>导入官方推荐的数据库 employees。<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="测试read-uncommitted-级别"><a href="#测试read-uncommitted-级别" class="headerlink" title="测试read uncommitted 级别"></a>测试read uncommitted 级别</h3></li>
 <li><p>查看当前的数据库隔离级别</p>
 <pre><code>mysql&gt; select @@tx_isolation;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcqcxqidj20a3051dfo.jpg" alt="查看数据库的当前的隔离级别"></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcqcxqidj20a3051dfo.jpg" alt="查看数据库的当前的隔离级别"></p>
 </li>
 <li><p>在A客户端（打开的mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted</p>
 <pre><code>set session transaction isolation level read uncommitted；
 start transaction;
 select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcr48xktj20hy0d2jrn.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcr48xktj20hy0d2jrn.jpg" alt=""></p>
 </li>
 <li><p>在B客户端（打开的另一个mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted，并更新数据。</p>
 <pre><code>set session transaction isolation level read uncommitted;
 start transaction;
 update salaries set salary=salary+100 where emp_no = 100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrinkm2j20ix06raa2.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrinkm2j20ix06raa2.jpg" alt=""></p>
 </li>
 <li><p>在A中再次执行相同的查询数据</p>
 <pre><code>select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrsldjtj20eo09c0sq.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrsldjtj20eo09c0sq.jpg" alt=""></p>
 </li>
 </ol>
 <p>结论：一个事务没有提交，但是在另外的事务中却可以查看到这个事务没有提交的数据。这是所有隔离级别中最低级的一种。<br>导致的问题：可以读取到事务未提交的数据，俗称<strong>脏读</strong></p>
 <h3 id="read-committed-级别"><a href="#read-committed-级别" class="headerlink" title="read committed 级别"></a>read committed 级别</h3><ol>
 <li><p>查询B客户端的当前会话的事务的级别</p>
 <pre><code>select @@tx_isolation;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdrdhmn2j20b704jdfo.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdrdhmn2j20b704jdfo.jpg" alt=""></p>
 </li>
 <li><p>将B客户端的当前会话的事务级别设置为read committed，查询当前的数据。</p>
 <pre><code>set session transaction isolation level read committed;
 start transaction;
 select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdu7zrmvj20f00baaa4.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdu7zrmvj20f00baaa4.jpg" alt=""></p>
 </li>
 <li><p>在A客户端的会话中启动事务，对数据进行修改</p>
 <pre><code>start transaction;
 select * from salaries where emp_no=100000;
 update salaries set salary=salary-200 where emp_no=100000;
 select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdulbvghj20k50qadgo.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdulbvghj20k50qadgo.jpg" alt=""></p>
 </li>
 <li><p>在B客户端的会话中查询</p>
 <pre><code>select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobduz0fusj20fn09wwel.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobduz0fusj20fn09wwel.jpg" alt=""></p>
 </li>
 <li><p>提交A客户端中会话的事务</p>
 <pre><code>commit
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
 </li>
 <li><p>在B客户端会话中查看数据</p>
 <pre><code>select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
 </li>
 </ol>
 <p>结论：可见在A中修改的数据，在A中的事务被提交前，在B中是看不见的。一旦A提交，B中再次查询就可以看见了。如果当前会话的隔离级别是 read committed的，当前会话只能读取到其他事务提交的数据，未提交的数据是读不到的。<br>导致的问题：两次读取的结果不同，导致了<strong>不可重复读</strong>。</p>
@@ -310,32 +310,32 @@ select * from salaries where emp_no=100000;
 <ol>
 <li><p>查询B客户端的当前会话的事务的级别</p>
 <pre><code>select @@tx_isolation;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobep7am6xj20az05qjr8.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobep7am6xj20az05qjr8.jpg" alt=""></p>
 </li>
 <li><p>设置B客户端中的会话的隔离级别为repeatable read(可重复读，保证了两次读取的数据一致)。</p>
 <pre><code>set session transaction isolation level repeatable read;
 start transaction;
 select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobepmfqibj20i00dx3ys.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobepmfqibj20i00dx3ys.jpg" alt=""></p>
 </li>
 <li><p>在客户端A中的会话中启动一个事务,在事务里执行添加一条记录,并提交该事务。</p>
 <pre><code>start transaction;
 insert into salaries (emp_no,salary,from_date,to_date) value(100000,21232323,&apos;2017-06-29&apos;,&apos;2018-07-01&apos;);
 select * from salaries where emp_no=100000;
 commit;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfphq7lxj20vc0efaah.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfphq7lxj20vc0efaah.jpg" alt=""></p>
 </li>
 <li><p>在客户端B的会话中查询数据，</p>
 <pre><code>select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfq8jd5mj20i50azdfz.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfq8jd5mj20i50azdfz.jpg" alt=""></p>
 </li>
 <li><p>在客户端B的会话中插入一条与第三步插入的记录的<code>emp_no</code>和<code>from_date</code>都相同的数据</p>
 <pre><code>insert into salaries (emp_no,salary,from_date,to_date) value(100000,1000000,&apos;2017-06-29&apos;,&apos;2020-07-01&apos;);
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfqkg9znj20vg02iwed.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfqkg9znj20vg02iwed.jpg" alt=""></p>
 </li>
 <li><p>在客户端B的会话中查询数据，</p>
 <pre><code>select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foberfvn12j20f209imx6.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foberfvn12j20f209imx6.jpg" alt=""></p>
 </li>
 </ol>
 <p>结论：会话使用事务的级别为repeatable read，保证了在事务提交前的每次查询数据都是一样的，避免了不可重复读的问题，<br>导致的问题：从上述的实验中不难看出问题，就是在第五步出现的该问题，明明在当前会话中查询的数据没有与要提交的的数据冲突，可是在插入的时候却提示已经有该主键的数据记录了。看不见记录，却提示已存在该记录，这种情况称为<strong>幻读</strong>。</p>
@@ -348,17 +348,17 @@ commit;
 <pre><code>set session transaction isolation level serializable;
 -- 启动事务
 start transaction;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgq6qmduj20i903hjr9.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgq6qmduj20i903hjr9.jpg" alt=""></p>
 </li>
 <li><p>在B客户端的会话中查询数据</p>
 <pre><code>select * from salaries where emp_no=100000;
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""></p>
 </li>
 <li><p>在A客户端会话中启动事务，查询数据，并插入一条数据。</p>
 <pre><code>start transaction
 select * from salaries where emp_no=100000;
 insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
-</code></pre><p> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""><br> <img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgrek0cnj20uz031wed.jpg" alt=""></p>
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""><br><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgrek0cnj20uz031wed.jpg" alt=""></p>
 <p> 可以看到插入数据并没有成功，尽管库中并没有相同主键的记录。</p>
 </li>
 <li><p>在A客户端插入数据的时候，同时在B客户端提交事务。</p>
@@ -366,11 +366,11 @@ insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apo
 insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
 </code></pre></li>
 </ol>
-<pre><code>    -- 客户端B
-    commit
-![](https://ws1.sinaimg.cn/large/af2f0e07gy1fobgx2jlpbj20v508e74c.jpg)
-由上面的结果看，A中的insert语句在等待执行期间，如果B客户端的事务执行了commit，那么A中的insert就会执成功，否则就会超时。
-</code></pre>  
+<pre><code>-- 客户端B
+commit
+</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgx2jlpbj20v508e74c.jpg" alt=""></p>
+<p>由上面的结果看，A中的insert语句在等待执行期间，如果B客户端的事务执行了commit，那么A中的insert就会执成功，否则就会超时。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
