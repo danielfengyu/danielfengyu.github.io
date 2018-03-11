@@ -804,7 +804,7 @@ java -jar myproject.jar --debug //可以在控制台输出相关的debug日志�
     <link href="http://yoursite.com/2018/01/07/Java-Socket-%E7%BC%96%E7%A8%8B/"/>
     <id>http://yoursite.com/2018/01/07/Java-Socket-编程/</id>
     <published>2018-01-07T05:17:58.000Z</published>
-    <updated>2018-03-11T04:10:28.157Z</updated>
+    <updated>2018-03-11T15:42:29.602Z</updated>
     
     <content type="html"><![CDATA[<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><p><center><img src="http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></center><br>基于TCP/IP协议族的网络，共分四层：</p>
 <ol>
@@ -859,7 +859,7 @@ java -jar myproject.jar --debug //可以在控制台输出相关的debug日志�
 <p>一个调用者在调用耗时操作,不能立即返回数据时,先返回一个取货凭证.然后在过一断时间后凭取货凭证来获取真正的数据。所以连结调用者和真实数据之间的桥梁是取货凭证。</p>
 <h2 id="Java中的回调"><a href="#Java中的回调" class="headerlink" title="Java中的回调"></a>Java中的回调</h2><p>java中的回调就是将规定一个接口，然后设计一个类（该类与接口存在关联或者依赖关系），最后，当使用这个类的时候，实现之前规定的接口，这就是java中的回调。简单的说，在Java中，通常就是编写下层的人规定一个接口，由上层来实现这个接口；然后上层就可以把这个接口的一个对象作为参数传给下层，下层就会通过那个接口来调用由上层编写的函数。</p>
 <p>java的回调是以接口的形式实现的。从类之间的关系角度看，有关联与依赖之分。</p>
-]]></content>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2>]]></content>
     
     <summary type="html">
     
