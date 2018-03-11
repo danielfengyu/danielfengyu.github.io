@@ -9,7 +9,7 @@
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" content="Socket在网络编程中所处的位置网络分层基于TCP/IP协议族的网络，工分四层：
+    <meta name="description" content="Socket在网络编程中所处的位置网络分层基于TCP/IP协议族的网络，共分四层：
 
 应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的
 传输层
@@ -108,10 +108,10 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Socket在网络编程中所处的位置"><span class="toc-number">1.</span> <span class="toc-text">Socket在网络编程中所处的位置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络分层"><span class="toc-number">1.1.</span> <span class="toc-text">网络分层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器模型"><span class="toc-number">1.2.</span> <span class="toc-text">服务器模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java异步编程"><span class="toc-number">2.</span> <span class="toc-text">Java异步编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java中的回调"><span class="toc-number">2.1.</span> <span class="toc-text">Java中的回调</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Socket在网络编程中所处的位置"><span class="toc-number">1.</span> <span class="toc-text">Socket在网络编程中所处的位置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络分层"><span class="toc-number">1.1.</span> <span class="toc-text">网络分层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSI七层模型"><span class="toc-number">1.2.</span> <span class="toc-text">OSI七层模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP"><span class="toc-number">1.3.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器模型"><span class="toc-number">1.4.</span> <span class="toc-text">服务器模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java异步编程"><span class="toc-number">2.</span> <span class="toc-text">Java异步编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java中的回调"><span class="toc-number">2.1.</span> <span class="toc-text">Java中的回调</span></a></li></ol></li></ol>
 		</div>
 		
-		<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><p><center><img src="http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></center><br>基于TCP/IP协议族的网络，工分四层：</p>
+		<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><p><center><img src="http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></center><br>基于TCP/IP协议族的网络，共分四层：</p>
 <ol>
 <li>应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的</li>
 <li>传输层</li>
@@ -119,18 +119,42 @@ var _hmt = _hmt || [];
 <li>网络接口层</li>
 </ol>
 <p>Socket是位于应用层之下，传输层之上的接口，也就是操作系统提供给用户访问网络的系统接口。我们可以借助于Socket接口层，对传输层，网际层以及网络接口层进行操作，来实现我们不同的应用层协议。对于应用层，我们想实现网络功能，归根究底都是要通过Socket来实现的，否则，我们无法访问处于操作系统的传输层，网际层以及网络接口层。</p>
-<p>TCP/UDP，两者最大的区别在于，TCP是可靠的，也就是说，我们通过TCP发送的数据，网络协议栈会保证数据可靠的传输到对端，而UDP是不可靠的，如果出现丢包，协议栈不会做任何处理，可靠性的保证交由应用层处理。因此，TCP的性能会比UDP低，但是可靠性会比UDP好很多。除此之外，两者在传输数据时，也有形式上的不同，TCP的数据是流，大家可以类比文件流，而UDP则是基于数据包，也就是说数据会被打成包发送。流和数据包的最大区别在于流没有数据便捷，数据包有数据边界，UDP每次发送的数据都独立成包。</p>
-<h2 id="服务器模型"><a href="#服务器模型" class="headerlink" title="服务器模型"></a>服务器模型</h2><p>目前常见的服务器模型主要有三种：</p>
+<p>Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。一般由操作系统或者JVM自己实现。java.net中的socket其实就是对底层的抽象调用。</p>
+<p>套接字关联的数据结构：</p>
 <ol>
-<li>阻塞服务器</li>
-<li>并发服务器</li>
-<li>异步服务器</li>
+<li>该套接字所关联的本地和远程互联网地址和端口。</li>
+<li>一个FIFO队列用于存放接收到的等待分配的数据（RecvQ），以及一个用于存放等待传输数据的的队列（SendQ）</li>
+<li>对于TCP套接字，还包含了与打开关闭TCP握手相关的额外协议状态信息。</li>
 </ol>
+<p>在JAVA中，我们用 ServerSocket、Socket类创建一个套接字连接，从套接字得到的结果是一个InputStream以及OutputStream对象，以便 将连接作为一个IO流对象对待。通过IO流可以从流中读取数据或者写数据到流中，读写IO流会有异常IOException产生。向输出流写数据并不意味着数据实际上已经被发送，它们只是被复制到了发送缓冲区队列SendQ，就是在Socket的OutputStream上调用 flush()方法，也不能保证数据能够立即发送到网络。<strong>真正的数据发送是由操作系统的TCP协议栈模块从缓冲区中取数据发送到网络来完成的</strong>。当有数据从网络来到时，TCP协议栈模块接收数据并放入接收缓冲区队列RecvQ，输入流InputStream通过read方法从RecvQ中取出数据。</p>
+<p>套接字底层是基于TCP的，所以socket的超时和TCP超时是相同的。如果TCP的三次握手超时，那这个socket连接也会超时。</p>
+<p>TCP/UDP，两者最大的区别在于，TCP是可靠的，也就是说，我们通过TCP发送的数据，网络协议栈会保证数据可靠的传输到对端，而UDP是不可靠的，如果出现丢包，协议栈不会做任何处理，可靠性的保证交由应用层处理。因此，TCP的性能会比UDP低，但是可靠性会比UDP好很多。除此之外，两者在传输数据时，也有形式上的不同，TCP的数据是流，大家可以类比文件流，而UDP则是基于数据包，也就是说数据会被打成包发送。流和数据包的最大区别在于流没有数据边界，数据包有数据边界，UDP每次发送的数据都独立成包。</p>
+<h2 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型"></a>OSI七层模型</h2><ul>
+<li>应用层</li>
+<li>表示层</li>
+<li>会话层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2></li>
+</ul>
+<ol>
+<li>TCP连接的建立需要通过三次握手来完成 </li>
+<li><p>TCP连接的关闭通过四次挥手来完成。</p>
+<h2 id="服务器模型"><a href="#服务器模型" class="headerlink" title="服务器模型"></a>服务器模型</h2><p>目前常见的服务器模型主要有三种：</p>
+</li>
+<li><p>阻塞服务器</p>
+</li>
+<li>并发服务器</li>
+<li><p>异步服务器</p>
 <ul>
 <li>阻塞式服务器是最好实现的服务器，也是问题最多的服务器。客户端发送到服务端的请求会进行排队，服务器会一次处理这些请求，前一个请求没有处理完，就不会处理下一个请求，这种服务器很容易受到攻击，只需要发送一个处理时间很长的请求就可以阻塞其他的请求。因此这种服务器也只能作为理论上的模型。</li>
 <li>并发式服务器。这种服务器处理请求的时候，会为每个接收到的请求创建独立的线程来处理该请求。好处是不会出现请求被阻塞的情况，但也存在一些问题，如果线程过多会把服务器的资源耗尽，导致服务器不能提供服务。不过好在有别的方式可以规避这种情况，就是在服务端建立线程池来处理请求。线程池虽然避免了服务器资源耗尽的问题，但是也存在一些自身的不足，比如线程池资源被用完后，后续的请求也会出现阻塞的情况。</li>
 <li>异步服务器。这种服务器借助系统的异步IO机制，当一个请求到来，我们可以先将请求注册，当有数据可以读取时，会得到通知，这时我们处理请求，这样服务器没有必要阻塞线程，也不会存在很大的系统开销，因此对于并发量比较高的服务器，一般都采用这种方式。</li>
 </ul>
+</li>
+</ol>
+<p>服务器的优化之路：单个线程阻塞模式；一个请求一个线程处理；多线程+线程池；NIO中的多路复用技术，一个线程管理多个请求。这里的请求都是服务端的接收套接字接收到客户端的连接请求。</p>
 <h1 id="Java异步编程"><a href="#Java异步编程" class="headerlink" title="Java异步编程"></a>Java异步编程</h1><p>JAVA平台,实现异步调用的角色有如下三个角色：</p>
 <ol>
 <li>调用者</li>

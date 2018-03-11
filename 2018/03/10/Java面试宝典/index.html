@@ -1,0 +1,498 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java面试宝典 | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="基础JDK目录结构
+bin JDK开发工具的可执行文件，配置java的环境变量的时候Path需要指向该目录
+lib 开发工具使用的归档包路径
+jre java运行时环境的根目录，包含java虚拟机，运行时的类包，java应用的启动器,java应用程序要运行起来依赖的最小目录
+include 包含C语">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/03/10/Java面试宝典/" title="Java面试宝典" itemprop="url">Java面试宝典</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-03-10T03:02:34.000Z" itemprop="datePublished">2018-03-10</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK目录结构"><span class="toc-number">1.1.</span> <span class="toc-text">JDK目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-O体系架构"><span class="toc-number">1.2.</span> <span class="toc-text">I/O体系架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的分类"><span class="toc-number">1.3.</span> <span class="toc-text">流的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的原理"><span class="toc-number">1.4.</span> <span class="toc-text">流的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的使用总结"><span class="toc-number">1.5.</span> <span class="toc-text">流的使用总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NIO体系架构"><span class="toc-number">1.6.</span> <span class="toc-text">NIO体系架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Selector"><span class="toc-number">1.6.1.</span> <span class="toc-text">Selector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Channel"><span class="toc-number">1.6.2.</span> <span class="toc-text">Channel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer"><span class="toc-number">1.6.3.</span> <span class="toc-text">Buffer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NIO和IO的区别"><span class="toc-number">1.7.</span> <span class="toc-text">NIO和IO的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java集合"><span class="toc-number">1.8.</span> <span class="toc-text">Java集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#体系"><span class="toc-number">1.8.1.</span> <span class="toc-text">体系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List接口"><span class="toc-number">1.9.</span> <span class="toc-text">List接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedList"><span class="toc-number">1.9.1.</span> <span class="toc-text">LinkedList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayList"><span class="toc-number">1.9.2.</span> <span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vector"><span class="toc-number">1.9.3.</span> <span class="toc-text">Vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stack"><span class="toc-number">1.9.4.</span> <span class="toc-text">Stack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Set"><span class="toc-number">1.10.</span> <span class="toc-text">Set</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HashSet"><span class="toc-number">1.10.1.</span> <span class="toc-text">HashSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TreeSet"><span class="toc-number">1.10.2.</span> <span class="toc-text">TreeSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashSet"><span class="toc-number">1.10.3.</span> <span class="toc-text">LinkedHashSet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Map"><span class="toc-number">1.11.</span> <span class="toc-text">Map</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HashMap"><span class="toc-number">1.11.1.</span> <span class="toc-text">HashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashTable"><span class="toc-number">1.11.2.</span> <span class="toc-text">HashTable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashMap"><span class="toc-number">1.11.3.</span> <span class="toc-text">LinkedHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TreeMap"><span class="toc-number">1.11.4.</span> <span class="toc-text">TreeMap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collections"><span class="toc-number">1.12.</span> <span class="toc-text">Collections</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.13.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发编程"><span class="toc-number">1.14.</span> <span class="toc-text">并发编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池"><span class="toc-number">1.14.1.</span> <span class="toc-text">线程池</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="JDK目录结构"><a href="#JDK目录结构" class="headerlink" title="JDK目录结构"></a>JDK目录结构</h2><ul>
+<li>bin JDK开发工具的可执行文件，配置java的环境变量的时候Path需要指向该目录</li>
+<li>lib 开发工具使用的归档包路径</li>
+<li>jre java运行时环境的根目录，包含java虚拟机，运行时的类包，java应用的启动器,java应用程序要运行起来依赖的最小目录</li>
+<li>include 包含C语言头文件,支持Java本地接口与Java虚拟机调试程序接口。</li>
+<li><p>jre/lib 代码库、树形设置以及JRE使用的源文件。rt.jar是java运行时类库，是用得最多的基础类库，包含java.lang,java.io,java.net,java.util等。</p>
+<ol>
+<li>java.lang：其下的类不需要显示import，包括object类，数据类型相关类（Integer等），Class类，线程相关类Thread，异常类Throable。</li>
+<li>java.io：I/O操作相关的类，包括文件File，FileReader，FileWriter，输入输出流InputStream/OutputStream等。</li>
+<li>java.net：网络相关类，HTTP链接类HttpURLConnecion,socket类等。</li>
+<li>java.util：数据结构相关的类ArrayList、Hashmap，日期类Date，随机数类Random类等。</li>
+</ol>
+</li>
+<li>/jre/lib/ext Java平台的扩展程序(插件等)的默认安装目录。</li>
+<li>/jre/lib/security 包含用于安全管理的文件。这些措施包括安全策略（java.policy）和安全性（java.security）文件。</li>
+<li>db Java实现的数据库</li>
+</ul>
+<p>JDK包含了java程序的运行环境和开发工具。借助java开发工具中的编译器javac.exe，我们可以把.java文件编译为在任何平台上都一样的.class文件。jre（包含jvm，java运行时类库和动态链接库（.dll）等信息）为java的执行提供了运行环境，可以加载javac.exe编译后的.class文件，并把其转化为对应平台上的机器码，由此可见在不同的平台上jvm的实现是不一样的。</p>
+<h2 id="I-O体系架构"><a href="#I-O体系架构" class="headerlink" title="I/O体系架构"></a>I/O体系架构</h2><h2 id="流的分类"><a href="#流的分类" class="headerlink" title="流的分类"></a>流的分类</h2><ul>
+<li><strong>按方向：输入流（Reader和InputStream）和输出流（Writer和OutputStream）</strong>。输入输出是对程序运行的内存来说的，程序运行的部分始终处于内存中。</li>
+<li><strong>按操作单元：字符流(Writer和Reader)和字节流（OutputStream和InputStream）</strong>。字符流操作的单元是两个字节（16bit）,字节流操作的单位是一个字节（8bit）。由此可知java的字符的长度为两个字节。</li>
+<li><strong>按角色划分：节点流和处理流。</strong>可以从/向一个特定的IO设备（如磁盘，网络）读/写数据的流，称为节点流。节点流也被称为低级流。当使用节点流进行输入输出的时候，程序直接连接到实际的数据源，和实际的输入/输出节点进行连接。处理流则用于对一个已存在的流进行连接和封装，通过封装后的流来实现数据的读/写功能。处理流也被称为高级流。当使用处理流进行输入/输出时，程序并不会直接连接到实际的数据源，没有和实际的输入和输出节点连接。使用处理流的一个明显的好处是，只要使用相同的处理流，程序就可以采用完全相同的输入/输出代码来访问不同的数据源，随着处理流所包装的节点流的变化，程序实际所访问的数据源也相应的发生变化。处理流最终必须“套接”在节点流上才能完成输入输出。<br><img src="http://img.blog.csdn.net/20160505135650158" alt=""><h2 id="流的原理"><a href="#流的原理" class="headerlink" title="流的原理"></a>流的原理</h2>所有的输入流都是基于InputStream和Reader的；所有的输出流都是基于OutputStream和Writer的。</li>
+</ul>
+<p>输入流使用隐式的记录指针来表示当前正准备从哪个“水滴”开始读取，每当程序从InputStream或者Reader里面取出一个或者多个“水滴”后，记录指针自定向后移动；除此之外，InputStream和Reader里面都提供了一些方法来控制记录指针的移动。</p>
+<p>同样，当执行输出时，程序相当于依次把“水滴”放入到输出流的水管中，输出流同样采用隐示指针来标识当前水滴即将放入的位置，每当程序向OutputStream或者Writer里面输出一个或者多个水滴后，记录指针自动向后移动。</p>
+<p><strong><em>注意的一点是字符流与字节流的指针的移动步长不一致。</em></strong></p>
+<p>处理流可以“嫁接”在任何已存在的流（可以节点流，也可以是处理流）的基础之上，这就允许Java应用程序采用相同的代码，透明的方式来访问不同的输入和输出设备的数据流。</p>
+<p><strong><em>处理流使用了装饰模式进行设计。</em></strong></p>
+<h2 id="流的使用总结"><a href="#流的使用总结" class="headerlink" title="流的使用总结"></a>流的使用总结</h2><ul>
+<li>如果是操作二进制文件那我们就使用字节流，如果操作的是文本文件那我们就使用字符流。</li>
+<li>尽可能的多使用处理流，这会使我们的代码更加灵活，复用性更好。</li>
+</ul>
+<h2 id="NIO体系架构"><a href="#NIO体系架构" class="headerlink" title="NIO体系架构"></a>NIO体系架构</h2><p>三个核心模块：</p>
+<ul>
+<li>Selector</li>
+<li>Channel</li>
+<li>Buffer</li>
+</ul>
+<h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><p>Selector帮助开发者突破IO的瓶颈，它提供了单线程处理多个 Channel的机制。如果你的应用打开了多个连接（通道），但每个连接的流量都很低，使用Selector就会很方便。<br>要使用Selector，得先向Selector注册Channel，然后调用它的select()方法。这个方法会一直阻塞到某个注册的通道有事件就绪。一旦这个方法返回，线程就可以处理这些事件，事件的例子有如新连接进来，数据接收等.</p>
+<h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><p>Channel是一个对象，可以通过它读取和写入数据，所有的IO在NIO中都从一个Channel 开始。Channel中的数据要么写入Buffer，要么从Buffer读取。通道与流的不同之处在于通道是双向的，而流只是在一个方向上移动(一个流必须是 InputStream 或者 OutputStream 的子类)， 而 通道可以用于读、写或者同时用于读写。</p>
+<h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>NIO操作面向缓冲区，数据从Channel读取到Buffer缓冲区，随后在Buffer中处理数据。Buffer其实就是一块缓存区，内部使用字节数组存储数据，并维护几个特殊变量，实现数据的反复利用。一个Buffer对象是固定数量的数据的容器。其作用是一个存储器,或者分段运输区,在这里数据可被存储并在之后用于检索。尽管缓冲区作用于它们存储的原始数据类型,但缓冲区十分倾向于处理字节。非字节缓冲区可以在后台执行从字节或到字节的转换,这取决于缓冲区是如何创建的。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/ed571e5b8793cae275479b761393a6f0" alt=""></p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/0fc724bf520f4db008a73c597e7eadef" alt=""></p>
+<h2 id="NIO和IO的区别"><a href="#NIO和IO的区别" class="headerlink" title="NIO和IO的区别"></a>NIO和IO的区别</h2><ol>
+<li>Java IO的各种流是阻塞的；ava NIO的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取。而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。非阻塞的写也是如此。</li>
+<li>流失单向的；通道（Channel）是双向的。</li>
+<li>IO是面向流；NIO面向缓冲；</li>
+<li>IO无选择器；NIO有选择器；</li>
+<li>如果一个连接的数据量比较大使用基于IO的服务器，如果连接很多，且每个连接需要传输的数据量不大，可以使用基于NIO的服务器。</li>
+</ol>
+<h2 id="Java集合"><a href="#Java集合" class="headerlink" title="Java集合"></a>Java集合</h2><h3 id="体系"><a href="#体系" class="headerlink" title="体系"></a>体系</h3><ul>
+<li>Collection Collection体系中的集合存储的是元素本身，只是每个实现的存储方式不一样。</li>
+<li>Map Map体系中存储的是键值对。</li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/916361/201603/916361-20160322135512683-168468369.jpg" alt=""></p>
+<ol>
+<li>List、Set和Queue等属于Collection接口，其中定义了List、Set和Queue的基本方法增删改查。</li>
+<li>ArrayList是List的一个实现，底层是有数组实现的，其中元素可以重复。</li>
+<li>HashSet是Set的一个实现，元素无序，并且不能重复。</li>
+<li>Map提供一种映射关系，元素以键值对的形式存在，能根据键快速查询到值。Map中的键值对以Entry类型的对象实例存在。key值不能重复，value可以重复，即键值的关系是多对一。</li>
+<li>HashMap是Map的一个实现，是基于hash表实现的，HashMap中的Entry对象是无序的，key和value都可以是null,但是key只能有一个是null（因为键不能重复）。</li>
+</ol>
+<h2 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a>List接口</h2><p>特点：</p>
+<ol>
+<li>元素是有序的，可以使用索引访问指定的元素。</li>
+<li>其中的元素不能重复。</li>
+<li>除了iterator()方法外，List还提供了一个专有的方法listIterator(),用于返回一个ListIterator接口，和Iterator接口相比，能向前或向后遍历。</li>
+</ol>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><ol>
+<li>实现了List和queue接口。</li>
+<li>允许有null值</li>
+<li>扩充了一些方法，可以用来模拟堆栈（stack）,队列（queue），双向队列（deque）。</li>
+<li>LinkedList没有同步方法，所有<strong>不是线程安全</strong>的。如果多个线程同时访问这个List，需要自己进行同步控制。一种解决办法：Listlist=Collections.synchronizedList(newLinkedList(…));这个时候的List就是同步的了。</li>
+</ol>
+<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><ol>
+<li>底层实现是数组，大小可动态扩展</li>
+<li>操作的方法没有进行同步控制，所以<strong>不是线程安全</strong>，并发操作时需要手动确保同步。</li>
+<li>CopyOnWriteArrayList提供了线程安全的ArrayList。不过其add方法的同步是通过创建数组副本来实现的，效率较低。</li>
+</ol>
+<h3 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h3><ol>
+<li>Vector非常类似ArrayList，但是Vector<strong>是线程安全的</strong>。</li>
+<li>效率较低，很少使用了。</li>
+<li>java.util 包中的集合类都返回 fail-fast迭代器，这意味着它们假设线程在集合内容中进行迭代时，集合不会更改它的内容。如果 fail-fast迭代器检测到在迭代过程中进行了更改操作，那么它会抛出 ConcurrentModificationException</li>
+</ol>
+<h3 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h3><ol>
+<li>父类是Vector。</li>
+</ol>
+<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><ol>
+<li>具有与Collection完全一样的接口。</li>
+<li>Set不保存重复元素。</li>
+<li>加入Set的元素都必须定义equals()方法以确保对象的唯一性。</li>
+<li>其中的元素无序。</li>
+</ol>
+<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><ol>
+<li>元素不重复</li>
+<li>元素无序</li>
+<li>允许至多一个null元素</li>
+<li><strong>不是线程安全的</strong></li>
+</ol>
+<h3 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h3><ol>
+<li>可以实现排序，元素添加到集合中的时候会自动按照某种比较规则将其插入到有序的对象序列中，并保证该集合元素组成按照“升序”排列。</li>
+<li>检索效率比ArrayList高，ArrayList是O(n),TreeSet是log(n)</li>
+<li>TreeSet要维护父子节点之间的关系，所以其占有的资源相对较多。</li>
+<li>数据插入的速度也较ArrayList块。</li>
+</ol>
+<h3 id="LinkedHashSet"><a href="#LinkedHashSet" class="headerlink" title="LinkedHashSet"></a>LinkedHashSet</h3><ol>
+<li>具有Link和HashSet的特点。查询按HashSet来，速度快；还能保证数据插入的顺序，这个是因为数据使用Link链表进行存储的。</li>
+</ol>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><ol>
+<li>四个实现类：HashMap Hashtable LinkedHashMap 和TreeMap。</li>
+<li>存储键值对，键不可以重复，值可以重复。</li>
+</ol>
+<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><ol>
+<li>根据键的hashcode存储数据。</li>
+<li>根据键可以和快查询到其值。</li>
+<li>HashMap<strong>不是线程安全的，</strong>其中的操作方法并没有并发控制。</li>
+<li>如果需要其同步可以使用Collections的synchronizedMap方法。</li>
+<li>键和值可以是null，但只允许一个键是null</li>
+<li>每一个键值对存在在一个Entry对象中，而Entry对象又是存储在一个Set中，Set中不能有重复元素，即是要Entry对象不重复，而Entry对中的键就可以保证Entry对象不重复。</li>
+</ol>
+<h3 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h3><ol>
+<li>根据键的hashcode存储数据</li>
+<li>根据键可以快速查询到其值</li>
+<li><strong>是线程安全的，</strong>因此写入效率较低。</li>
+</ol>
+<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><ol>
+<li>保存了记录的插入顺序，在用Iterator遍历LinkedHashMap时，先得到的记录肯定是先插入的.在遍历 的时候会比HashMap慢。</li>
+<li><strong>不是线程安全的。</strong></li>
+</ol>
+<h3 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h3><ol>
+<li>保存的记录根据键进行排序，默认按升序，可以指定排序的比较器。</li>
+<li>当用Iterator 遍历TreeMap时，得到的记录是排过序的。</li>
+<li><strong>不是线程安全的</strong>。</li>
+</ol>
+<h2 id="Collections"><a href="#Collections" class="headerlink" title="Collections"></a>Collections</h2><p>Collections是针对集合类的一个帮助类。提供了一系列静态方法实现对各种集合的搜索、排序、线程完全化等操作。<br>相当于对Array进行类似操作的类——Arrays。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>容器类只是持有对象的一份引用，所以一旦将对象放入容器中，就失去了对象的类型信息。</li>
+<li>在所有的Set中，TreeSet的效率是最低，但是其中的元素是排序的。</li>
+<li>LinkedList可以用来模拟stack、queue等。</li>
+<li>Set和Collection有一模一样的接口。</li>
+<li>哈希码就是将对象的信息经过一些转变形成一个独一无二的int值，这个值存储在一个array中。我们都知道所有存储结构中，array查找速度是最快的。所以，可以加速查找。</li>
+<li>线程安全的集合：Vector 、HashTable，线程安全了也导致其效率变低了。</li>
+</ol>
+<h2 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h2><p>创建线程的三种方式：</p>
+<ol>
+<li>继承Thread</li>
+<li>实现Runable</li>
+<li>实现Callable，使用Future对象接收Callable的call方法返回的值或抛出的异常，并把Future对象给Thread对象启动线程。</li>
+</ol>
+<p>启动线程的两种方式：</p>
+<ol>
+<li>使用线程池启动线程。</li>
+<li>使用Thread对象的start()方法</li>
+</ol>
+<p>注意：run或call方法不能直接调用，而是线程内部自己处理的，调用了OS的线程启动方法。</p>
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>Executors工具可以创建普通的线程池以及schedule调度任务的调度池，其实两者实现上还是有一些区别，但是理解了ThreadPoolExecutor，在看ScheduledThreadPoolExecutor就非常轻松了，后面的文章中也会专门介绍这块，但是需要先看这篇文章。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/03/10/Java面试宝典/" data-title="Java面试宝典 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/02/09/MySQL/"  title="MySQL">
+ <strong>旧一篇:</strong><br/> 
+ <span>MySQL
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="Java面试宝典" data-thread-key="Java面试宝典" data-author-key="Daniel" data-url="http://yoursite.com/post/Java面试宝典"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>
