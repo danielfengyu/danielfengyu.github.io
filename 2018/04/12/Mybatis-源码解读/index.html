@@ -1,0 +1,715 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Mybatis 源码解读 | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="使用使用的方式：
+
+纯代码
+mybatis配置文件+代码，对于要学习mybatis的源码，这种方式是一种不错的选择。
+Spring-mybatis配置方式，开发中建议使用这种方式。
+
+下面着重介绍下第二种方式，从简单的例子入手。
+使用mybatis的java的基本代码结构：
+String resou">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/04/12/Mybatis-源码解读/" title="Mybatis 源码解读" itemprop="url">Mybatis 源码解读</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-04-12T14:31:07.000Z" itemprop="datePublished">2018-04-12</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用"><span class="toc-number">1.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置文件的加载"><span class="toc-number">2.</span> <span class="toc-text">配置文件的加载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SqlSession的工作揭秘"><span class="toc-number">3.</span> <span class="toc-text">SqlSession的工作揭秘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#解析Mapper-xml文件"><span class="toc-number">3.1.</span> <span class="toc-text">解析Mapper.xml文件</span></a></li></ol></li></ol>
+		</div>
+		
+		<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>使用的方式：</p>
+<ol>
+<li>纯代码</li>
+<li>mybatis配置文件+代码，对于要学习mybatis的源码，这种方式是一种不错的选择。</li>
+<li>Spring-mybatis配置方式，开发中建议使用这种方式。</li>
+</ol>
+<p>下面着重介绍下第二种方式，从简单的例子入手。</p>
+<p>使用mybatis的java的基本代码结构：</p>
+<pre><code>String resourcePath = &quot;./mybatis-config.xml&quot;;
+InputStream is = null;
+try {
+    is = Resources.getResourceAsStream(resourcePath);
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is, &quot;development&quot;);
+SqlSession sqlSession = sessionFactory.openSession();
+UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+User user = userMapper.selectUser(id);
+</code></pre><p>mybatis-config.xml:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE configuration
+  PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
+  &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
+&lt;configuration&gt;
+  &lt;properties resource=&quot;./jdbc.properties&quot;&gt;
+   &lt;!--  &lt;property name=&quot;jdbc.driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+    &lt;property name=&quot;jdbc.url&quot; value=&quot;jdbc:mysql://localhost:3306/test&quot;/&gt;
+    &lt;property name=&quot;jdbc.username&quot; value=&quot;root&quot;/&gt;
+    &lt;property name=&quot;jdbc.password&quot; value=&quot;root&quot;/&gt; --&gt;
+    &lt;!-- 使得可以使用默认值 --&gt;
+    &lt;property name=&quot;org.apache.ibatis.parsing.PropertyParser.enable-default-value&quot; value=&quot;true&quot;/&gt;
+  &lt;/properties&gt;
+  &lt;settings&gt;
+        &lt;setting name=&quot;cacheEnabled&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;multipleResultSetsEnabled&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;useColumnLabel&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;useGeneratedKeys&quot; value=&quot;false&quot;/&gt;
+      &lt;setting name=&quot;autoMappingBehavior&quot; value=&quot;PARTIAL&quot;/&gt;
+      &lt;setting name=&quot;autoMappingUnknownColumnBehavior&quot; value=&quot;WARNING&quot;/&gt;
+      &lt;setting name=&quot;defaultExecutorType&quot; value=&quot;SIMPLE&quot;/&gt;
+      &lt;setting name=&quot;defaultStatementTimeout&quot; value=&quot;25&quot;/&gt;
+      &lt;setting name=&quot;defaultFetchSize&quot; value=&quot;100&quot;/&gt;
+      &lt;setting name=&quot;safeRowBoundsEnabled&quot; value=&quot;false&quot;/&gt;
+      &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;false&quot;/&gt;
+      &lt;setting name=&quot;localCacheScope&quot; value=&quot;SESSION&quot;/&gt;
+      &lt;setting name=&quot;jdbcTypeForNull&quot; value=&quot;OTHER&quot;/&gt;
+      &lt;setting name=&quot;lazyLoadTriggerMethods&quot; value=&quot;equals,clone,hashCode,toString&quot;/&gt;
+      &lt;!-- &lt;setting name=&quot;logImpl&quot; value=&quot;LOG4J&quot;/&gt; --&gt;
+  &lt;/settings&gt;
+  &lt;typeAliases&gt;
+          &lt;typeAlias alias=&quot;User&quot; type=&quot;com.daniel.study.mybatis.entity.User&quot;/&gt;
+  &lt;/typeAliases&gt;
+  &lt;typeHandlers&gt;
+          &lt;typeHandler handler=&quot;com.daniel.study.mybatis.type.MyTypeHandler&quot;/&gt;
+          &lt;typeHandler handler=&quot;org.apache.ibatis.type.EnumOrdinalTypeHandler&quot; javaType=&quot;com.daniel.study.mybatis.enums.Gender&quot;/&gt;
+  &lt;/typeHandlers&gt;
+  &lt;plugins&gt;
+      &lt;plugin interceptor=&quot;com.daniel.study.mybatis.plugins.MyPlugin&quot;&gt;
+        &lt;property name=&quot;someProperty&quot; value=&quot;100&quot;/&gt;
+      &lt;/plugin&gt;
+  &lt;/plugins&gt;
+  &lt;environments default=&quot;development&quot;&gt;
+    &lt;environment id=&quot;development&quot;&gt;
+      &lt;transactionManager type=&quot;JDBC&quot;&gt;
+          &lt;!-- &lt;property name=&quot;name&quot; value=&quot;&quot;/&gt; --&gt;
+      &lt;/transactionManager&gt;
+      &lt;dataSource type=&quot;POOLED&quot;&gt;
+        &lt;property name=&quot;driver&quot; value=&quot;${jdbc.driverClassName}&quot;/&gt;
+        &lt;property name=&quot;url&quot; value=&quot;${jdbc.url}&quot;/&gt;
+        &lt;property name=&quot;username&quot; value=&quot;${jdbc.username:fengyu}&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
+      &lt;/dataSource&gt;
+    &lt;/environment&gt;
+  &lt;/environments&gt;
+  &lt;mappers&gt;
+    &lt;mapper resource=&quot;com/daniel/study/mybatis/dao/impl/UserMapper.xml&quot;/&gt;
+    &lt;mapper resource=&quot;com/daniel/study/mybatis/dao/impl/ConsumerMapper.xml&quot;/&gt;
+  &lt;/mappers&gt;
+&lt;/configuration&gt;
+</code></pre><p>这就是要使用配置文件+代码的方式实现mybatis数据持久层访问的方式。</p>
+<h1 id="配置文件的加载"><a href="#配置文件的加载" class="headerlink" title="配置文件的加载"></a>配置文件的加载</h1><p>这一节主要介绍mybatis是怎么加载上一节中使用的配置文件的。</p>
+<p>加载的过程中设计到的主要类及过程如下图：</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/mybatis%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B.png" alt="mybatis配置文件的加载过程"></p>
+<p>加载配置文件的最终目的是得到Configuration对象，这个对象最后在DefaultSqlSessionFactory中使用，使用该Configuration对象可以得到各种类型的SqlSession。</p>
+<p>加载配置文件（mybatis-config.xml）的方式有两种，一种是字符流的方式，以Reader方式加载配置，一种是以字节流的方式，以Inputstream方式加载配置。</p>
+<p>字符方式加载的主要代码：</p>
+<pre><code>public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
+    try {
+      XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
+      return build(parser.parse());
+    } catch (Exception e) {
+      throw ExceptionFactory.wrapException(&quot;Error building SqlSession.&quot;, e);
+    } finally {
+      ErrorContext.instance().reset();
+      try {
+        reader.close();
+      } catch (IOException e) {
+        // Intentionally ignore. Prefer previous error.
+      }
+    }
+  }
+
+//配置创建器
+public XMLConfigBuilder(Reader reader, String environment, Properties props) {
+    this(new XPathParser(reader, true, props, new XMLMapperEntityResolver()), environment, props);
+}
+//配置创建器通过parse解析xml配置文件
+public Configuration parse() {
+    if (parsed) {
+        throw new BuilderException(&quot;Each XMLConfigBuilder can only be used once.&quot;);
+    }
+    parsed = true;
+    // 给配置对象设置属性值
+    parseConfiguration(parser.evalNode(&quot;/configuration&quot;));
+    // 返回设置完成的配置对象，其中已经包括了xml配置中给定的信息
+    return configuration;
+}
+
+// 最终解析xml为mybatis配置的建造者
+private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
+    // 这里创建，初始化了一个了mybatis的配置
+    super(new Configuration());
+    ErrorContext.instance().resource(&quot;SQL Mapper Configuration&quot;);
+    // 这里设置mybatis配置的变量
+    this.configuration.setVariables(props);
+    this.parsed = false;
+    this.environment = environment;
+    this.parser = parser;
+}
+</code></pre><p>字节流的方式加载配置的主要代码：</p>
+<pre><code>public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
+    try {
+      XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+      return build(parser.parse());
+    } catch (Exception e) {
+      throw ExceptionFactory.wrapException(&quot;Error building SqlSession.&quot;, e);
+    } finally {
+      ErrorContext.instance().reset();
+      try {
+        inputStream.close();
+      } catch (IOException e) {
+        // Intentionally ignore. Prefer previous error.
+      }
+    }
+}
+
+// Inputstream方式读取配置
+public XMLConfigBuilder(InputStream inputStream, String environment, Properties props) {
+    this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
+}
+
+//配置创建器通过parse解析xml配置文件
+public Configuration parse() {//返回Configuration
+    if (parsed) {
+        throw new BuilderException(&quot;Each XMLConfigBuilder can only be used once.&quot;);
+    }
+    parsed = true;
+    // 给配置对象设置属性值
+    parseConfiguration(parser.evalNode(&quot;/configuration&quot;));
+    // 返回设置完成的配置对象，其中已经包括了xml配置中给定的信息
+    return configuration;
+}
+
+// 最终解析xml为mybatis配置的建造者
+private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
+    // 这里创建，初始化了一个了mybatis的配置
+    super(new Configuration());
+    ErrorContext.instance().resource(&quot;SQL Mapper Configuration&quot;);
+    // 这里设置mybatis配置的变量
+    this.configuration.setVariables(props);
+    this.parsed = false;
+    this.environment = environment;
+    this.parser = parser;
+}
+</code></pre><p>两者其实没有多大区别，只是读取数据源的方式不同而已，最终都是使用XPathParser来对xml进行解析。XPathParser是对jdk中XPath的封装。通过XPathParser创建了与xml配置文件对应的document对象。</p>
+<pre><code>//InputStream
+public XPathParser(InputStream inputStream, boolean validation, Properties variables, EntityResolver entityResolver) {
+    commonConstructor(validation, variables, entityResolver);
+        // 创建对应的xml文档
+    this.document = createDocument(new InputSource(inputStream));
+}
+
+//Reader
+public XPathParser(Reader reader, boolean validation, Properties variables, EntityResolver entityResolver) {
+    commonConstructor(validation, variables, entityResolver);
+    this.document = createDocument(new InputSource(reader));
+}
+</code></pre><p>解析xml配置文件的最终结果是得到一个Configuration对象，使用该对象作为原材料，通过DefaultSqlSessionFactory创建SqlSession对象。SqlSession对象是整个mybatis操作数据库的核心。DefaultSqlSessionFactory创建SQLSession的方法主要有两个：</p>
+<ol>
+<li><p>根据数据源创建：</p>
+<pre><code>private SqlSession openSessionFromDataSource(ExecutorType execType, TransactionIsolationLevel level, boolean autoCommit) {
+    Transaction tx = null;
+    try {
+      final Environment environment = configuration.getEnvironment();
+      final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+      tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
+        //执行器，用于处理SQL的执行的
+      final Executor executor = configuration.newExecutor(tx, execType);
+        //SqlSession对象是具有Configuration和Executor的
+      return new DefaultSqlSession(configuration, executor, autoCommit);
+    } catch (Exception e) {
+      closeTransaction(tx); // may have fetched a connection so lets call close()
+      throw ExceptionFactory.wrapException(&quot;Error opening session.  Cause: &quot; + e, e);
+    } finally {
+      ErrorContext.instance().reset();
+    }
+}
+</code></pre></li>
+<li><p>根据连接（Connection）创建：</p>
+<pre><code>private SqlSession openSessionFromConnection(ExecutorType execType, Connection connection) {
+    try {
+      boolean autoCommit;
+      try {
+        autoCommit = connection.getAutoCommit();
+      } catch (SQLException e) {
+        // Failover to true, as most poor drivers
+        // or databases won&apos;t support transactions
+        autoCommit = true;
+      }      
+      final Environment environment = configuration.getEnvironment();
+      final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+      final Transaction tx = transactionFactory.newTransaction(connection);
+      //执行器，用于处理SQL的执行的
+      final Executor executor = configuration.newExecutor(tx, execType);
+      //SqlSession对象是具有Configuration和Executor的
+      return new DefaultSqlSession(configuration, executor, autoCommit);
+    } catch (Exception e) {
+      throw ExceptionFactory.wrapException(&quot;Error opening session.  Cause: &quot; + e, e);
+    } finally {
+      ErrorContext.instance().reset();
+    }
+  }
+</code></pre></li>
+</ol>
+<h1 id="SqlSession的工作揭秘"><a href="#SqlSession的工作揭秘" class="headerlink" title="SqlSession的工作揭秘"></a>SqlSession的工作揭秘</h1><p>回到之前介绍的代码使用mybatis的demo代码：</p>
+<pre><code>String resourcePath = &quot;./mybatis-config.xml&quot;;
+InputStream is = null;
+try {
+    is = Resources.getResourceAsStream(resourcePath);
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is, &quot;development&quot;);
+SqlSession sqlSession = sessionFactory.openSession();//1
+UserMapper userMapper = sqlSession.getMapper(UserMapper.class);//2
+User user = userMapper.selectUser(id);
+</code></pre><p>在上面的代码中的<code>1</code>处，获取了SqlSession,<code>2</code>处使用该SqlSession对象对映射接口进行处理，获取UserMapper的代理对象，在该代理对象的selectUser()方法中增强了一些和处理数据库相关的内容。这个userMapper代理对象生成的时间是在加载配置对象Configuration的时候。生成代理对象的代码：</p>
+<pre><code>    private void mapperElement(XNode parent) throws Exception {
+    if (parent != null) {
+        for (XNode child : parent.getChildren()) {
+            // 如果元素的名称是package
+            if (&quot;package&quot;.equals(child.getName())) {
+                // package元素的name属性就是包名
+                String mapperPackage = child.getStringAttribute(&quot;name&quot;);
+                // 包包名加入mapper集合,最终依然是调用configuration.addMapper(Class&lt;?&gt;type)方法
+                configuration.addMappers(mapperPackage);
+            } else {// 元素名称是mapper，一个mapper节点对应一个映射文件
+                String resource = child.getStringAttribute(&quot;resource&quot;);
+                String url = child.getStringAttribute(&quot;url&quot;);
+                String mapperClass = child.getStringAttribute(&quot;class&quot;);
+                if (resource != null &amp;&amp; url == null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(resource);
+                    InputStream inputStream = Resources.getResourceAsStream(resource);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url != null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(url);
+                    // 来自网络的mapper xml
+                    InputStream inputStream = Resources.getUrlAsStream(url);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url == null &amp;&amp; mapperClass != null) {
+                    Class&lt;?&gt; mapperInterface = Resources.classForName(mapperClass);
+                    configuration.addMapper(mapperInterface);
+                } else {
+                    throw new BuilderException(
+                            &quot;A mapper element may only specify a url, resource or class, but not more than one.&quot;);
+                }
+            }
+        }
+    }
+}
+</code></pre><h2 id="解析Mapper-xml文件"><a href="#解析Mapper-xml文件" class="headerlink" title="解析Mapper.xml文件"></a>解析Mapper.xml文件</h2><p>解析mapper文件的工作其实是在加载配置文件的时候就进行的了，解析涉及到的主要代码：</p>
+<pre><code>private void parseConfiguration(XNode root) {
+    try {
+        // issue #117 read properties first
+        propertiesElement(root.evalNode(&quot;properties&quot;));
+        Properties settings = settingsAsProperties(root.evalNode(&quot;settings&quot;));
+        loadCustomVfs(settings);
+        typeAliasesElement(root.evalNode(&quot;typeAliases&quot;));
+        pluginElement(root.evalNode(&quot;plugins&quot;));
+        objectFactoryElement(root.evalNode(&quot;objectFactory&quot;));
+        objectWrapperFactoryElement(root.evalNode(&quot;objectWrapperFactory&quot;));
+        reflectorFactoryElement(root.evalNode(&quot;reflectorFactory&quot;));
+        settingsElement(settings);
+        // read it after objectFactory and objectWrapperFactory issue #631
+        environmentsElement(root.evalNode(&quot;environments&quot;));
+        databaseIdProviderElement(root.evalNode(&quot;databaseIdProvider&quot;));
+        typeHandlerElement(root.evalNode(&quot;typeHandlers&quot;));
+        //从这里开始解析配置文件中mappers元素
+        mapperElement(root.evalNode(&quot;mappers&quot;));
+    } catch (Exception e) {
+        throw new BuilderException(&quot;Error parsing SQL Mapper Configuration. Cause: &quot; + e, e);
+    }
+}
+</code></pre><p>把解析到的mapper.class存放到Configuration对象中的mapperRegistry对象中，mapperRegistry对象负责管理各个mapper类。</p>
+<pre><code>private void mapperElement(XNode parent) throws Exception {
+    if (parent != null) {
+        for (XNode child : parent.getChildren()) {
+            // 如果元素的名称是package
+            if (&quot;package&quot;.equals(child.getName())) {
+                // package元素的name属性就是包名
+                String mapperPackage = child.getStringAttribute(&quot;name&quot;);
+                // 包包名加入mapper集合,最终依然是调用configuration.addMapper(Class&lt;?&gt;type)方法
+                configuration.addMappers(mapperPackage);
+            } else {// 元素名称是mapper，一个mapper节点对应一个映射文件
+                String resource = child.getStringAttribute(&quot;resource&quot;);
+                String url = child.getStringAttribute(&quot;url&quot;);
+                String mapperClass = child.getStringAttribute(&quot;class&quot;);
+                if (resource != null &amp;&amp; url == null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(resource);
+                    InputStream inputStream = Resources.getResourceAsStream(resource);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url != null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(url);
+                    // 来自网络的mapper xml
+                    InputStream inputStream = Resources.getUrlAsStream(url);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url == null &amp;&amp; mapperClass != null) {
+                    Class&lt;?&gt; mapperInterface = Resources.classForName(mapperClass);
+                    configuration.addMapper(mapperInterface);
+                } else {
+                    throw new BuilderException(
+                            &quot;A mapper element may only specify a url, resource or class, but not more than one.&quot;);
+                }
+            }
+        }
+    }
+}
+</code></pre><p>mpper.xml有四种方式可以表示映射资源：</p>
+<ol>
+<li>mapper.xml所在的包</li>
+<li>单个文件的位置resource属性来定位</li>
+<li>单个文件的位置url属性来定位</li>
+<li>直接指定类的全限定名，通过class属性来定位。</li>
+</ol>
+<p>无论是哪种方式最终都会转化为mapper.xml文件中的命名空间指定的接口的class对象存放到Configuration对象中的mapperRegistry中。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/04/12/Mybatis-源码解读/" data-title="Mybatis 源码解读 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/05/19/Tomcat工作原理/" title="Tomcat工作原理">
+  <strong>新一篇:</strong><br/>
+  <span>
+  Tomcat工作原理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2018/03/25/设计模式/"  title="设计模式">
+ <strong>旧一篇:</strong><br/> 
+ <span>设计模式
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="Mybatis 源码解读" data-thread-key="Mybatis-源码解读" data-author-key="Daniel" data-url="http://yoursite.com/post/Mybatis-源码解读"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

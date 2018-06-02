@@ -1,0 +1,631 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>MyBatis | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="配置文件中的元素根元素：
+&amp;lt;configuration&amp;gt;&amp;lt;/configuration&amp;gt;
+的子元素:
+&amp;lt;properties&amp;gt;&amp;lt;/properties&amp;gt;
+&amp;lt;settings&amp;gt;&amp;lt;/settings&amp;gt;
+&amp;lt;typeAliases">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/03/18/MyBatis/" title="MyBatis" itemprop="url">MyBatis</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-03-18T07:45:07.000Z" itemprop="datePublished">2018-03-18</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#配置文件中的元素"><span class="toc-number">1.</span> <span class="toc-text">配置文件中的元素</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#类型处理器typeHandlers"><span class="toc-number">1.1.</span> <span class="toc-text">类型处理器typeHandlers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插件（plugins）"><span class="toc-number">1.2.</span> <span class="toc-text">插件（plugins）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置环境（environments）"><span class="toc-number">1.3.</span> <span class="toc-text">配置环境（environments）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事务管理器transactionManager"><span class="toc-number">1.3.1.</span> <span class="toc-text">事务管理器transactionManager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据源-DataSource"><span class="toc-number">1.3.2.</span> <span class="toc-text">数据源 DataSource</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#databaseIdProvider"><span class="toc-number">1.4.</span> <span class="toc-text">databaseIdProvider</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#映射器-mapper"><span class="toc-number">1.5.</span> <span class="toc-text">映射器 mapper</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XML映射文件中元素"><span class="toc-number">2.</span> <span class="toc-text">XML映射文件中元素</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#select的常见属性"><span class="toc-number">2.1.</span> <span class="toc-text">select的常见属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#delete、update和insert的常见属性"><span class="toc-number">2.2.</span> <span class="toc-text">delete、update和insert的常见属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数"><span class="toc-number">2.3.</span> <span class="toc-text">参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Result-Maps"><span class="toc-number">2.4.</span> <span class="toc-text">Result Maps</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#动态SQL"><span class="toc-number">3.</span> <span class="toc-text">动态SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#foreach"><span class="toc-number">3.1.</span> <span class="toc-text">foreach</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">3.2.</span> <span class="toc-text">bind</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-API"><span class="toc-number">4.</span> <span class="toc-text">Java API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#执行语句的方法"><span class="toc-number">4.1.</span> <span class="toc-text">执行语句的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务控制方法"><span class="toc-number">4.2.</span> <span class="toc-text">事务控制方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存"><span class="toc-number">4.3.</span> <span class="toc-text">缓存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#疑问"><span class="toc-number">5.</span> <span class="toc-text">疑问</span></a></li></ol>
+		</div>
+		
+		<h1 id="配置文件中的元素"><a href="#配置文件中的元素" class="headerlink" title="配置文件中的元素"></a>配置文件中的元素</h1><p>根元素：</p>
+<pre><code>&lt;configuration&gt;&lt;/configuration&gt;
+</code></pre><p><configuration\>的子元素:</configuration\></p>
+<pre><code>&lt;properties&gt;&lt;/properties&gt;
+&lt;settings&gt;&lt;/settings&gt;
+&lt;typeAliases&gt;&lt;/typeAliases&gt;
+&lt;environments&gt;&lt;environments&gt;
+&lt;typeHandlers&gt;&lt;typeHandlers&gt;
+&lt;objectFactory&gt;&lt;/objectFactory&gt;
+&lt;plugins&gt;&lt;/plugins&gt;
+</code></pre><h2 id="类型处理器typeHandlers"><a href="#类型处理器typeHandlers" class="headerlink" title="类型处理器typeHandlers"></a>类型处理器typeHandlers</h2><p>无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时， 都会用类型处理器将获取的值以合适的方式转换成 Java 类型。你可以重写类型处理器或创建你自己的类型处理器来处理不支持的或非标准的类型。 具体做法为：实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型。例如：</p>
+<pre><code>// ExampleTypeHandler.java
+@MappedJdbcTypes(JdbcType.VARCHAR)
+public class ExampleTypeHandler extends BaseTypeHandler&lt;String&gt; {
+
+  @Override
+  public void setNonNullParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType) throws SQLException {
+    ps.setString(i, parameter);
+  }
+
+  @Override
+  public String getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    return rs.getString(columnName);
+  }
+
+  @Override
+  public String getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    return rs.getString(columnIndex);
+  }
+
+  @Override
+  public String getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    return cs.getString(columnIndex);
+  }
+}
+</code></pre><p>在配置文件中配置该类型处理器：</p>
+<pre><code>&lt;!-- mybatis-config.xml --&gt;
+&lt;typeHandlers&gt;
+  &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre><p>使用如上的类型处理器的作用：</p>
+<ol>
+<li>将会覆盖已经存在的处理Java的String类型属性的类型处理器。</li>
+<li>将会覆盖已经存在的处理VARCHAR参数及结果的类型处理器。</li>
+</ol>
+<p>因为Mybatis不会知道数据库元信息来决定使用哪种类型，所以必须在参数和结果映射中指明那个是VARCHAR类型的字段，以使其能够绑定到正确的类型处理器上。</p>
+<p>通过类型处理器的泛型，如上的<string>，Mybatis可以得知该类型处理器处理的Java类型，但是这种行为可以通过两种方式改变：</string></p>
+<ul>
+<li><p>在类型处理器的配置元素（typeHandler element）上增加一个 javaType 属性。</p>
+<pre><code>&lt;typeHandlers&gt;
+  &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot; javaType=&quot;String&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre></li>
+<li>在类型处理器的类上（TypeHandler class）增加一个 @MappedTypes 注解来指定与其关联的 Java 类型列表，<strong>如果在 javaType 属性中也同时指定，则注解方式将被忽略.</strong></li>
+</ul>
+<p>可以通过两种方式来指定被关联的JDBC类型：</p>
+<ul>
+<li><p>在类型处理器的配置元素上增加一个 jdbcType 属性</p>
+<pre><code>&lt;typeHandlers&gt;
+  &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot; jdbcType=&quot;String&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre></li>
+<li>在类型处理器的类上（TypeHandler class）增加一个 @MappedJdbcTypes 注解来指定与其关联的 JDBC 类型列表，<strong>如果在 jdbcType 属性中也同时指定，则注解方式将被忽略。</strong></li>
+</ul>
+<h2 id="插件（plugins）"><a href="#插件（plugins）" class="headerlink" title="插件（plugins）"></a>插件（plugins）</h2><p>MyBatis 允许你在已映射语句执行过程中的某一点进行拦截调用。默认情况下，MyBatis 允许使用插件来拦截的方法调用包括：</p>
+<ul>
+<li>Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)</li>
+<li>ParameterHandler (getParameterObject, setParameters)</li>
+<li>ResultSetHandler (handleResultSets, handleOutputParameters)</li>
+<li>StatementHandler (prepare, parameterize, batch, update, query)</li>
+</ul>
+<h2 id="配置环境（environments）"><a href="#配置环境（environments）" class="headerlink" title="配置环境（environments）"></a>配置环境（environments）</h2><p>Mybatis可以配置成适应多种环境，这种机制有助于将 SQL 映射应用于多种数据库之中， 现实情况下有多种理由需要这么做。例如，开发、测试和生产环境需要有不同的配置。</p>
+<p>不过要记住的是：<strong>每个数据库对应一个 SqlSessionFactory 实例</strong>。</p>
+<p>为了指定创建哪种环境，只要将它作为可选的参数传递给 SqlSessionFactoryBuilder 即可。可以接受环境配置的两个方法签名是：</p>
+<pre><code>SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment);
+SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment, properties);
+</code></pre><h3 id="事务管理器transactionManager"><a href="#事务管理器transactionManager" class="headerlink" title="事务管理器transactionManager"></a>事务管理器transactionManager</h3><p>Mybatis有两种类型的事务管理器：</p>
+<ul>
+<li>JDBC 直接使用了 JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域</li>
+<li>MANAGED 这个配置几乎没做什么。它从来不提交或回滚一个连接，而是让容器来管理事务的整个生命周期（比如 JEE 应用服务器的上下文）</li>
+</ul>
+<p><strong>如果你正在使用 Spring + MyBatis，则没有必要配置事务管理器， 因为 Spring 模块会使用自带的管理器来覆盖前面的配置。</strong></p>
+<p>上面提到的两种事务管理器都不需要任何属性，它们都是类型别名，换句话说，你可以使用 TransactionFactory 接口的实现类的完全限定名或类型别名代替它们。</p>
+<pre><code>public interface TransactionFactory {
+  void setProperties(Properties props);  
+  Transaction newTransaction(Connection conn);
+  Transaction newTransaction(DataSource dataSource, TransactionIsolationLevel level, boolean autoCommit);  
+}
+</code></pre><p>你也需要创建一个 Transaction 接口的实现类，这个接口也很简单：</p>
+<pre><code>public interface Transaction {
+  Connection getConnection() throws SQLException;
+  void commit() throws SQLException;
+  void rollback() throws SQLException;
+  void close() throws SQLException;
+  Integer getTimeout() throws SQLException;
+}
+</code></pre><p><strong>使用这两个接口，你可以完全自定义 MyBatis 对事务的处理</strong>。</p>
+<h3 id="数据源-DataSource"><a href="#数据源-DataSource" class="headerlink" title="数据源 DataSource"></a>数据源 DataSource</h3><p>Mybatis有三种内置的数据源类型：</p>
+<ul>
+<li>UNPOOLED 这个数据源的实现只是每次被请求时打开和关闭连接，没有连接池的必要的应用或数据库可以选择这种类型。这种类型的数据源只需要配置五种属性：driver、url、username、password和defaultTransactionIsolationLevel（默认的事务隔离级别）</li>
+<li>POOLED 这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来，避免了创建新的连接实例时所必需的初始化和认证时间。</li>
+<li>JNDI 这个数据源的实现是为了能在如 EJB 或应用服务器这类容器中使用，容器可以集中或在外部配置数据源，然后放置一个 JNDI 上下文的引用。这种类型的数据源有两个属性：initial_context （用来在 InitialContext 中寻找上下文）和data_source （这是引用数据源实例位置的上下文的路径）</li>
+</ul>
+<p><strong>使用第三方数据源</strong> 你可以通过实现接口 org.apache.ibatis.datasource.DataSourceFactory 来使用第三方数据源：</p>
+<pre><code>public interface DataSourceFactory {
+  void setProperties(Properties props);
+  DataSource getDataSource();
+}
+</code></pre><p>org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory 可被用作父类来构建新的数据源适配器，比如下面这段插入 C3P0 数据源所必需的代码：</p>
+<pre><code>import org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
+
+  public C3P0DataSourceFactory() {
+    this.dataSource = new ComboPooledDataSource();
+  }
+}
+</code></pre><h2 id="databaseIdProvider"><a href="#databaseIdProvider" class="headerlink" title="databaseIdProvider"></a>databaseIdProvider</h2><p>MyBatis 可以根据不同的数据库厂商执行不同的语句，这种多厂商的支持是基于映射语句中的 databaseId 属性。为支持多厂商特性只要像下面这样在 mybatis-config.xml 文件中加入 databaseIdProvider 即可：</p>
+<pre><code>&lt;databaseIdProvider type=&quot;DB_VENDOR&quot; /&gt;
+</code></pre><h2 id="映射器-mapper"><a href="#映射器-mapper" class="headerlink" title="映射器 mapper"></a>映射器 mapper</h2><p>告诉mybatis去哪里寻找SQL的映射语句。</p>
+<h1 id="XML映射文件中元素"><a href="#XML映射文件中元素" class="headerlink" title="XML映射文件中元素"></a>XML映射文件中元素</h1><p>SQL 映射文件有很少的几个顶级元素：</p>
+<ul>
+<li>cache 给定命名空间的缓存配置</li>
+<li>cache-ref 其他命名空间的缓存的引用</li>
+<li>resultMap 是最复杂也最强的的元素，用来描述如何从数据库结果集中来加载对象。</li>
+<li>sql 可被其他语句引用的可重用语句块</li>
+<li>insert 映射插入语句</li>
+<li>update 映射更新语句</li>
+<li>delete 映射删除语句</li>
+<li>select 映射查询语句</li>
+</ul>
+<p>语句中的#{xxx}告诉 MyBatis 创建一个预处理语句参数，通过 JDBC，这样的一个参数在 SQL 中会由一个“?”来标识，并被传递到一个新的预处理语句中。</p>
+<h2 id="select的常见属性"><a href="#select的常见属性" class="headerlink" title="select的常见属性"></a>select的常见属性</h2><pre><code>&lt;select
+  id=&quot;selectPerson&quot;
+  parameterType=&quot;int&quot;
+  parameterMap=&quot;deprecated&quot;
+  resultType=&quot;hashmap&quot;
+  resultMap=&quot;personResultMap&quot;
+  flushCache=&quot;false&quot;
+  useCache=&quot;true&quot;
+  timeout=&quot;10000&quot;
+  fetchSize=&quot;256&quot;
+  statementType=&quot;PREPARED&quot;
+  resultSetType=&quot;FORWARD_ONLY&quot;&gt;
+</code></pre><ul>
+<li>id 在命名空间中唯一的标识符，可以被用来引用这条语句。</li>
+<li>parameterType 将会传入这条语句的参数类的完全限定名或别名。这个属性是可选的，因为 MyBatis 可以通过 TypeHandler 推断出具体传入语句的参数，默认值为 unset。</li>
+<li>resultType 从这条语句中返回的期望类型的类的完全限定名或别名。<strong>注意如果是集合情形，那应该是集合可以包含的类型，</strong>而不能是集合本身。使用 resultType 或 resultMap，但不能同时使用。</li>
+<li>resultMap 外部 resultMap 的命名引用。结果集的映射是 MyBatis 最强大的特性，对其有一个很好的理解的话，许多复杂映射的情形都能迎刃而解。使用 resultMap 或 resultType，但不能同时使用。</li>
+<li>flushCache 将其设置为 true，任何时候只要语句被调用，都会导致本地缓存和二级缓存都会被清空，默认值：false。</li>
+<li>useCache 将其设置为 true，将会导致本条语句的结果被二级缓存，默认值：对 select 元素为 true。</li>
+<li>timeout 这个设置是在抛出异常之前(有异常就会立即返回)，驱动程序等待数据库返回请求结果的秒数。默认值为 unset（依赖驱动）</li>
+<li>fetchSize 这是尝试影响驱动程序每次批量返回的结果行数和这个设置值相等。默认值为 unset（依赖驱动）</li>
+<li>statementType STATEMENT，PREPARED 或 CALLABLE 的一个。这会让 MyBatis 分别使用 Statement，PreparedStatement 或 CallableStatement，默认值：PREPARED</li>
+<li>resultSetType FORWARD_ONLY，SCROLL_SENSITIVE 或 SCROLL_INSENSITIVE 中的一个，默认值为 unset （依赖驱动）。</li>
+<li>databaseId 如果配置了 databaseIdProvider，MyBatis 会加载所有的不带 databaseId 或匹配当前 databaseId 的语句；如果带或者不带的语句都有，则不带的会被忽略。</li>
+<li>resultOrdered 这个设置仅针对嵌套结果 select 语句适用：如果为 true，就是假设包含了嵌套结果集或是分组了，这样的话当返回一个主结果行的时候，就不会发生有对前面结果集的引用的情况。这就使得在获取嵌套的结果集的时候不至于导致内存不够用。默认值：false。</li>
+<li>这个设置仅对多结果集的情况适用，它将列出语句执行后返回的结果集并每个结果集给一个名称，名称是逗号分隔的。</li>
+</ul>
+<h2 id="delete、update和insert的常见属性"><a href="#delete、update和insert的常见属性" class="headerlink" title="delete、update和insert的常见属性"></a>delete、update和insert的常见属性</h2><pre><code>&lt;insert
+  id=&quot;insertAuthor&quot;
+  parameterType=&quot;domain.blog.Author&quot;
+  flushCache=&quot;true&quot;
+  statementType=&quot;PREPARED&quot;
+  keyProperty=&quot;&quot;
+  keyColumn=&quot;&quot;
+  useGeneratedKeys=&quot;&quot;
+  timeout=&quot;20&quot;&gt;
+
+&lt;update
+  id=&quot;updateAuthor&quot;
+  parameterType=&quot;domain.blog.Author&quot;
+  flushCache=&quot;true&quot;
+  statementType=&quot;PREPARED&quot;
+  timeout=&quot;20&quot;&gt;
+
+&lt;delete
+  id=&quot;deleteAuthor&quot;
+  parameterType=&quot;domain.blog.Author&quot;
+  flushCache=&quot;true&quot;
+  statementType=&quot;PREPARED&quot;
+  timeout=&quot;20&quot;&gt;
+</code></pre><p>与select相同的属性在这里就不解释了，解释select没有的</p>
+<ul>
+<li>useGeneratedKeys 这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键</li>
+<li>keyProperty 唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值</li>
+<li>keyColumn 通过生成的键值设置表中的列名，这个设置仅在某些数据库（像 PostgreSQL）是必须的，当主键列不是表中的第一列的时候需要设置。</li>
+</ul>
+<p>首先，如果你的数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么你可以设置 useGeneratedKeys=”true”，然后再把 keyProperty 设置到目标属性上就OK了。例如，如果上面的 Author 表已经对 id 使用了自动生成的列类型，那么语句可以修改为:</p>
+<pre><code>&lt;insert id=&quot;insertAuthor&quot; useGeneratedKeys=&quot;true&quot;
+    keyProperty=&quot;id&quot;&gt;
+  insert into Author (username,password,email,bio)
+  values (#{username},#{password},#{email},#{bio})
+&lt;/insert&gt;
+</code></pre><p>${xxx} 映射语句内部的参数传递。</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>对于数值类型，还有一个小数保留位数的设置，来确定小数点后保留的位数。</p>
+<pre><code>#{height,javaType=double,jdbcType=NUMERIC,numericScale=2}
+</code></pre><p><strong>字符串替换</strong>：</p>
+<p>默认情况下,使用 #{} 格式的语法会导致 MyBatis 创建 PreparedStatement 参数并安全地设置参数（就像使用 ? 一样）。这样做更安全，更迅速，通常也是首选做法，不过有时你就是想直接在 SQL 语句中插入一个不转义的字符串。比如，像 ORDER BY，你可以这样来使用：</p>
+<pre><code>ORDER BY ${columnName} -- 这里 MyBatis 不会修改或转义字符串。即不会被？替换
+</code></pre><p><strong>注：用这种方式接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击，因此要么不允许用户输入这些字段，要么自行转义并检验。</strong></p>
+<h2 id="Result-Maps"><a href="#Result-Maps" class="headerlink" title="Result Maps"></a>Result Maps</h2><p>ResultMap 的设计思想是，简单的语句不需要明确的结果映射，而复杂一点的语句只需要描述它们的关系就行了。ResultMap 最优秀的地方在于，虽然你已经对它相当了解了，但是根本就不需要显式地用到他们。 </p>
+<p>ResultMap有许多的子元素，下面是其元素的概念图：</p>
+<ul>
+<li>constructor   用于在实例化类时，注入结果到构造方法中<ul>
+<li>idArg   ID 参数;标记出作为 ID 的结果可以帮助提高整体性能</li>
+<li>arg  将被注入到构造方法的一个普通结果</li>
+</ul>
+</li>
+<li>id 一个 ID 结果;标记出作为 ID 的结果可以帮助提高整体性能</li>
+<li>result  注入到字段或 JavaBean 属性的普通结果.</li>
+<li>association 一个复杂类型的关联;许多结果将包装成这种类型。<ul>
+<li>嵌套结果映射 – 关联可以指定为一个 resultMap 元素，或者引用一个</li>
+</ul>
+</li>
+<li>collection  一个复杂类型的集合<ul>
+<li>嵌套结果映射 – 集合可以指定为一个 resultMap 元素，或者引用一个</li>
+</ul>
+</li>
+<li>discriminator  使用结果值来决定使用哪个 resultMap<ul>
+<li>case – 基于某些值的结果映射<ul>
+<li>嵌套结果映射 – 一个 case 也是一个映射它本身的结果,因此可以包含很多相 同的元素，或者它可以参照一个外部的 resultMap</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>动态 SQL 元素和 JSTL 或基于类似 XML 的文本处理器相似。<br>xml映射器中常用的用于组装动态SQL的元素：</p>
+<ul>
+<li>if</li>
+<li>choose(when,otherwise)</li>
+<li>trim(where,set)</li>
+<li>foreach</li>
+</ul>
+<p>自定义 trim 元素来定制 where 元素的功能:</p>
+<pre><code>&lt;trim prefix=&quot;WHERE&quot; prefixOverrides=&quot;AND |OR &quot;&gt;
+  ... 
+&lt;/trim&gt;
+</code></pre><p>set 元素等价的自定义 trim 元素:</p>
+<pre><code>&lt;trim prefix=&quot;SET&quot; suffixOverrides=&quot;,&quot;&gt;
+  ...
+&lt;/trim&gt;
+</code></pre><h2 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h2><p>你可以将任何可迭代对象（如 List、Set 等）、Map 对象或者数组对象传递给 foreach 作为集合参数。当使用可迭代对象或者数组时，index 是当前迭代的次数，item 的值是本次迭代获取的元素。当使用 Map 对象（或者 Map.Entry 对象的集合）时，index 是键，item 是值。</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>bind 元素可以从 OGNL 表达式中创建一个变量并将其绑定到上下文。比如：</p>
+<pre><code>&lt;select id=&quot;selectBlogsLike&quot; resultType=&quot;Blog&quot;&gt;
+  &lt;bind name=&quot;pattern&quot; value=&quot;&apos;%&apos; + _parameter.getTitle() + &apos;%&apos;&quot; /&gt;
+  SELECT * FROM BLOG
+  WHERE title LIKE #{pattern}
+&lt;/select&gt;
+</code></pre><h1 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h1><p>MyBatis的主要接口就是SqlSession，可以通过这个接口来执行命令，获取映射器和管理事务。SqlSessions 是由 SqlSessionFactory 实例创建的。SqlSessionFactory 对象包含创建 SqlSession 实例的所有方法。而 SqlSessionFactory 本身是由 SqlSessionFactoryBuilder 创建的，它可以从 XML、注解或手动配置 Java 代码来创建 SqlSessionFactory</p>
+<p>注意：当 Mybatis 与一些依赖注入框架（如 Spring 或者 Guice）同时使用时，SqlSessions 将被依赖注入框架所创建，所以你不需要使用 SqlSessionFactoryBuilder 或者 SqlSessionFactory。</p>
+<p>MyBatis中比较重要的三个类：</p>
+<ul>
+<li>SqlSessionFactoryBuilder 用于创建SqlSessionFactory</li>
+<li>SqlSessionFactory 用于创建SqlSession</li>
+<li><p>SqlSession SqlSession 实例在 MyBatis 中是非常强大的一个类,其中包括超过20个方法，对这些方法进行简单的分类：</p>
+<ul>
+<li>执行语句的方法</li>
+<li>提交或回滚事务的方法</li>
+<li><p>获取映射器实例的方法</p>
+<h2 id="执行语句的方法"><a href="#执行语句的方法" class="headerlink" title="执行语句的方法"></a>执行语句的方法</h2><p>这些方法被用来执行定义在 SQL 映射的 XML 文件中的 SELECT、INSERT、UPDATE 和 DELETE 语句。它们都会自行解释，每一句都使用语句的 ID 属性和参数对象，参数可以是原生类型（自动装箱或包装类）、JavaBean、POJO 或 Map。这些方法如下：</p>
+<p>  <t> T selectOne(String statement, Object parameter)<br>  <e> List<e> selectList(String statement, Object parameter)<br>  <k,v> Map<k,v> selectMap(String statement, Object parameter, String mapKey)<br>  int insert(String statement, Object parameter)<br>  int update(String statement, Object parameter)<br>  int delete(String statement, Object parameter)</k,v></k,v></e></e></t></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>selectMap 稍微特殊一点，因为它会将返回的对象的其中一个属性作为 key 值，将对象作为 value 值，从而将多结果集转为 Map 类型值。</p>
+<h2 id="事务控制方法"><a href="#事务控制方法" class="headerlink" title="事务控制方法"></a>事务控制方法</h2><p>如果你已经设置了自动提交或你正在使用<strong>外部事务管理器</strong>，这就没有任何效果了。然而，如果你正在使用 JDBC 事务管理器，由Connection 实例来控制，那么这四个方法就会派上用场：</p>
+<pre><code>void commit()
+void commit(boolean force)
+void rollback()
+void rollback(boolean force)
+</code></pre><p>MyBatis-Spring 和 MyBatis-Guice 提供了声明事务处理，所以如果你在使用 Mybatis 的同时使用了Spring 或者 Guice，那么请参考它们的手册以获取更多的内容。</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>MyBatis使用了两种缓存:本地缓存（local cache）和二级缓存（second level cache）。</p>
+<p>每当一个新 session 被创建，MyBatis 就会创建一个与之相关联的本地缓存。任何在 session 执行过的查询语句本身都会被保存在本地缓存。默认情况下，本地缓存数据可在整个 session 的周期内使用，这一缓存需要被用来解决循环引用错误和加快重复嵌套查询的速度，所以它可以不被禁用掉，但是你可以设置localCacheScope=STATEMENT 表示缓存仅在语句执行时有效本地缓存会被增删改、提交事务、关闭事务以及关闭 session 所清空。</p>
+<h1 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h1><p> #{param}和${param}的区别？</p>
+<pre><code>答：前者可以防止SQL注入；参数中含有单引号的时候可以自动转义；把参数值转为字符串的形式。后者可以用来拼接SQL，必须用${param}的地方： order by   ${column}。
+</code></pre><p>如果xml中有特殊符号的处理方式？</p>
+<pre><code>答：加上转义标签&lt;![CDATA[sql语句]]&gt;
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/03/18/MyBatis/" data-title="MyBatis | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/03/24/Spring源码解析——想到哪里就说到哪里/" title="Spring源码解析——想到哪里就说到哪里">
+  <strong>新一篇:</strong><br/>
+  <span>
+  Spring源码解析——想到哪里就说到哪里</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2018/03/17/协议/"  title="协议">
+ <strong>旧一篇:</strong><br/> 
+ <span>协议
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="MyBatis" data-thread-key="MyBatis" data-author-key="Daniel" data-url="http://yoursite.com/post/MyBatis"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

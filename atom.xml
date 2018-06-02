@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-11T05:57:14.260Z</updated>
+  <updated>2018-06-02T02:55:04.457Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,1365 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Tomcat工作原理</title>
+    <link href="http://yoursite.com/2018/05/19/Tomcat%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/"/>
+    <id>http://yoursite.com/2018/05/19/Tomcat工作原理/</id>
+    <published>2018-05-19T13:12:59.000Z</published>
+    <updated>2018-06-02T02:55:04.457Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>随着互联网的发展，java也在不断的改善进步。B/S架构的发展也是进展迅速，java为了支持B/S架构，出现了Servlet和jsp等服务端小程序，客户端小程序applet等。在servlet规范或是标准出现前，编写服务端程序需要在服务器集成通过其他语言实现的CGI程序，这个方式对java的平台无关性的影响很大，为此javaee中推出了servlet来替代CGI，servlet是用java实现的，属于javaee标准，且性能较高。为了能运行java编写的servlet程序，需要一个能支持servlet的web服务器，就这样Tomcat诞生了，Tomcat提供了对Servlet标准的支持，运行于服务端的servlet程序可以长期驻留在服务器上，即保留在web容器的servlet容器中。使用servlet写web的都知道比较费劲，为此根据.NET 中的ASP技术衍生出了JSP（Java Server Page）。其实JSP只是Servlet的一种表现形式，JSP最终都会被web服务器（如Tomcat）编译为Servlet，要编译jsp为servlet，需要web服务器中提供jsper解析器，jsper的功能就是把jsp解析为servlet。</p>
+<p>Servlet和CGI一样，都可以提供动态服务。但有时候客户端的动态变化，是不需要与服务器交互的，为此，javaee体系提供了applet网络小程序，该程序可以在客户端运行，需要客户端能特殊支持，由于该技术的复杂特性，导致被JavaScript技术取代。</p>
+<h1 id="JavaEE-J2EE"><a href="#JavaEE-J2EE" class="headerlink" title="JavaEE/J2EE"></a>JavaEE/J2EE</h1><p>JavaEE是J2EE的新叫法。JavaEE是一套使用Java进行企业级Web应用开发的大家一致遵循的工业标准，提供了一个机遇组件开发的方法来加快设计，开发，部署等。满足开放性，分布性和平台无关性。</p>
+<p>JavaEE是对JavaSE的扩展。</p>
+<p>JavaEE核心标准（规范）：</p>
+<ul>
+<li>jdbc</li>
+<li>jndi(Java Naming and Directory Interfaces)Java 的命名和目录接口</li>
+<li>EJB（Enterprise JavaBean）</li>
+<li>RMI（Remote Method Invoke）远程方法调用</li>
+<li>Java IDL（Interface Description Language）/CORBA（Common Object Broker Architecture）Java 接口定义语言/公用对象请求代理程序体系结构.</li>
+<li>JSP（Java Server Pages）</li>
+<li>Servlet</li>
+<li>XML</li>
+<li>JMS（Java Message Service）Java 消息服务</li>
+<li>JTA（Java Transaction API）Java 事务 API</li>
+<li>JTS（Java Transaction Service）Java 事务服务</li>
+<li>JavaMail</li>
+<li>JAF（JavaBean Activation Framework）</li>
+</ul>
+<p>JavaEE抽象了java应用的开发模式，提升了设计，开发，部署等效率。现在有许多框架都是在已有的JavaEE上再次抽象得到的，目的也是为了提升设计，开发和部署的效率，同时兼顾考虑了性能等大规模部署的问题。</p>
+<p>我们常说的MVC模式在JavaEE就体现得很充分：EJB（M）+JSP(V)+Servlet（C）。我们通常说的SpringMVC和Struts都是对Servlet的抽象。</p>
+<h1 id="Servlet与CGI"><a href="#Servlet与CGI" class="headerlink" title="Servlet与CGI"></a>Servlet与CGI</h1><p>Servlet是JavaEE的标准规范之一，运行在Web服务器或者应用服务器上，作为来自 Web 浏览器或其他 HTTP 客户端的请求和 HTTP 服务器上的数据库或应用程序之间的中间层，由服务器启动并初始化，初始化后能保存在服务器上的servlet容器中，客户的请求都会被服务器分发到特定的servlet处理。servlet是以多线程的方式运行的，对于每个请求都会启动一个单独的线程与之对接。servlet所需的数据老子HTTPServletRequest和web.xml。</p>
+<p>CGI（Common Gateway Interface），CGI 是Web 服务器运行时外部程序的规范(编程模型)，按CGI 编写的程序可以扩展服务器功能。几乎所有服务器都支持CGI,可用任何语言编写CGI,标准CGI 使用<strong>命令行参数或环境变量</strong>表示服务器的详细请求，服务器与浏览器通信采用标准输入输出方式。间接CGI 又称缓冲CGI,在CGI 程序和CGI 接口之间插入一个缓冲程序，缓冲程序与CGI 接口间用标准输入输出进行通信。<br>对于每次请求，CGI方式都是启动一个新的进程，处理完请求后销毁该进程，这种工作模式限制了CGI服务器的并发量。CGI的另一个缺点是与平台强相关。Java Servlet是运行JVM上的与平台无关。</p>
+<h1 id="Jsp"><a href="#Jsp" class="headerlink" title="Jsp"></a>Jsp</h1><p>Jsp是一种特殊的servlet，经过jsper处理后成为Servlet。Servlet侧重于解决运算和业务逻辑问题，JSP则侧重于解决展示问题。</p>
+<h2 id="Jsp的内置对象"><a href="#Jsp的内置对象" class="headerlink" title="Jsp的内置对象"></a>Jsp的内置对象</h2><p>Jsp共有九个内置对象：</p>
+<ul>
+<li>request</li>
+<li>response</li>
+<li>session，作用域是同一个用户的不同请求</li>
+<li>application，可将信息保存在服务器中，直到服务器关闭，否则application对象中保存的信息会在整个应用中都有效。</li>
+<li>out </li>
+<li>pageContext 取得任何范围的参数</li>
+<li>config 取得服务器的配置信息，通过web.xml可以一个servlet的初始化信息存入config中。</li>
+<li>page Jsp本身,类似java对象的this。page隐含对象本质上包含当前 Servlet接口引用的变量，类似于Java编程中的 this 指针。</li>
+<li>exception 作用是显示异常，只有在包含 isErrorPage=”true” 的页面中才可以被使用。</li>
+</ul>
+<p>这些内置对象之间的关系是有一定的规律可寻的，Servlet容器根据HTTP的请求生成request，并根据响应生成response。web容器通过request和response可以得到pageContex，session通过服务器自动创建，但可以通过pageContext获取，还可以通过pageContext获取application、out、config等。page只和jsp本身相关。</p>
+<h2 id="内置指令："><a href="#内置指令：" class="headerlink" title="内置指令："></a>内置指令：</h2><ul>
+<li>编译指令：page、include、taglib 。使用&lt;%@ 指令 属性%&gt;</li>
+<li>动作指令：forward、include、useBean、setProperty、getProperty、plugin、param。使用<jsp:指令 属性=""></jsp:指令></li>
+</ul>
+<h1 id="aaplet"><a href="#aaplet" class="headerlink" title="aaplet"></a>aaplet</h1><p>applet是浏览器客户端运行的java小程序，是为了在客户端HTML实现动态的技术，类似于JavaScript，但是目前已经很少使用这门技术了。目前的主流就是JavaScript。</p>
+<h1 id="Tomcat的源码调试步骤"><a href="#Tomcat的源码调试步骤" class="headerlink" title="Tomcat的源码调试步骤"></a>Tomcat的源码调试步骤</h1><ol>
+<li><p>从GitHub上clone源码： </p>
+<pre><code>&gt; git clone https://github.com/apache/tomcat.git
+</code></pre></li>
+<li>在源码目录下复制一份build.properties.default，并命名为build.properties，把该文件放到与build.properties.default同一个目录</li>
+<li>修改build.properties其中的配置，把base.path的值设置为你指定的目录，该目录的作用是用来存放在编译Tomcat时所需要的依赖包的，在编译时会从网上把这些包下载到该目录。</li>
+<li><p>开始编译，运行命令：</p>
+<pre><code>&gt; ant
+</code></pre></li>
+<li>编译成功后在源码根目录下会输出一个output目录，该目录是存放编译好的Tomcat，可以直接运行的</li>
+<li><p>为了能把源码导入eclipse，需要生成一些和eclipse相关的配置文件，如classpath。运行如下命令：</p>
+<pre><code>&gt; ant ide-eclipse
+</code></pre></li>
+<li>如果6执行成功，则在源码跟目录下我们会看见 .classpath、.project和.settings等文件或文件夹。</li>
+<li>这个就可以把该工程导入eclipse了。</li>
+<li><p>导入的工程会报classpath变量的绑定出错，应该是找不到相应的环境变量，需要修改eclipse的环境变量配置。</p>
+<p> <img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_143600.png" alt=""></p>
+</li>
+<li><p>打开6生成的.classpath文件，我们会看到相应的配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;classpath&gt;
+    &lt;classpathentry kind=&quot;src&quot; path=&quot;java&quot;/&gt;
+    &lt;classpathentry excluding=&quot;deployment/|tld/|webapp*/|webresources/&quot; kind=&quot;src&quot; path=&quot;test&quot;/&gt;
+    &lt;classpathentry kind=&quot;src&quot; path=&quot;webapps/examples/WEB-INF/classes&quot;/&gt;
+    &lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&quot;/&gt;
+    &lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.junit.JUNIT_CONTAINER/4&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;ANT_HOME/lib/ant.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/jaxrpc-1.1-rc4/geronimo-spec-jaxrpc-1.1-rc4.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/wsdl4j-1.6.2/wsdl4j-1.6.2.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/ecj-4.7.3a/ecj-4.7.3a.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/easymock-3.2/easymock-3.2.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/hamcrest-1.3/hamcrest-core-1.3.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/cglib-2.2.3/cglib-nodep-2.2.3.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/objenesis-1.2/objenesis-1.2.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;output&quot; path=&quot;.settings/output&quot;/&gt;
+&lt;/classpath&gt;
+</code></pre><ol>
+<li>src是源文件输出目的的。</li>
+<li>output是类文件输出目的地。</li>
+<li>con是eclipse运行时所需的核心包。</li>
+<li>var是eclipse通过环境变量的形式增加的一些JAR包。</li>
+<li>lib是直接加入的JAR包</li>
+</ol>
+</li>
+<li><p>根据9中错误提示，可以看出是在绑定环境变量指定的包的时候出错了。说明eclipse是没相应的环境变量，需要设置ANT_HOME和TOMCAT_LIBS_BASE环境变量。其中的ANT_HOME是ant安装目录，TOMCAT_LIBS_BASE是3中配置的目录。配置eclipse环境变量的步骤：Window-&gt;Preferences-&gt;Java-&gt;Build Path-&gt;Classpath Variables。然后使用New添加环境变量即可。</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_145110.png" alt=""></p>
+</li>
+<li>两个环境变量添加完后就没有错误了，可以通过org.apache.catalina.startup.Bootstrap在eclipse中以源码的方式启动Tomcat了。</li>
+<li><p>启动成功后，通过<a href="http://localhost:8080/就可以访问Tomcat的默认页面" target="_blank" rel="external">http://localhost:8080/就可以访问Tomcat的默认页面</a></p>
+<h1 id="Tomcat处理用户HTTP请求的流程"><a href="#Tomcat处理用户HTTP请求的流程" class="headerlink" title="Tomcat处理用户HTTP请求的流程"></a>Tomcat处理用户HTTP请求的流程</h1></li>
+<li><p>Tomcat的某个service的connector在某个指定端口上监听用户HTTP请求，封装HttpServletRequest和HttpServletResponse</p>
+</li>
+<li>接收到请求，connector把请求转发到其对应的service下的engine</li>
+<li>engine解析request的URL得到需要转发的host</li>
+<li>host解析URL得到serve它的容器Context</li>
+<li>servlet容器解析URL得到对应的servlet</li>
+<li>servlet处理请求，包装返回结果并返回（这里暂时不请求返回的机制是原路返回到connector，然后通过connector把结果通过socket的输出流返回给客户端；还是直接在servlet就返回给客户端了。个人觉得是后者的情况比较准确，因为在servlet我们已经能获取socket的输出流了。所以下图可能不是特别准确）。</li>
+</ol>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B.png" alt=""></p>
+<h1 id="各种器的关系"><a href="#各种器的关系" class="headerlink" title="各种器的关系"></a>各种器的关系</h1><p>在java的开发过程中，我们会遇到很多的“器”，比如服务器，应用服务器，web应用服务器，IOC容器，web容器，servlet容器，docker容器等。所以我觉得有必要理清下这些“器”的作用，使用场景，特征，它们之间的关系等。</p>
+<ul>
+<li>对容器的通俗解释：容器是一个接口集合，解耦应用程序与服务器或底层软件的耦合。</li>
+<li>对服务器的通俗理解：基于硬件，加上某些容器或应用，能对外提供服务的网络设备。注意其不单纯指硬件，也不单纯指软件，而是二者之间的和谐配合。</li>
+</ul>
+<p>下面用我自己的话来对上面的各种器进行解释：</p>
+<ol>
+<li>服务器：提供某种软件服务的硬件设备。</li>
+<li>应用服务器：提供一个完整的应用生态的服务器，本质是服务器。如果这个服务器上安装了Tomcat等，可以提供用户进行web访问功能的应用，叫web应用服务器。</li>
+<li>web服务器：只提供web资源，不提供web服务，如部署了Nginx的。</li>
+<li>各种容器的功能大体一致，就是给用户提供统一的接口。IOC容器提供了访问bean等接口，web容器提供了部署web应用的接口，servlet容器提供了统一管理servlet的接口。docker容器提供了统一管理服务部署额接口。</li>
+</ol>
+<p>Tomcat（提供web应用服务）=Tomcat（提供应用服务）+Nginx（提供web服务）</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://www.jianshu.com/p/83385852f711" title="https://www.jianshu.com/p/83385852f711" target="_blank" rel="external">https://www.jianshu.com/p/83385852f711</a></li>
+<li><a href="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" title="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" target="_blank" rel="external">https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html</a></li>
+<li><a href="https://blog.csdn.net/skp127/article/details/52026150" title="https://blog.csdn.net/skp127/article/details/52026150" target="_blank" rel="external">https://blog.csdn.net/skp127/article/details/52026150</a></li>
+<li><a href="https://blog.csdn.net/tjiyu/article/details/53148174" title="https://blog.csdn.net/tjiyu/article/details/53148174" target="_blank" rel="external">https://blog.csdn.net/tjiyu/article/details/53148174</a></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;随着互联网的发展，java也在不断的改善进步。B/S架构的发展也是进展迅速，java为了支持B/S架构，出现了Servlet和jsp等服务端
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Mybatis 源码解读</title>
+    <link href="http://yoursite.com/2018/04/12/Mybatis-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"/>
+    <id>http://yoursite.com/2018/04/12/Mybatis-源码解读/</id>
+    <published>2018-04-12T14:31:07.000Z</published>
+    <updated>2018-04-13T14:12:06.296Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>使用的方式：</p>
+<ol>
+<li>纯代码</li>
+<li>mybatis配置文件+代码，对于要学习mybatis的源码，这种方式是一种不错的选择。</li>
+<li>Spring-mybatis配置方式，开发中建议使用这种方式。</li>
+</ol>
+<p>下面着重介绍下第二种方式，从简单的例子入手。</p>
+<p>使用mybatis的java的基本代码结构：</p>
+<pre><code>String resourcePath = &quot;./mybatis-config.xml&quot;;
+InputStream is = null;
+try {
+    is = Resources.getResourceAsStream(resourcePath);
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is, &quot;development&quot;);
+SqlSession sqlSession = sessionFactory.openSession();
+UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+User user = userMapper.selectUser(id);
+</code></pre><p>mybatis-config.xml:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE configuration
+  PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
+  &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
+&lt;configuration&gt;
+  &lt;properties resource=&quot;./jdbc.properties&quot;&gt;
+   &lt;!--  &lt;property name=&quot;jdbc.driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+    &lt;property name=&quot;jdbc.url&quot; value=&quot;jdbc:mysql://localhost:3306/test&quot;/&gt;
+    &lt;property name=&quot;jdbc.username&quot; value=&quot;root&quot;/&gt;
+    &lt;property name=&quot;jdbc.password&quot; value=&quot;root&quot;/&gt; --&gt;
+    &lt;!-- 使得可以使用默认值 --&gt;
+    &lt;property name=&quot;org.apache.ibatis.parsing.PropertyParser.enable-default-value&quot; value=&quot;true&quot;/&gt;
+  &lt;/properties&gt;
+  &lt;settings&gt;
+        &lt;setting name=&quot;cacheEnabled&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;multipleResultSetsEnabled&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;useColumnLabel&quot; value=&quot;true&quot;/&gt;
+      &lt;setting name=&quot;useGeneratedKeys&quot; value=&quot;false&quot;/&gt;
+      &lt;setting name=&quot;autoMappingBehavior&quot; value=&quot;PARTIAL&quot;/&gt;
+      &lt;setting name=&quot;autoMappingUnknownColumnBehavior&quot; value=&quot;WARNING&quot;/&gt;
+      &lt;setting name=&quot;defaultExecutorType&quot; value=&quot;SIMPLE&quot;/&gt;
+      &lt;setting name=&quot;defaultStatementTimeout&quot; value=&quot;25&quot;/&gt;
+      &lt;setting name=&quot;defaultFetchSize&quot; value=&quot;100&quot;/&gt;
+      &lt;setting name=&quot;safeRowBoundsEnabled&quot; value=&quot;false&quot;/&gt;
+      &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;false&quot;/&gt;
+      &lt;setting name=&quot;localCacheScope&quot; value=&quot;SESSION&quot;/&gt;
+      &lt;setting name=&quot;jdbcTypeForNull&quot; value=&quot;OTHER&quot;/&gt;
+      &lt;setting name=&quot;lazyLoadTriggerMethods&quot; value=&quot;equals,clone,hashCode,toString&quot;/&gt;
+      &lt;!-- &lt;setting name=&quot;logImpl&quot; value=&quot;LOG4J&quot;/&gt; --&gt;
+  &lt;/settings&gt;
+  &lt;typeAliases&gt;
+          &lt;typeAlias alias=&quot;User&quot; type=&quot;com.daniel.study.mybatis.entity.User&quot;/&gt;
+  &lt;/typeAliases&gt;
+  &lt;typeHandlers&gt;
+          &lt;typeHandler handler=&quot;com.daniel.study.mybatis.type.MyTypeHandler&quot;/&gt;
+          &lt;typeHandler handler=&quot;org.apache.ibatis.type.EnumOrdinalTypeHandler&quot; javaType=&quot;com.daniel.study.mybatis.enums.Gender&quot;/&gt;
+  &lt;/typeHandlers&gt;
+  &lt;plugins&gt;
+      &lt;plugin interceptor=&quot;com.daniel.study.mybatis.plugins.MyPlugin&quot;&gt;
+        &lt;property name=&quot;someProperty&quot; value=&quot;100&quot;/&gt;
+      &lt;/plugin&gt;
+  &lt;/plugins&gt;
+  &lt;environments default=&quot;development&quot;&gt;
+    &lt;environment id=&quot;development&quot;&gt;
+      &lt;transactionManager type=&quot;JDBC&quot;&gt;
+          &lt;!-- &lt;property name=&quot;name&quot; value=&quot;&quot;/&gt; --&gt;
+      &lt;/transactionManager&gt;
+      &lt;dataSource type=&quot;POOLED&quot;&gt;
+        &lt;property name=&quot;driver&quot; value=&quot;${jdbc.driverClassName}&quot;/&gt;
+        &lt;property name=&quot;url&quot; value=&quot;${jdbc.url}&quot;/&gt;
+        &lt;property name=&quot;username&quot; value=&quot;${jdbc.username:fengyu}&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
+      &lt;/dataSource&gt;
+    &lt;/environment&gt;
+  &lt;/environments&gt;
+  &lt;mappers&gt;
+    &lt;mapper resource=&quot;com/daniel/study/mybatis/dao/impl/UserMapper.xml&quot;/&gt;
+    &lt;mapper resource=&quot;com/daniel/study/mybatis/dao/impl/ConsumerMapper.xml&quot;/&gt;
+  &lt;/mappers&gt;
+&lt;/configuration&gt;
+</code></pre><p>这就是要使用配置文件+代码的方式实现mybatis数据持久层访问的方式。</p>
+<h1 id="配置文件的加载"><a href="#配置文件的加载" class="headerlink" title="配置文件的加载"></a>配置文件的加载</h1><p>这一节主要介绍mybatis是怎么加载上一节中使用的配置文件的。</p>
+<p>加载的过程中设计到的主要类及过程如下图：</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/mybatis%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B.png" alt="mybatis配置文件的加载过程"></p>
+<p>加载配置文件的最终目的是得到Configuration对象，这个对象最后在DefaultSqlSessionFactory中使用，使用该Configuration对象可以得到各种类型的SqlSession。</p>
+<p>加载配置文件（mybatis-config.xml）的方式有两种，一种是字符流的方式，以Reader方式加载配置，一种是以字节流的方式，以Inputstream方式加载配置。</p>
+<p>字符方式加载的主要代码：</p>
+<pre><code>public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
+    try {
+      XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
+      return build(parser.parse());
+    } catch (Exception e) {
+      throw ExceptionFactory.wrapException(&quot;Error building SqlSession.&quot;, e);
+    } finally {
+      ErrorContext.instance().reset();
+      try {
+        reader.close();
+      } catch (IOException e) {
+        // Intentionally ignore. Prefer previous error.
+      }
+    }
+  }
+
+//配置创建器
+public XMLConfigBuilder(Reader reader, String environment, Properties props) {
+    this(new XPathParser(reader, true, props, new XMLMapperEntityResolver()), environment, props);
+}
+//配置创建器通过parse解析xml配置文件
+public Configuration parse() {
+    if (parsed) {
+        throw new BuilderException(&quot;Each XMLConfigBuilder can only be used once.&quot;);
+    }
+    parsed = true;
+    // 给配置对象设置属性值
+    parseConfiguration(parser.evalNode(&quot;/configuration&quot;));
+    // 返回设置完成的配置对象，其中已经包括了xml配置中给定的信息
+    return configuration;
+}
+
+// 最终解析xml为mybatis配置的建造者
+private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
+    // 这里创建，初始化了一个了mybatis的配置
+    super(new Configuration());
+    ErrorContext.instance().resource(&quot;SQL Mapper Configuration&quot;);
+    // 这里设置mybatis配置的变量
+    this.configuration.setVariables(props);
+    this.parsed = false;
+    this.environment = environment;
+    this.parser = parser;
+}
+</code></pre><p>字节流的方式加载配置的主要代码：</p>
+<pre><code>public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
+    try {
+      XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+      return build(parser.parse());
+    } catch (Exception e) {
+      throw ExceptionFactory.wrapException(&quot;Error building SqlSession.&quot;, e);
+    } finally {
+      ErrorContext.instance().reset();
+      try {
+        inputStream.close();
+      } catch (IOException e) {
+        // Intentionally ignore. Prefer previous error.
+      }
+    }
+}
+
+// Inputstream方式读取配置
+public XMLConfigBuilder(InputStream inputStream, String environment, Properties props) {
+    this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
+}
+
+//配置创建器通过parse解析xml配置文件
+public Configuration parse() {//返回Configuration
+    if (parsed) {
+        throw new BuilderException(&quot;Each XMLConfigBuilder can only be used once.&quot;);
+    }
+    parsed = true;
+    // 给配置对象设置属性值
+    parseConfiguration(parser.evalNode(&quot;/configuration&quot;));
+    // 返回设置完成的配置对象，其中已经包括了xml配置中给定的信息
+    return configuration;
+}
+
+// 最终解析xml为mybatis配置的建造者
+private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
+    // 这里创建，初始化了一个了mybatis的配置
+    super(new Configuration());
+    ErrorContext.instance().resource(&quot;SQL Mapper Configuration&quot;);
+    // 这里设置mybatis配置的变量
+    this.configuration.setVariables(props);
+    this.parsed = false;
+    this.environment = environment;
+    this.parser = parser;
+}
+</code></pre><p>两者其实没有多大区别，只是读取数据源的方式不同而已，最终都是使用XPathParser来对xml进行解析。XPathParser是对jdk中XPath的封装。通过XPathParser创建了与xml配置文件对应的document对象。</p>
+<pre><code>//InputStream
+public XPathParser(InputStream inputStream, boolean validation, Properties variables, EntityResolver entityResolver) {
+    commonConstructor(validation, variables, entityResolver);
+        // 创建对应的xml文档
+    this.document = createDocument(new InputSource(inputStream));
+}
+
+//Reader
+public XPathParser(Reader reader, boolean validation, Properties variables, EntityResolver entityResolver) {
+    commonConstructor(validation, variables, entityResolver);
+    this.document = createDocument(new InputSource(reader));
+}
+</code></pre><p>解析xml配置文件的最终结果是得到一个Configuration对象，使用该对象作为原材料，通过DefaultSqlSessionFactory创建SqlSession对象。SqlSession对象是整个mybatis操作数据库的核心。DefaultSqlSessionFactory创建SQLSession的方法主要有两个：</p>
+<ol>
+<li><p>根据数据源创建：</p>
+<pre><code>private SqlSession openSessionFromDataSource(ExecutorType execType, TransactionIsolationLevel level, boolean autoCommit) {
+    Transaction tx = null;
+    try {
+      final Environment environment = configuration.getEnvironment();
+      final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+      tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
+        //执行器，用于处理SQL的执行的
+      final Executor executor = configuration.newExecutor(tx, execType);
+        //SqlSession对象是具有Configuration和Executor的
+      return new DefaultSqlSession(configuration, executor, autoCommit);
+    } catch (Exception e) {
+      closeTransaction(tx); // may have fetched a connection so lets call close()
+      throw ExceptionFactory.wrapException(&quot;Error opening session.  Cause: &quot; + e, e);
+    } finally {
+      ErrorContext.instance().reset();
+    }
+}
+</code></pre></li>
+<li><p>根据连接（Connection）创建：</p>
+<pre><code>private SqlSession openSessionFromConnection(ExecutorType execType, Connection connection) {
+    try {
+      boolean autoCommit;
+      try {
+        autoCommit = connection.getAutoCommit();
+      } catch (SQLException e) {
+        // Failover to true, as most poor drivers
+        // or databases won&apos;t support transactions
+        autoCommit = true;
+      }      
+      final Environment environment = configuration.getEnvironment();
+      final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+      final Transaction tx = transactionFactory.newTransaction(connection);
+      //执行器，用于处理SQL的执行的
+      final Executor executor = configuration.newExecutor(tx, execType);
+      //SqlSession对象是具有Configuration和Executor的
+      return new DefaultSqlSession(configuration, executor, autoCommit);
+    } catch (Exception e) {
+      throw ExceptionFactory.wrapException(&quot;Error opening session.  Cause: &quot; + e, e);
+    } finally {
+      ErrorContext.instance().reset();
+    }
+  }
+</code></pre></li>
+</ol>
+<h1 id="SqlSession的工作揭秘"><a href="#SqlSession的工作揭秘" class="headerlink" title="SqlSession的工作揭秘"></a>SqlSession的工作揭秘</h1><p>回到之前介绍的代码使用mybatis的demo代码：</p>
+<pre><code>String resourcePath = &quot;./mybatis-config.xml&quot;;
+InputStream is = null;
+try {
+    is = Resources.getResourceAsStream(resourcePath);
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is, &quot;development&quot;);
+SqlSession sqlSession = sessionFactory.openSession();//1
+UserMapper userMapper = sqlSession.getMapper(UserMapper.class);//2
+User user = userMapper.selectUser(id);
+</code></pre><p>在上面的代码中的<code>1</code>处，获取了SqlSession,<code>2</code>处使用该SqlSession对象对映射接口进行处理，获取UserMapper的代理对象，在该代理对象的selectUser()方法中增强了一些和处理数据库相关的内容。这个userMapper代理对象生成的时间是在加载配置对象Configuration的时候。生成代理对象的代码：</p>
+<pre><code>    private void mapperElement(XNode parent) throws Exception {
+    if (parent != null) {
+        for (XNode child : parent.getChildren()) {
+            // 如果元素的名称是package
+            if (&quot;package&quot;.equals(child.getName())) {
+                // package元素的name属性就是包名
+                String mapperPackage = child.getStringAttribute(&quot;name&quot;);
+                // 包包名加入mapper集合,最终依然是调用configuration.addMapper(Class&lt;?&gt;type)方法
+                configuration.addMappers(mapperPackage);
+            } else {// 元素名称是mapper，一个mapper节点对应一个映射文件
+                String resource = child.getStringAttribute(&quot;resource&quot;);
+                String url = child.getStringAttribute(&quot;url&quot;);
+                String mapperClass = child.getStringAttribute(&quot;class&quot;);
+                if (resource != null &amp;&amp; url == null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(resource);
+                    InputStream inputStream = Resources.getResourceAsStream(resource);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url != null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(url);
+                    // 来自网络的mapper xml
+                    InputStream inputStream = Resources.getUrlAsStream(url);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url == null &amp;&amp; mapperClass != null) {
+                    Class&lt;?&gt; mapperInterface = Resources.classForName(mapperClass);
+                    configuration.addMapper(mapperInterface);
+                } else {
+                    throw new BuilderException(
+                            &quot;A mapper element may only specify a url, resource or class, but not more than one.&quot;);
+                }
+            }
+        }
+    }
+}
+</code></pre><h2 id="解析Mapper-xml文件"><a href="#解析Mapper-xml文件" class="headerlink" title="解析Mapper.xml文件"></a>解析Mapper.xml文件</h2><p>解析mapper文件的工作其实是在加载配置文件的时候就进行的了，解析涉及到的主要代码：</p>
+<pre><code>private void parseConfiguration(XNode root) {
+    try {
+        // issue #117 read properties first
+        propertiesElement(root.evalNode(&quot;properties&quot;));
+        Properties settings = settingsAsProperties(root.evalNode(&quot;settings&quot;));
+        loadCustomVfs(settings);
+        typeAliasesElement(root.evalNode(&quot;typeAliases&quot;));
+        pluginElement(root.evalNode(&quot;plugins&quot;));
+        objectFactoryElement(root.evalNode(&quot;objectFactory&quot;));
+        objectWrapperFactoryElement(root.evalNode(&quot;objectWrapperFactory&quot;));
+        reflectorFactoryElement(root.evalNode(&quot;reflectorFactory&quot;));
+        settingsElement(settings);
+        // read it after objectFactory and objectWrapperFactory issue #631
+        environmentsElement(root.evalNode(&quot;environments&quot;));
+        databaseIdProviderElement(root.evalNode(&quot;databaseIdProvider&quot;));
+        typeHandlerElement(root.evalNode(&quot;typeHandlers&quot;));
+        //从这里开始解析配置文件中mappers元素
+        mapperElement(root.evalNode(&quot;mappers&quot;));
+    } catch (Exception e) {
+        throw new BuilderException(&quot;Error parsing SQL Mapper Configuration. Cause: &quot; + e, e);
+    }
+}
+</code></pre><p>把解析到的mapper.class存放到Configuration对象中的mapperRegistry对象中，mapperRegistry对象负责管理各个mapper类。</p>
+<pre><code>private void mapperElement(XNode parent) throws Exception {
+    if (parent != null) {
+        for (XNode child : parent.getChildren()) {
+            // 如果元素的名称是package
+            if (&quot;package&quot;.equals(child.getName())) {
+                // package元素的name属性就是包名
+                String mapperPackage = child.getStringAttribute(&quot;name&quot;);
+                // 包包名加入mapper集合,最终依然是调用configuration.addMapper(Class&lt;?&gt;type)方法
+                configuration.addMappers(mapperPackage);
+            } else {// 元素名称是mapper，一个mapper节点对应一个映射文件
+                String resource = child.getStringAttribute(&quot;resource&quot;);
+                String url = child.getStringAttribute(&quot;url&quot;);
+                String mapperClass = child.getStringAttribute(&quot;class&quot;);
+                if (resource != null &amp;&amp; url == null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(resource);
+                    InputStream inputStream = Resources.getResourceAsStream(resource);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url != null &amp;&amp; mapperClass == null) {
+                    ErrorContext.instance().resource(url);
+                    // 来自网络的mapper xml
+                    InputStream inputStream = Resources.getUrlAsStream(url);
+                    XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url,
+                            configuration.getSqlFragments());
+                    // parse()方法中依然是调用了configuration.addMapper(Class&lt;?&gt;type)方法
+                    mapperParser.parse();
+                } else if (resource == null &amp;&amp; url == null &amp;&amp; mapperClass != null) {
+                    Class&lt;?&gt; mapperInterface = Resources.classForName(mapperClass);
+                    configuration.addMapper(mapperInterface);
+                } else {
+                    throw new BuilderException(
+                            &quot;A mapper element may only specify a url, resource or class, but not more than one.&quot;);
+                }
+            }
+        }
+    }
+}
+</code></pre><p>mpper.xml有四种方式可以表示映射资源：</p>
+<ol>
+<li>mapper.xml所在的包</li>
+<li>单个文件的位置resource属性来定位</li>
+<li>单个文件的位置url属性来定位</li>
+<li>直接指定类的全限定名，通过class属性来定位。</li>
+</ol>
+<p>无论是哪种方式最终都会转化为mapper.xml文件中的命名空间指定的接口的class对象存放到Configuration对象中的mapperRegistry中。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;使用&quot;&gt;&lt;a href=&quot;#使用&quot; class=&quot;headerlink&quot; title=&quot;使用&quot;&gt;&lt;/a&gt;使用&lt;/h1&gt;&lt;p&gt;使用的方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;纯代码&lt;/li&gt;
+&lt;li&gt;mybatis配置文件+代码，对于要学习mybatis的源码，这种方式是一
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>设计模式</title>
+    <link href="http://yoursite.com/2018/03/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://yoursite.com/2018/03/25/设计模式/</id>
+    <published>2018-03-25T07:50:11.000Z</published>
+    <updated>2018-03-25T10:30:23.949Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，有大神总结了23中设计模式，这些设计模式有各种各样的实现方式。常见的设计模式不过也就哪几种，我们很少使用其他设计模式的原因估计是太难一下记住这么多设计模式，可能有人说记住很简单，但是我要强调的一点是，即便你能全部记住，但是能熟练的使用真的很难，所以本文我只讨论几个比较简单的设计模式。</p>
+<h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="单例模式的实现方式"><a href="#单例模式的实现方式" class="headerlink" title="单例模式的实现方式"></a>单例模式的实现方式</h2><ul>
+<li><p>公有的静态成员变量来保存这个唯一的对象实例</p>
+<pre><code>public class EagerSingleton1 {
+    static {
+        System.out.println(&quot;load class!&quot;);
+    }
+    public static final EagerSingleton1 SINGLETON = new EagerSingleton1();
+
+    private EagerSingleton1() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StackTraceElement element = elements[2];
+        System.out.println(&quot;call constructor!&quot; + element.getClassName());//1
+    }
+
+    public void test() {
+        System.out.println(&quot;test&quot;);
+    }
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;eagerSingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.EagerSingleton1&quot;&gt;&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
+public class EagerSingleton1Test {
+
+    @Autowired
+    private EagerSingleton1 eagerSingleton1;//使用Spring的Ioc注入
+
+    @Test
+    public void test() {
+        EagerSingleton1 singleton1 = EagerSingleton1.SINGLETON;
+        System.out.println(eagerSingleton1 == singleton1);//2 false，说明破坏了单例
+    }
+
+}
+</code></pre><p>  输出结果：</p>
+<pre><code>load class!
+call constructor!com.daniel.study.design_model.singleton.EagerSingleton1
+call constructor!sun.reflect.NativeConstructorAccessorImpl
+false
+</code></pre><p>  对这种方式续做几点说明：</p>
+<ol>
+<li>这种方式的单例是不安全的，任然可以通过IOC的注入，IOC在实例化eagerSingleton1时调用了private的构造函数。因为Spring的IOC容器在实例化对象时使用反射方式，故知道反射可以破坏单例模式</li>
+<li>从结果看1处别调用了两次，第二次是Spring实例化，第一次是在类加载的时候实例化的。</li>
+<li>从2处的结果可以看出Spring实例化与类加载的时候实例化是不同的。</li>
+</ol>
+</li>
+<li><p>使用公有的静态成员方法返回实例</p>
+<pre><code>//需要单例的类型
+public class EagerSingleton2 {
+    static {
+        System.out.println(&quot;load class!&quot;);
+    }
+    // 类加载的时候就实例化了
+    private static final EagerSingleton2 SINGLETON = new EagerSingleton2();
+
+    private EagerSingleton2() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StackTraceElement element = elements[2];
+        System.out.println(&quot;call constructor!&quot; + element.getClassName());
+    }
+
+    public static EagerSingleton2 getInstance() {
+        return SINGLETON;
+    }
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;eagerSingleton2&quot; class=&quot;com.daniel.study.design_model.singleton.EagerSingleton2&quot;&gt;&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
+public class EagerSingleton2Test {
+
+    @Autowired
+    private EagerSingleton2 eagerSingleton2;
+
+    @Test
+    public void test() {
+        EagerSingleton2 singleton1 = EagerSingleton2.getInstance();
+        System.out.println(eagerSingleton2 == singleton1);
+    }
+
+}
+</code></pre><p>  结果：</p>
+<pre><code>load class!
+call constructor!com.daniel.study.design_model.singleton.EagerSingleton2
+call constructor!sun.reflect.NativeConstructorAccessorImpl
+false
+</code></pre><p>可以看出与前一种方式没有太大的区别，如果没有反射机制的话，这种两种方式都是比较好的实例化单例的方式，是线程安全的，且效率高。因为这两种方式都是在类加载的时候进行实例化，因为一个类在被卸载前只会加载一次。但由于反射机制的存在导致了单例设计被破坏。因为Spring的实例化就是借助的反射，所以使用Spring进行依赖注入单例对象，导致了创建了两个不同的对象。还有就是上面这两种方式都是饿汉模式，咋类加载的时候就实例化了，而不是在使用的时候实例化。在使用的时候实例化称作懒汉式。</p>
+</li>
+<li><p>懒汉单例模式</p>
+<pre><code>//需要实例化为单例的类
+public class LazySingleton1 {
+    static {
+        System.out.println(&quot;load class!&quot;);
+    }
+    private static LazySingleton1 lazySingleton1;
+
+    private LazySingleton1() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StackTraceElement element = elements[2];
+        System.out.println(&quot;call constructor!&quot; + element.getClassName());
+    }
+
+    public static LazySingleton1 getInstance() {
+        if (lazySingleton1 == null) {
+            lazySingleton1 = new LazySingleton1();
+        }
+        return lazySingleton1;
+    }
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;lazySingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.LazySingleton1&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
+public class LazySingleton1Test {
+
+    @Autowired
+    private LazySingleton1 lazySingleton1;
+
+    @Test
+    public void test() {
+        LazySingleton1 lazySingleton2 = LazySingleton1.getInstance();
+        System.out.println(lazySingleton1 == lazySingleton2);
+    }
+
+}
+</code></pre><p>  结果：</p>
+<pre><code>load class!
+call constructor!sun.reflect.NativeConstructorAccessorImpl //1
+call constructor!com.daniel.study.design_model.singleton.LazySingleton1//2
+false
+</code></pre></li>
+</ul>
+<p>这种方式也破坏了单例。但这里是Spring先实例化的，测试代码中的实例化是到调用getInstance静态方法的时候开始的，显然两次实例化的对象不一致，也是破坏了单例。上面的代码还有另外一个问题就是其实线程不安全的，为了保证线程安全，这段单例类的代码有两种改进办法：</p>
+<pre><code>public class LazySingleton2 {
+    static {
+        System.out.println(&quot;load class!&quot;);
+    }
+    private static LazySingleton2 lazySingleton2;
+
+    private LazySingleton2() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StackTraceElement element = elements[2];
+        System.out.println(&quot;call constructor!&quot; + element.getClassName());
+    }
+    //方法上加锁
+    public static synchronized LazySingleton2 getInstance() {
+        if (lazySingleton2 == null) {
+            lazySingleton2 = new LazySingleton2();
+        }
+        return lazySingleton2;
+    }
+}
+
+//双重锁检查，避免指令重排序
+public class Lazysingleton3 {
+    static {
+        System.out.println(&quot;load class!&quot;);
+    }
+    private volatile static Lazysingleton3 lazySingleton3;
+
+    private Lazysingleton3() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StackTraceElement element = elements[2];
+        System.out.println(&quot;call constructor!&quot; + element.getClassName());
+    }
+
+    public static Lazysingleton3 getInstance() {
+        if (lazySingleton3 == null) {// 这步判断可以减少不必要的获取锁释放锁的操作
+            synchronized (Lazysingleton3.class) {
+                // 如果thread1来到这里把CPU释放了，同时释放了锁，那么Thread2可以进入这里，
+                // 即两个线程中的计数器都已经指到了这里的指令，如果不进行非空判断,势必会破坏单例
+                if (lazySingleton3 == null) {
+                    lazySingleton3 = new Lazysingleton3();
+                }
+            }
+        }
+        return lazySingleton3;
+    }
+}
+</code></pre><ul>
+<li><p>静态内部类进行实例化</p>
+<pre><code>public class LazySingleton4 {
+
+    static {
+        System.out.println(&quot;loader class 1&quot;);
+    }
+
+    private LazySingleton4() {
+        System.out.println(&quot;LazySingleton4 class loaded!&quot;);
+    }
+
+    static {
+        System.out.println(&quot;loader class 2&quot;);
+    }
+
+    private static class SingletongHandler {
+        static {
+            System.out.println(&quot;loader class 3&quot;);
+        }
+        private static final LazySingleton4 lazySingleton4 = new LazySingleton4();
+        static {
+            System.out.println(&quot;loader class 4&quot;);
+        }
+    }
+
+    public static LazySingleton4 getInstance() {
+        return SingletongHandler.lazySingleton4;
+    }
+
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;lazySingleton4_1&quot; class=&quot;com.daniel.study.design_model.singleton.LazySingleton4&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
+public class LazySingleton4Test {
+
+    @Autowired
+    private LazySingleton4 lazySingleton4_1;
+
+    @Test
+    public void test() {
+        LazySingleton4 lazySingleton4_2 = LazySingleton4.getInstance();
+        System.out.println(lazySingleton4_1 == lazySingleton4_2);
+    }
+
+}
+</code></pre><p>  结果：</p>
+<pre><code>loader class 1
+loader class 2
+LazySingleton4 class loaded!//Spring实例化
+loader class 3
+LazySingleton4 class loaded!//代码中使用getInstance的地方
+loader class 4
+false
+</code></pre></li>
+</ul>
+<p>这里的懒汉式与前面不同，前面使用的方式是用代码来控制懒加载的，这里使用的是jvm加载类的原理来进行懒加载的。只有在调用LazySingleton4.getInstance()的时候才会加载类SingletongHandler，而类在卸载前只会被加载一次，故保证了单例的唯一性。但是我们仍需要注意到，Spring的实例化并不是单例对象，即这种方式也会通过反射破坏单例。</p>
+<p>上面的方式，在反射面前都不能保证单例了（Spring就是通过反射的方式实例化对象的，这里用Spring进行实例化的时候，都导致了单例被破坏）。下面介绍一种反射不能破坏的单例模式。</p>
+<ul>
+<li><p>使用枚举实现单例</p>
+<pre><code>public enum EnumSingleton {
+    INSTANCE;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void test() {
+        System.out.println(this.getName());
+    }
+}
+</code></pre><p>  Spring配置枚举的实例：</p>
+<pre><code>&lt;bean id=&quot;INSTANCE&quot; class=&quot;org.springframework.beans.factory.config.FieldRetrievingFactoryBean&quot;&gt;    
+    &lt;property name=&quot;staticField&quot; value=&quot;com.daniel.study.design_model.singleton.EnumSingleton.INSTANCE&quot; /&gt;    
+&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+</li>
+</ul>
+<pre><code>    public class EnumSingletonTest {
+
+        @Test
+        public void testTest() {
+            ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
+            EnumSingleton singleton1 = (EnumSingleton) ctx.getBean(&quot;INSTANCE&quot;);
+            EnumSingleton singleton2 = EnumSingleton.INSTANCE;
+            System.out.println(&quot;EnumSingleton:&quot;+singleton1 == singleton2);
+        }
+
+    }
+
+结果：
+
+    EnumSingleton:true
+</code></pre><p>可以看出使用Enum实现的单例没有被Spring的实例化破坏，即反射不能破坏Enum单例模式。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>反射可以破坏单例模式，在设计单例类的时候需要注意这一点，除了反射外，序列化/反序列化，clone（所以单例类不能继承Clonable接口）也会破坏单例模式。如果想单例模式不被反射破坏，可以使用Enum（枚举）来设计单例类。这种方式也可以阻止序列化/反序列化对单例模式的破坏。</p>
+<p>为了保证单例模式不被反射或者序列化/反序列化破坏，可以这样做:声明一个私有的静态成员变量，用来做flag，如果已经调用构造函数实例化了，第二次就不能实例化了。这种方式的依据是无论是反射实例化，还是正常的实例化最终都需要调用构造方法。不过如果getInstance的执行在反射实例化之后，这种方法可能会导致通过getInstance方法获取实例不生效。对于序列化类的实例化，在类中加入readResolve就可以避免单例模式被破坏。</p>
+<p>综上，使用枚举实现单例模式是即安全，有快捷的。</p>
+<pre><code>//加了标志的单例类
+public class GoodSingleton {
+    private static boolean flag = false;
+    private static final GoodSingleton SINGLETON = new GoodSingleton();
+    static {
+        System.out.println(&quot;class load&quot;);
+    }
+
+    private GoodSingleton() {
+        if (flag) {
+            throw new RuntimeException(&quot;破坏了单例模式&quot;);
+        }
+        flag = true;
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StackTraceElement element = elements[2];
+        System.out.println(&quot;first call&quot;);
+        System.out.println(&quot;call constructor!&quot; + element.getClassName());
+    }
+
+    public static GoodSingleton getInstance() {
+        return SINGLETON;
+    }
+}
+</code></pre><p>   配置：</p>
+<pre><code>&lt;bean id=&quot;goodSingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.GoodSingleton&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;
+</code></pre><p>   测试：</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
+public class GoodSingletonTest {
+
+    @Autowired
+    private GoodSingleton goodSingleton1;
+
+    @Test
+    public void test() {
+        GoodSingleton goodSingleton2 = GoodSingleton.getInstance();
+        System.out.println(goodSingleton1 == goodSingleton2);
+    }
+
+}
+</code></pre><p>   结果：</p>
+<pre><code>first call
+call constructor!com.daniel.study.design_model.singleton.GoodSingleton//1
+class load
+
+Caused by: java.lang.RuntimeException: 破坏了单例模式 //2
+at com.daniel.study.design_model.singleton.GoodSingleton.&lt;init&gt;(GoodSingleton.java:12)
+at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:170)
+... 43 more
+</code></pre><p>类GoodSingleton加载的时候执行了实例化，就是结果中的1，在这里第一次调用了构造函数。在Spring准备实例化GoodSingleton的时候，flag已是true，所以抛出了异常，即不准调用构造函数两次。对于序列化/反序列化破坏了单例的情况便不能用以上面这种方式解决了，因为反序列化不需要调用构造函数。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;众所周知，有大神总结了23中设计模式，这些设计模式有各种各样的实现方式。常见的设计模式不过也就哪几种，我们很少使用其他设计模式的原因估计是太
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Spring源码解析——想到哪里就说到哪里</title>
+    <link href="http://yoursite.com/2018/03/24/Spring%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%83%B3%E5%88%B0%E5%93%AA%E9%87%8C%E5%B0%B1%E8%AF%B4%E5%88%B0%E5%93%AA%E9%87%8C/"/>
+    <id>http://yoursite.com/2018/03/24/Spring源码解析——想到哪里就说到哪里/</id>
+    <published>2018-03-24T13:32:13.000Z</published>
+    <updated>2018-03-25T10:31:28.615Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="事件机制"><a href="#事件机制" class="headerlink" title="事件机制"></a>事件机制</h1><p>事件的基础类是java.util.EventObject,其中有一个属性是source，类型是Object，表示的是事件发生的地方（源头）。在Spring中继承这个类后构成了自己的一个Spring的事件的基础类ApplicationEvent，该类在整个Spring的上下文中都有用，是一个抽象类。ApplicationEvent中新增了一个属性就是timeStamp时间戳，表示事件发生的时间。Spring中的事件对象的层次结构：</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/spring-events.png" alt="Spring Events"></p>
+<p>四个ApplicationContextEvent的实现都很简单，就是定义了一个参数类型为ApplicationContext的构造函数，这个参数是作为事件源的。</p>
+<p>RequestHandleEvent应用上下文中的请求事件，添加了一些区别请求的属性。</p>
+<p>PayloadApplicationEvent，是这个家族中较复杂的事件了，表示上下文过载事件。<br>BrokerAvailabilityEvent用于通知message可以用的事件。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;事件机制&quot;&gt;&lt;a href=&quot;#事件机制&quot; class=&quot;headerlink&quot; title=&quot;事件机制&quot;&gt;&lt;/a&gt;事件机制&lt;/h1&gt;&lt;p&gt;事件的基础类是java.util.EventObject,其中有一个属性是source，类型是Object，表示的是事件发生
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>MyBatis</title>
+    <link href="http://yoursite.com/2018/03/18/MyBatis/"/>
+    <id>http://yoursite.com/2018/03/18/MyBatis/</id>
+    <published>2018-03-18T07:45:07.000Z</published>
+    <updated>2018-03-18T16:01:37.259Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="配置文件中的元素"><a href="#配置文件中的元素" class="headerlink" title="配置文件中的元素"></a>配置文件中的元素</h1><p>根元素：</p>
+<pre><code>&lt;configuration&gt;&lt;/configuration&gt;
+</code></pre><p><configuration\>的子元素:</configuration\></p>
+<pre><code>&lt;properties&gt;&lt;/properties&gt;
+&lt;settings&gt;&lt;/settings&gt;
+&lt;typeAliases&gt;&lt;/typeAliases&gt;
+&lt;environments&gt;&lt;environments&gt;
+&lt;typeHandlers&gt;&lt;typeHandlers&gt;
+&lt;objectFactory&gt;&lt;/objectFactory&gt;
+&lt;plugins&gt;&lt;/plugins&gt;
+</code></pre><h2 id="类型处理器typeHandlers"><a href="#类型处理器typeHandlers" class="headerlink" title="类型处理器typeHandlers"></a>类型处理器typeHandlers</h2><p>无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时， 都会用类型处理器将获取的值以合适的方式转换成 Java 类型。你可以重写类型处理器或创建你自己的类型处理器来处理不支持的或非标准的类型。 具体做法为：实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型。例如：</p>
+<pre><code>// ExampleTypeHandler.java
+@MappedJdbcTypes(JdbcType.VARCHAR)
+public class ExampleTypeHandler extends BaseTypeHandler&lt;String&gt; {
+
+  @Override
+  public void setNonNullParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType) throws SQLException {
+    ps.setString(i, parameter);
+  }
+
+  @Override
+  public String getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    return rs.getString(columnName);
+  }
+
+  @Override
+  public String getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    return rs.getString(columnIndex);
+  }
+
+  @Override
+  public String getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    return cs.getString(columnIndex);
+  }
+}
+</code></pre><p>在配置文件中配置该类型处理器：</p>
+<pre><code>&lt;!-- mybatis-config.xml --&gt;
+&lt;typeHandlers&gt;
+  &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre><p>使用如上的类型处理器的作用：</p>
+<ol>
+<li>将会覆盖已经存在的处理Java的String类型属性的类型处理器。</li>
+<li>将会覆盖已经存在的处理VARCHAR参数及结果的类型处理器。</li>
+</ol>
+<p>因为Mybatis不会知道数据库元信息来决定使用哪种类型，所以必须在参数和结果映射中指明那个是VARCHAR类型的字段，以使其能够绑定到正确的类型处理器上。</p>
+<p>通过类型处理器的泛型，如上的<string>，Mybatis可以得知该类型处理器处理的Java类型，但是这种行为可以通过两种方式改变：</string></p>
+<ul>
+<li><p>在类型处理器的配置元素（typeHandler element）上增加一个 javaType 属性。</p>
+<pre><code>&lt;typeHandlers&gt;
+  &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot; javaType=&quot;String&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre></li>
+<li>在类型处理器的类上（TypeHandler class）增加一个 @MappedTypes 注解来指定与其关联的 Java 类型列表，<strong>如果在 javaType 属性中也同时指定，则注解方式将被忽略.</strong></li>
+</ul>
+<p>可以通过两种方式来指定被关联的JDBC类型：</p>
+<ul>
+<li><p>在类型处理器的配置元素上增加一个 jdbcType 属性</p>
+<pre><code>&lt;typeHandlers&gt;
+  &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot; jdbcType=&quot;String&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre></li>
+<li>在类型处理器的类上（TypeHandler class）增加一个 @MappedJdbcTypes 注解来指定与其关联的 JDBC 类型列表，<strong>如果在 jdbcType 属性中也同时指定，则注解方式将被忽略。</strong></li>
+</ul>
+<h2 id="插件（plugins）"><a href="#插件（plugins）" class="headerlink" title="插件（plugins）"></a>插件（plugins）</h2><p>MyBatis 允许你在已映射语句执行过程中的某一点进行拦截调用。默认情况下，MyBatis 允许使用插件来拦截的方法调用包括：</p>
+<ul>
+<li>Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)</li>
+<li>ParameterHandler (getParameterObject, setParameters)</li>
+<li>ResultSetHandler (handleResultSets, handleOutputParameters)</li>
+<li>StatementHandler (prepare, parameterize, batch, update, query)</li>
+</ul>
+<h2 id="配置环境（environments）"><a href="#配置环境（environments）" class="headerlink" title="配置环境（environments）"></a>配置环境（environments）</h2><p>Mybatis可以配置成适应多种环境，这种机制有助于将 SQL 映射应用于多种数据库之中， 现实情况下有多种理由需要这么做。例如，开发、测试和生产环境需要有不同的配置。</p>
+<p>不过要记住的是：<strong>每个数据库对应一个 SqlSessionFactory 实例</strong>。</p>
+<p>为了指定创建哪种环境，只要将它作为可选的参数传递给 SqlSessionFactoryBuilder 即可。可以接受环境配置的两个方法签名是：</p>
+<pre><code>SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment);
+SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment, properties);
+</code></pre><h3 id="事务管理器transactionManager"><a href="#事务管理器transactionManager" class="headerlink" title="事务管理器transactionManager"></a>事务管理器transactionManager</h3><p>Mybatis有两种类型的事务管理器：</p>
+<ul>
+<li>JDBC 直接使用了 JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域</li>
+<li>MANAGED 这个配置几乎没做什么。它从来不提交或回滚一个连接，而是让容器来管理事务的整个生命周期（比如 JEE 应用服务器的上下文）</li>
+</ul>
+<p><strong>如果你正在使用 Spring + MyBatis，则没有必要配置事务管理器， 因为 Spring 模块会使用自带的管理器来覆盖前面的配置。</strong></p>
+<p>上面提到的两种事务管理器都不需要任何属性，它们都是类型别名，换句话说，你可以使用 TransactionFactory 接口的实现类的完全限定名或类型别名代替它们。</p>
+<pre><code>public interface TransactionFactory {
+  void setProperties(Properties props);  
+  Transaction newTransaction(Connection conn);
+  Transaction newTransaction(DataSource dataSource, TransactionIsolationLevel level, boolean autoCommit);  
+}
+</code></pre><p>你也需要创建一个 Transaction 接口的实现类，这个接口也很简单：</p>
+<pre><code>public interface Transaction {
+  Connection getConnection() throws SQLException;
+  void commit() throws SQLException;
+  void rollback() throws SQLException;
+  void close() throws SQLException;
+  Integer getTimeout() throws SQLException;
+}
+</code></pre><p><strong>使用这两个接口，你可以完全自定义 MyBatis 对事务的处理</strong>。</p>
+<h3 id="数据源-DataSource"><a href="#数据源-DataSource" class="headerlink" title="数据源 DataSource"></a>数据源 DataSource</h3><p>Mybatis有三种内置的数据源类型：</p>
+<ul>
+<li>UNPOOLED 这个数据源的实现只是每次被请求时打开和关闭连接，没有连接池的必要的应用或数据库可以选择这种类型。这种类型的数据源只需要配置五种属性：driver、url、username、password和defaultTransactionIsolationLevel（默认的事务隔离级别）</li>
+<li>POOLED 这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来，避免了创建新的连接实例时所必需的初始化和认证时间。</li>
+<li>JNDI 这个数据源的实现是为了能在如 EJB 或应用服务器这类容器中使用，容器可以集中或在外部配置数据源，然后放置一个 JNDI 上下文的引用。这种类型的数据源有两个属性：initial_context （用来在 InitialContext 中寻找上下文）和data_source （这是引用数据源实例位置的上下文的路径）</li>
+</ul>
+<p><strong>使用第三方数据源</strong> 你可以通过实现接口 org.apache.ibatis.datasource.DataSourceFactory 来使用第三方数据源：</p>
+<pre><code>public interface DataSourceFactory {
+  void setProperties(Properties props);
+  DataSource getDataSource();
+}
+</code></pre><p>org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory 可被用作父类来构建新的数据源适配器，比如下面这段插入 C3P0 数据源所必需的代码：</p>
+<pre><code>import org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
+
+  public C3P0DataSourceFactory() {
+    this.dataSource = new ComboPooledDataSource();
+  }
+}
+</code></pre><h2 id="databaseIdProvider"><a href="#databaseIdProvider" class="headerlink" title="databaseIdProvider"></a>databaseIdProvider</h2><p>MyBatis 可以根据不同的数据库厂商执行不同的语句，这种多厂商的支持是基于映射语句中的 databaseId 属性。为支持多厂商特性只要像下面这样在 mybatis-config.xml 文件中加入 databaseIdProvider 即可：</p>
+<pre><code>&lt;databaseIdProvider type=&quot;DB_VENDOR&quot; /&gt;
+</code></pre><h2 id="映射器-mapper"><a href="#映射器-mapper" class="headerlink" title="映射器 mapper"></a>映射器 mapper</h2><p>告诉mybatis去哪里寻找SQL的映射语句。</p>
+<h1 id="XML映射文件中元素"><a href="#XML映射文件中元素" class="headerlink" title="XML映射文件中元素"></a>XML映射文件中元素</h1><p>SQL 映射文件有很少的几个顶级元素：</p>
+<ul>
+<li>cache 给定命名空间的缓存配置</li>
+<li>cache-ref 其他命名空间的缓存的引用</li>
+<li>resultMap 是最复杂也最强的的元素，用来描述如何从数据库结果集中来加载对象。</li>
+<li>sql 可被其他语句引用的可重用语句块</li>
+<li>insert 映射插入语句</li>
+<li>update 映射更新语句</li>
+<li>delete 映射删除语句</li>
+<li>select 映射查询语句</li>
+</ul>
+<p>语句中的#{xxx}告诉 MyBatis 创建一个预处理语句参数，通过 JDBC，这样的一个参数在 SQL 中会由一个“?”来标识，并被传递到一个新的预处理语句中。</p>
+<h2 id="select的常见属性"><a href="#select的常见属性" class="headerlink" title="select的常见属性"></a>select的常见属性</h2><pre><code>&lt;select
+  id=&quot;selectPerson&quot;
+  parameterType=&quot;int&quot;
+  parameterMap=&quot;deprecated&quot;
+  resultType=&quot;hashmap&quot;
+  resultMap=&quot;personResultMap&quot;
+  flushCache=&quot;false&quot;
+  useCache=&quot;true&quot;
+  timeout=&quot;10000&quot;
+  fetchSize=&quot;256&quot;
+  statementType=&quot;PREPARED&quot;
+  resultSetType=&quot;FORWARD_ONLY&quot;&gt;
+</code></pre><ul>
+<li>id 在命名空间中唯一的标识符，可以被用来引用这条语句。</li>
+<li>parameterType 将会传入这条语句的参数类的完全限定名或别名。这个属性是可选的，因为 MyBatis 可以通过 TypeHandler 推断出具体传入语句的参数，默认值为 unset。</li>
+<li>resultType 从这条语句中返回的期望类型的类的完全限定名或别名。<strong>注意如果是集合情形，那应该是集合可以包含的类型，</strong>而不能是集合本身。使用 resultType 或 resultMap，但不能同时使用。</li>
+<li>resultMap 外部 resultMap 的命名引用。结果集的映射是 MyBatis 最强大的特性，对其有一个很好的理解的话，许多复杂映射的情形都能迎刃而解。使用 resultMap 或 resultType，但不能同时使用。</li>
+<li>flushCache 将其设置为 true，任何时候只要语句被调用，都会导致本地缓存和二级缓存都会被清空，默认值：false。</li>
+<li>useCache 将其设置为 true，将会导致本条语句的结果被二级缓存，默认值：对 select 元素为 true。</li>
+<li>timeout 这个设置是在抛出异常之前(有异常就会立即返回)，驱动程序等待数据库返回请求结果的秒数。默认值为 unset（依赖驱动）</li>
+<li>fetchSize 这是尝试影响驱动程序每次批量返回的结果行数和这个设置值相等。默认值为 unset（依赖驱动）</li>
+<li>statementType STATEMENT，PREPARED 或 CALLABLE 的一个。这会让 MyBatis 分别使用 Statement，PreparedStatement 或 CallableStatement，默认值：PREPARED</li>
+<li>resultSetType FORWARD_ONLY，SCROLL_SENSITIVE 或 SCROLL_INSENSITIVE 中的一个，默认值为 unset （依赖驱动）。</li>
+<li>databaseId 如果配置了 databaseIdProvider，MyBatis 会加载所有的不带 databaseId 或匹配当前 databaseId 的语句；如果带或者不带的语句都有，则不带的会被忽略。</li>
+<li>resultOrdered 这个设置仅针对嵌套结果 select 语句适用：如果为 true，就是假设包含了嵌套结果集或是分组了，这样的话当返回一个主结果行的时候，就不会发生有对前面结果集的引用的情况。这就使得在获取嵌套的结果集的时候不至于导致内存不够用。默认值：false。</li>
+<li>这个设置仅对多结果集的情况适用，它将列出语句执行后返回的结果集并每个结果集给一个名称，名称是逗号分隔的。</li>
+</ul>
+<h2 id="delete、update和insert的常见属性"><a href="#delete、update和insert的常见属性" class="headerlink" title="delete、update和insert的常见属性"></a>delete、update和insert的常见属性</h2><pre><code>&lt;insert
+  id=&quot;insertAuthor&quot;
+  parameterType=&quot;domain.blog.Author&quot;
+  flushCache=&quot;true&quot;
+  statementType=&quot;PREPARED&quot;
+  keyProperty=&quot;&quot;
+  keyColumn=&quot;&quot;
+  useGeneratedKeys=&quot;&quot;
+  timeout=&quot;20&quot;&gt;
+
+&lt;update
+  id=&quot;updateAuthor&quot;
+  parameterType=&quot;domain.blog.Author&quot;
+  flushCache=&quot;true&quot;
+  statementType=&quot;PREPARED&quot;
+  timeout=&quot;20&quot;&gt;
+
+&lt;delete
+  id=&quot;deleteAuthor&quot;
+  parameterType=&quot;domain.blog.Author&quot;
+  flushCache=&quot;true&quot;
+  statementType=&quot;PREPARED&quot;
+  timeout=&quot;20&quot;&gt;
+</code></pre><p>与select相同的属性在这里就不解释了，解释select没有的</p>
+<ul>
+<li>useGeneratedKeys 这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键</li>
+<li>keyProperty 唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值</li>
+<li>keyColumn 通过生成的键值设置表中的列名，这个设置仅在某些数据库（像 PostgreSQL）是必须的，当主键列不是表中的第一列的时候需要设置。</li>
+</ul>
+<p>首先，如果你的数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么你可以设置 useGeneratedKeys=”true”，然后再把 keyProperty 设置到目标属性上就OK了。例如，如果上面的 Author 表已经对 id 使用了自动生成的列类型，那么语句可以修改为:</p>
+<pre><code>&lt;insert id=&quot;insertAuthor&quot; useGeneratedKeys=&quot;true&quot;
+    keyProperty=&quot;id&quot;&gt;
+  insert into Author (username,password,email,bio)
+  values (#{username},#{password},#{email},#{bio})
+&lt;/insert&gt;
+</code></pre><p>${xxx} 映射语句内部的参数传递。</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>对于数值类型，还有一个小数保留位数的设置，来确定小数点后保留的位数。</p>
+<pre><code>#{height,javaType=double,jdbcType=NUMERIC,numericScale=2}
+</code></pre><p><strong>字符串替换</strong>：</p>
+<p>默认情况下,使用 #{} 格式的语法会导致 MyBatis 创建 PreparedStatement 参数并安全地设置参数（就像使用 ? 一样）。这样做更安全，更迅速，通常也是首选做法，不过有时你就是想直接在 SQL 语句中插入一个不转义的字符串。比如，像 ORDER BY，你可以这样来使用：</p>
+<pre><code>ORDER BY ${columnName} -- 这里 MyBatis 不会修改或转义字符串。即不会被？替换
+</code></pre><p><strong>注：用这种方式接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击，因此要么不允许用户输入这些字段，要么自行转义并检验。</strong></p>
+<h2 id="Result-Maps"><a href="#Result-Maps" class="headerlink" title="Result Maps"></a>Result Maps</h2><p>ResultMap 的设计思想是，简单的语句不需要明确的结果映射，而复杂一点的语句只需要描述它们的关系就行了。ResultMap 最优秀的地方在于，虽然你已经对它相当了解了，但是根本就不需要显式地用到他们。 </p>
+<p>ResultMap有许多的子元素，下面是其元素的概念图：</p>
+<ul>
+<li>constructor   用于在实例化类时，注入结果到构造方法中<ul>
+<li>idArg   ID 参数;标记出作为 ID 的结果可以帮助提高整体性能</li>
+<li>arg  将被注入到构造方法的一个普通结果</li>
+</ul>
+</li>
+<li>id 一个 ID 结果;标记出作为 ID 的结果可以帮助提高整体性能</li>
+<li>result  注入到字段或 JavaBean 属性的普通结果.</li>
+<li>association 一个复杂类型的关联;许多结果将包装成这种类型。<ul>
+<li>嵌套结果映射 – 关联可以指定为一个 resultMap 元素，或者引用一个</li>
+</ul>
+</li>
+<li>collection  一个复杂类型的集合<ul>
+<li>嵌套结果映射 – 集合可以指定为一个 resultMap 元素，或者引用一个</li>
+</ul>
+</li>
+<li>discriminator  使用结果值来决定使用哪个 resultMap<ul>
+<li>case – 基于某些值的结果映射<ul>
+<li>嵌套结果映射 – 一个 case 也是一个映射它本身的结果,因此可以包含很多相 同的元素，或者它可以参照一个外部的 resultMap</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>动态 SQL 元素和 JSTL 或基于类似 XML 的文本处理器相似。<br>xml映射器中常用的用于组装动态SQL的元素：</p>
+<ul>
+<li>if</li>
+<li>choose(when,otherwise)</li>
+<li>trim(where,set)</li>
+<li>foreach</li>
+</ul>
+<p>自定义 trim 元素来定制 where 元素的功能:</p>
+<pre><code>&lt;trim prefix=&quot;WHERE&quot; prefixOverrides=&quot;AND |OR &quot;&gt;
+  ... 
+&lt;/trim&gt;
+</code></pre><p>set 元素等价的自定义 trim 元素:</p>
+<pre><code>&lt;trim prefix=&quot;SET&quot; suffixOverrides=&quot;,&quot;&gt;
+  ...
+&lt;/trim&gt;
+</code></pre><h2 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h2><p>你可以将任何可迭代对象（如 List、Set 等）、Map 对象或者数组对象传递给 foreach 作为集合参数。当使用可迭代对象或者数组时，index 是当前迭代的次数，item 的值是本次迭代获取的元素。当使用 Map 对象（或者 Map.Entry 对象的集合）时，index 是键，item 是值。</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>bind 元素可以从 OGNL 表达式中创建一个变量并将其绑定到上下文。比如：</p>
+<pre><code>&lt;select id=&quot;selectBlogsLike&quot; resultType=&quot;Blog&quot;&gt;
+  &lt;bind name=&quot;pattern&quot; value=&quot;&apos;%&apos; + _parameter.getTitle() + &apos;%&apos;&quot; /&gt;
+  SELECT * FROM BLOG
+  WHERE title LIKE #{pattern}
+&lt;/select&gt;
+</code></pre><h1 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h1><p>MyBatis的主要接口就是SqlSession，可以通过这个接口来执行命令，获取映射器和管理事务。SqlSessions 是由 SqlSessionFactory 实例创建的。SqlSessionFactory 对象包含创建 SqlSession 实例的所有方法。而 SqlSessionFactory 本身是由 SqlSessionFactoryBuilder 创建的，它可以从 XML、注解或手动配置 Java 代码来创建 SqlSessionFactory</p>
+<p>注意：当 Mybatis 与一些依赖注入框架（如 Spring 或者 Guice）同时使用时，SqlSessions 将被依赖注入框架所创建，所以你不需要使用 SqlSessionFactoryBuilder 或者 SqlSessionFactory。</p>
+<p>MyBatis中比较重要的三个类：</p>
+<ul>
+<li>SqlSessionFactoryBuilder 用于创建SqlSessionFactory</li>
+<li>SqlSessionFactory 用于创建SqlSession</li>
+<li><p>SqlSession SqlSession 实例在 MyBatis 中是非常强大的一个类,其中包括超过20个方法，对这些方法进行简单的分类：</p>
+<ul>
+<li>执行语句的方法</li>
+<li>提交或回滚事务的方法</li>
+<li><p>获取映射器实例的方法</p>
+<h2 id="执行语句的方法"><a href="#执行语句的方法" class="headerlink" title="执行语句的方法"></a>执行语句的方法</h2><p>这些方法被用来执行定义在 SQL 映射的 XML 文件中的 SELECT、INSERT、UPDATE 和 DELETE 语句。它们都会自行解释，每一句都使用语句的 ID 属性和参数对象，参数可以是原生类型（自动装箱或包装类）、JavaBean、POJO 或 Map。这些方法如下：</p>
+<p>  <t> T selectOne(String statement, Object parameter)<br>  <e> List<e> selectList(String statement, Object parameter)<br>  <k,v> Map<k,v> selectMap(String statement, Object parameter, String mapKey)<br>  int insert(String statement, Object parameter)<br>  int update(String statement, Object parameter)<br>  int delete(String statement, Object parameter)</k,v></k,v></e></e></t></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>selectMap 稍微特殊一点，因为它会将返回的对象的其中一个属性作为 key 值，将对象作为 value 值，从而将多结果集转为 Map 类型值。</p>
+<h2 id="事务控制方法"><a href="#事务控制方法" class="headerlink" title="事务控制方法"></a>事务控制方法</h2><p>如果你已经设置了自动提交或你正在使用<strong>外部事务管理器</strong>，这就没有任何效果了。然而，如果你正在使用 JDBC 事务管理器，由Connection 实例来控制，那么这四个方法就会派上用场：</p>
+<pre><code>void commit()
+void commit(boolean force)
+void rollback()
+void rollback(boolean force)
+</code></pre><p>MyBatis-Spring 和 MyBatis-Guice 提供了声明事务处理，所以如果你在使用 Mybatis 的同时使用了Spring 或者 Guice，那么请参考它们的手册以获取更多的内容。</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>MyBatis使用了两种缓存:本地缓存（local cache）和二级缓存（second level cache）。</p>
+<p>每当一个新 session 被创建，MyBatis 就会创建一个与之相关联的本地缓存。任何在 session 执行过的查询语句本身都会被保存在本地缓存。默认情况下，本地缓存数据可在整个 session 的周期内使用，这一缓存需要被用来解决循环引用错误和加快重复嵌套查询的速度，所以它可以不被禁用掉，但是你可以设置localCacheScope=STATEMENT 表示缓存仅在语句执行时有效本地缓存会被增删改、提交事务、关闭事务以及关闭 session 所清空。</p>
+<h1 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h1><p> #{param}和${param}的区别？</p>
+<pre><code>答：前者可以防止SQL注入；参数中含有单引号的时候可以自动转义；把参数值转为字符串的形式。后者可以用来拼接SQL，必须用${param}的地方： order by   ${column}。
+</code></pre><p>如果xml中有特殊符号的处理方式？</p>
+<pre><code>答：加上转义标签&lt;![CDATA[sql语句]]&gt;
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;配置文件中的元素&quot;&gt;&lt;a href=&quot;#配置文件中的元素&quot; class=&quot;headerlink&quot; title=&quot;配置文件中的元素&quot;&gt;&lt;/a&gt;配置文件中的元素&lt;/h1&gt;&lt;p&gt;根元素：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;configuration&amp;gt;&amp;lt;/
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>协议</title>
+    <link href="http://yoursite.com/2018/03/17/%E5%8D%8F%E8%AE%AE/"/>
+    <id>http://yoursite.com/2018/03/17/协议/</id>
+    <published>2018-03-17T01:16:00.000Z</published>
+    <updated>2018-06-01T00:09:22.955Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h1><h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p>HTTP的全称是超文本传输协议（Hyper Text Transfer Protocol）,用于从万维互联网服务器传输超文本到本地浏览器的协议，是基于TCP、IP通信协议来传输数据的。</p>
+<p>主要特点：</p>
+<ul>
+<li>简单快捷，客户向服务器请求服务时，只需要请求方法和路径，请求方法有POST、GET、PUT等。由于HTTP简单，所以网络通信中的处理速度很快。</li>
+<li>灵活， 可以传输任意类型的数据对象，正在传输的类型由Content-Type确定。</li>
+<li>无连接，限制每次连接只处理一次请求。服务器处理完请求后，把响应给到客户端，就关闭了连接。节省请求的排队等待时延。</li>
+<li>无状态，指的是对事物处理没有记忆功能，缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。</li>
+<li>支持B/S和C/S模式。</li>
+</ul>
+<h3 id="URL的组成"><a href="#URL的组成" class="headerlink" title="URL的组成"></a>URL的组成</h3><p><a href="http://localhost:8080/home/index.htm?username=1234&amp;age=24#name" target="_blank" rel="external">http://localhost:8080/home/index.htm?username=1234&amp;age=24#name</a></p>
+<ul>
+<li>协议部分：指明了本次请求使用的协议，可以有http，https等。</li>
+<li>域名部分：就是服务器IP地址。</li>
+<li>端口部分：跟在域名后的数字就是端口，与域名之间用“：”分割</li>
+<li>虚拟目录部分：从域名后的第一个“/”开始到最后一个“/”为止，是虚拟目录部分。不是URL的必须部分</li>
+<li>文件名部分：从最后一个“/”开始到URL结尾，或者到“？”，又或者到“#”</li>
+<li>参数部分：从“？”开始到“#”为止之间的部分为参数部分，多个参数之间用“&amp;”分割</li>
+<li>锚部分从“#”开始到最后，都是锚部分。</li>
+</ul>
+<h3 id="URI和URL的区别"><a href="#URI和URL的区别" class="headerlink" title="URI和URL的区别"></a>URI和URL的区别</h3><ul>
+<li>Web上使用的任何资源都可以由URI（Uniform Resource Identifier,统一资源标识）来定位。</li>
+<li>URL（Uniform Resource Locator，统一资源定位器)它是一种具体的URI，即URL可以用来标识一个资源，而且还指明了如何locate这个资源</li>
+<li>URN（Uniform Resource Name，统一资源命名）是通过名字来标识资源。</li>
+</ul>
+<p>总之，URI是以一种抽象的，高层次概念定义统一资源标识，而URL和URN则是具体的资源标识的方式。</p>
+<h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>请求消息的格式：</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/http2.png" alt=""></p>
+<p>请求消息包括请求行、请求头部、空行和请求数据四部分。</p>
+<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><p>HTTP响应的消息格式：<br><img src="https://upload-images.jianshu.io/upload_images/2964446-1c4cab46f270d8ee.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>响应消息包括状态行、消息报头、空行和响应正文。</p>
+<p>空行的作用是为了区分不同类型的请求或响应的数据位置。</p>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><p>由三位数字组成，第一位定义了响应的类别</p>
+<ul>
+<li>1xx:指示信息，表示请求已接收，正在处理</li>
+<li>2xx:成功，表示请求已经被成功接收，理解和处理。</li>
+<li>3xx:重定向，要完成请求必须进行更进一步的操作</li>
+<li>4xx:客户端错误，请求有语法错误，或者请求无法实现</li>
+<li>5xx:服务端错误，服务端未能实现合法的请求。</li>
+</ul>
+<h3 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h3><p>HTTP1.0定义了三种：GET、POST和HEAD<br>HTTP1.1新增了五中：OPTIONS、PUT、DELETE、TRACE和CONNECT</p>
+<ul>
+<li>GET 请求指定的页面信息，并返回实体主体，请求的数据通过URL设置</li>
+<li>HEAD 类似于GET请求，只不过返回的响应中没有具体内容，用于获取报头</li>
+<li>POST 向指定资源提交数据进行处理请求，<strong>数据被包含在请求体中</strong>。POST请求可能会导致新的资源的建立和/或已有资源的修改。</li>
+<li>PUT 文档内容的替换</li>
+<li>DELETE 请求服务器删除指定资源</li>
+<li>CONNECT HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器</li>
+<li>OPTIONS 允许客户端查看服务器的性能</li>
+<li>TRACE 回显服务器请求，主要用于测试和诊断。</li>
+</ul>
+<p>HTTP是基于TCP套接字传输的，TCP连接的释放是由服务端主动发起的，客户端被动接受。 </p>
+<h3 id="POST和GET比较"><a href="#POST和GET比较" class="headerlink" title="POST和GET比较"></a>POST和GET比较</h3><ul>
+<li>请求报文不一样</li>
+<li>数据携带的方式不一样</li>
+<li>能传输的数据大小不一样</li>
+<li>安全性不一样</li>
+<li></li>
+</ul>
+<p>注意：POST不支持复杂的数据类型。soap：是http post的一个专用版本，遵循一种特殊的xml消息格式，Content-type设置为: text/xml 任何数据都可以xml化。</p>
+<h2 id="HTTPs"><a href="#HTTPs" class="headerlink" title="HTTPs"></a>HTTPs</h2><p>HTTP的缺点：</p>
+<ul>
+<li>通信使用明文，内容可能被窃听</li>
+<li>不验证通信房的身份，因此有可能遭遇伪装</li>
+</ul>
+<p>解决如上的HTTP问题我们能想到的是：</p>
+<ul>
+<li>进行通信加密，HTTP协议中没有加密机制，但可以通过和SSL或TLS（Transport LayerSecurity,传输层安全协议）的组合加密。    加密的是HTTP的通信内容。用SSL建立安全通信线路后，就可以在这条线路上进行HTTP通信了。</li>
+<li>内容加密，把参与通信的内容本身进行加密。由于HTTP协议中没有加密机制，那几对HTTP传输的内容进行加密。这种情况下客户端和服务端对数据内容都要有一个加解密的过程。</li>
+</ul>
+<p><strong><em>注：第三方证书颁发机构的主要目的是提供可靠的客户端或服务端。</em></strong></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>HTTP+ 加密 + 认证 + 完整性保护 =HTTPS。证书可以证明服务端和客户端的身份。HTTPs并非应用层的一种协议，知识HTTP通信接口部分用SSL和TLS协议替代而已。通常HTTP直接和TCP通信，当使用SSL后，演变成了先和SSL通信，然后SSL在和TCP通信。</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/https.png" alt=""></p>
+<h3 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h3><p>SSL是独立与HTTP的协议，所以不光是HTTP协议，其他的运行在应用层的协议，如SMTP、Telnet等均可配合SSL协议使用，SSL是当今世界上应用最为广泛的网络安全技术。</p>
+<h3 id="HTTPs的加密机制"><a href="#HTTPs的加密机制" class="headerlink" title="HTTPs的加密机制"></a>HTTPs的加密机制</h3><p>什么是共享秘钥加密？</p>
+<p>加密和解密都使用同一个秘钥的方式称为共享秘钥加密，也叫对称加密。</p>
+<p>什么是公开秘钥加密？</p>
+<p>使用两把秘钥中的公开秘钥加密，用自己保留的私有秘钥进行解密，即加密和解密的秘钥不一样，也称非对称秘钥加密。</p>
+<p>HTTPS 采用共享密钥加密和公开密钥加密两者并用的混合加密机制。但是公开密钥加密与共享密钥加密相比，其处理速度要慢。所以应充分利用两者各自的优势，将多种方法组合起来用于通信。<strong>在交换密钥环节使用公开密钥加密方式，之后的建立通信交换报文阶段则使用共享密钥加密方式。</strong></p>
+<h3 id="使用第三方认证机构进行安全通信的原理"><a href="#使用第三方认证机构进行安全通信的原理" class="headerlink" title="使用第三方认证机构进行安全通信的原理"></a>使用第三方认证机构进行安全通信的原理</h3><ol>
+<li>服务器的运营人员向数字证书认证机构提出公开秘钥的申请，对已申请的公开秘钥做数字签名，然后分配这个已签名的公开秘钥，并将该公开密钥放入公钥证书后绑定在一起。之后把该证书发给服务器。</li>
+<li>服务器会将这份由数字证书认证机构颁发的公钥证书发送给客户端，以进行公开密钥加密方式通信。</li>
+<li>接到证书的客户端可使用数字证书认证机构的公开密钥，对那张证书上的数字签名进行验证，一旦验证通过，客户端便可明确两件事：一，认证服务器的公开密钥的是真实有效的数字证书认证机构。二，服务器的公开密钥是值得信赖的。</li>
+<li>怎么能把认证机构的公开秘钥给到客户端呢？其实很简单，多数浏览器开发商发布版本时，会事先在内部植入常用认证机关的公开密钥。</li>
+<li>客户端就可以使用服务端的公开秘钥进行加密了，把加密后的数据发送给服务器，只有服务器有私有秘钥，因此也只有他才能解析数据。</li>
+</ol>
+<h3 id="SSL和TSL"><a href="#SSL和TSL" class="headerlink" title="SSL和TSL"></a>SSL和TSL</h3><p>SSL最初是由网景公司开发的，最高版本是SSL3.0。后来 IETF（Internet Engineering Task Force，Internet 工程任务组）在SSL基础上开发了TSL。当前主流的版本是SSL3.0 和 TLS1.0。</p>
+<h2 id="HTTP和HTTPs"><a href="#HTTP和HTTPs" class="headerlink" title="HTTP和HTTPs"></a>HTTP和HTTPs</h2><p>HTTPs是比HTTP慢，一种是通信慢，一种是CPU处理慢。</p>
+<ol>
+<li>和使用 HTTP 相比，网络负载可能会变慢 2 到 100 倍。除去和 TCP 连接、发送 HTTP 请求 • 响应以外，还必须进行 SSL 通信，因此整体上处理通信量不可避免会增加。</li>
+<li>SSL必须进行加解密处理，在服务器和客户端都需要进行加密和解密的运算处理。因此从结果上讲，比起 HTTP 会更多地消耗服务器和客户端的硬件资源，导致负载增强。</li>
+</ol>
+<h2 id="处理HTTP请求并发量大的问题"><a href="#处理HTTP请求并发量大的问题" class="headerlink" title="处理HTTP请求并发量大的问题"></a>处理HTTP请求并发量大的问题</h2><h3 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h3><p>使用Ajax（Asynchronous JavaScript and XML， 异 步 JavaScript 与 XML 技术）技术，实现页面上的异步刷新，减少HTTP通信中的数据发送量。Ajax 的核心技术是名为 XMLHttpRequest 的 API，通过 JavaScript 脚本语言的调用就能和服务器进行 HTTP 通信。</p>
+<p>解决了通信过程中的数据量问题，但可能引入了更多的HTTP请求。同样Ajax也不能解决HTTP本身的问题</p>
+<h3 id="Comet"><a href="#Comet" class="headerlink" title="Comet"></a>Comet</h3><p>通常，服务器端接收到请求，在处理完毕后就会立即返回响应，但为了实现推送功能，Comet 会先将响应置于挂起状态，当服务器端有内容更新时，再返回该响应。因此，服务器端一旦有更新，就可以立即反馈给客户端。</p>
+<p>为了保留响应，一次连接的持续时间也变长了。期间，为了维持连接会消耗更多的资源。另外，Comet 也仍未解决 HTTP 协议本身存在的问题。</p>
+<h3 id="SPDY"><a href="#SPDY" class="headerlink" title="SPDY"></a>SPDY</h3><p>陆续出现的 Ajax 和 Comet 等提高易用性的技术，一定程度上使 HTTP 得到了改善，但 HTTP 协议本身的限制也令人有些束手无策。为了进行根本性的改善，需要有一些协议层面上的改动。处于持续开发状态中的 SPDY 协议，正是为了在协议级别消除 HTTP 所遭遇的瓶颈。</p>
+<h2 id="Web攻击技术"><a href="#Web攻击技术" class="headerlink" title="Web攻击技术"></a>Web攻击技术</h2><p>HTTP协议本身并不具备安全功能，有些协议本身是具有安全的功能，比如远程登录用到的SSH协议，SSH 具备协议级别的认证及会话管理等功能。</p>
+<h3 id="在客户端篡改请求"><a href="#在客户端篡改请求" class="headerlink" title="在客户端篡改请求"></a>在客户端篡改请求</h3><p>在Web应用中，从浏览器接收到的HTTP请求的全部内容，都可以在客户端自由的变更，篡改。所有Web服务可能会接收到与预期不符的请求数据。在HTTP请求的报文内中加入攻击代码，就可以对Web应用进行攻击。</p>
+<p>通过 URL 查询字段或表单、HTTP 首部、Cookie 等途径把攻击代码传入，若这时 Web 应用存在安全漏洞，那内部信息就会遭到窃取，或被攻击者拿到管理权限。</p>
+<p>对web应用的攻击机模式主要有两种，主动攻击和被动攻击。</p>
+<p><strong>主动攻击</strong></p>
+<p>攻击这通过直接访问Web应用，把攻击代码传入的攻击模式。直接针对服务器上的资源进行攻击，因此需要能访问那些资源。具有代表性的主动攻击有：SQL注入攻击和OS命令注入攻击。</p>
+<p><strong> 被动攻击 </strong></p>
+<p>利用社会工程学执行攻击代码的攻击模式。攻击者不直接对目标Web应用发起攻击。常见的被动攻击：跨站脚本攻击和跨站点请求伪造。</p>
+<h3 id="常见的攻击"><a href="#常见的攻击" class="headerlink" title="常见的攻击"></a>常见的攻击</h3><p><strong>跨站脚本攻击</strong>（Cross-Site Scripting，XSS）：通过在存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或JavaScript进行的一种攻击。动态创建的HTML部分可能隐藏着安全漏洞。</p>
+<p>跨站攻击的可能影响：</p>
+<ol>
+<li>利用虚假输入表单骗取用户个人信息。</li>
+<li>利用脚本窃取用户的Cookie值，被害者在不知情的情况下帮攻击者发送恶意请求。</li>
+<li>显示伪造的文章和图片。</li>
+</ol>
+<p><strong>HTTP首部注入攻击</strong>（HTTP Header Injection）：攻击者通过在响应首部字段内插入换行，添加任意响应首部或主体的一种攻击，属于被动攻击模式。向首部主体内添加内容的攻击称为 HTTP 响应截断攻击（HTTP Response SplittingAttack）。</p>
+<p>HTTP首部注入攻击的影响：</p>
+<ol>
+<li>设置任何Cookie的信息</li>
+<li>重定向至任一URL</li>
+<li>显示任意的主体</li>
+</ol>
+<p><strong>SQL注入攻击</strong>（SQL Injection）：针对 Web 应用使用的数据库，通过运行非法的 SQL 而产生的攻击。如果在调用 SQL 语句的方式上存在疏漏，就有可能执行被恶意注入（Injection）非法 SQL 语句。</p>
+<p>SQL注入攻击可能的影响：</p>
+<ol>
+<li>非法查看或篡改数据</li>
+<li>规避认证</li>
+</ol>
+<p><strong>OS命令注入攻击</strong>（OS Command Injection）指通过 Web 应用，执行非法的操作系统命令达到攻击的目的。只要在能调用 Shell 函数的地方就有存在被攻击的风险。可以从 Web 应用中通过 Shell 来调用操作系统命令。倘若调用 Shell 时存在疏漏，就可以执行插入的非法 OS 命令</p>
+<p><strong>开放重定向</strong>（Open Redirect）：对指定的任意 URL 作重定向跳转的功能。此功能相关联的安全漏洞是指，假如指定的重定向 URL 到某个具有恶意的 Web 网站，那么用户就会被诱导至那个 Web 网站。这种情况会导致钓鱼攻击，用户重定向到了一个钓鱼网站。</p>
+<p><strong>点击劫持</strong>（Clickjacking）：利用透明的按钮或链接做成陷阱，覆盖在 Web 页面之上。然后诱使用户在不知情的情况下，点击那个链接访问内容的一种攻击手段。又叫页面伪装。</p>
+<p><strong>DOS攻击</strong>（Denial of Service attack，拒绝服务攻击）：让运行中的服务成停止状态的攻击，DOS攻击的对象不仅限于Web网站，还包括网络设备和服务器等。</p>
+<p>主要的攻击方式是：</p>
+<ol>
+<li>几种利用访问访问请求，造成资源过载，资源用尽的同时，实际上服务也就成停止状态。</li>
+<li>通过攻击安全漏洞，让服务停止。</li>
+</ol>
+<p>多台计算机发起的 DoS 攻击称为 DDoS 攻击（Distributed Denial of Service attack）。DDoS 攻击通常利用那些感染病毒的计算机（肉机）作为攻击者的攻击跳板</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;应用层协议&quot;&gt;&lt;a href=&quot;#应用层协议&quot; class=&quot;headerlink&quot; title=&quot;应用层协议&quot;&gt;&lt;/a&gt;应用层协议&lt;/h1&gt;&lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP&quot;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Java面试宝典</title>
     <link href="http://yoursite.com/2018/03/10/Java%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8/"/>
     <id>http://yoursite.com/2018/03/10/Java面试宝典/</id>
     <published>2018-03-10T03:02:34.000Z</published>
-    <updated>2018-03-11T05:57:14.260Z</updated>
+    <updated>2018-03-13T14:50:35.750Z</updated>
     
     <content type="html"><![CDATA[<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="JDK目录结构"><a href="#JDK目录结构" class="headerlink" title="JDK目录结构"></a>JDK目录结构</h2><ul>
 <li>bin JDK开发工具的可执行文件，配置java的环境变量的时候Path需要指向该目录</li>
@@ -177,7 +1531,24 @@
 <li>使用Thread对象的start()方法</li>
 </ol>
 <p>注意：run或call方法不能直接调用，而是线程内部自己处理的，调用了OS的线程启动方法。</p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>Executors工具可以创建普通的线程池以及schedule调度任务的调度池，其实两者实现上还是有一些区别，但是理解了ThreadPoolExecutor，在看ScheduledThreadPoolExecutor就非常轻松了，后面的文章中也会专门介绍这块，但是需要先看这篇文章。</p>
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>Executors工具可以创建普通的线程池以及schedule调度任务的调度池，其实两者实现上还是有一些区别，但是理解了ThreadPoolExecutor，在看ScheduledThreadPoolExecutor就非常轻松了。</p>
+<h2 id="语言本身"><a href="#语言本身" class="headerlink" title="语言本身"></a>语言本身</h2><p>创建java对象的几种方式：</p>
+<ul>
+<li>使用new关键字，可以调用有任意个参数的的构造函数。</li>
+<li>使用Class对象的newInstance()方法，只能调用无参构造函数。</li>
+<li><p>使用类的构造器，通过构造器的newInstance()方法创建类的对象，实际上Class的 newInstance()方法就是调用Constructor的newInstance()。</p>
+<pre><code>Constructor&lt;ClassTest&gt; constructor = ClassTest.class.getConstructor();
+Object object2 = constructor.newInstance();
+</code></pre></li>
+<li><p>使用Clone的方式，无论何时我们调用一个对象的clone方法，JVM就会创建一个新的对象，将调用clone方法的对象的内容全部考备进去，使用clone方法创建对象并不会调用构造函数，要使用clone方法，我们必须先实现Cloneable接口并实现其定义的clone方法。</p>
+<pre><code>Student stu = new Student();
+Student stu1 = (Student)stu.clone();
+</code></pre></li>
+<li><p>使用反序列化，在反序列化时，JVM创建对象并不会调用任何构造函数。</p>
+<pre><code>ObjectInputStream in = new ObjectInputStream (new FileInputStream(&quot;data.obj&quot;)); Student stu3 = (Student)in.readObject();
+</code></pre><p>注意：<strong>Class类的newInstance需要其构造方法是共有的或者对调用方法可见的，而构造器类的newInstance可以在特定环境下调用私有构造方法来创建对象。</strong></p>
+</li>
+</ul>
 ]]></content>
     
     <summary type="html">
@@ -539,7 +1910,7 @@ innodb_buffer_pool_size=1G
     <link href="http://yoursite.com/2018/02/01/Spring/"/>
     <id>http://yoursite.com/2018/02/01/Spring/</id>
     <published>2018-02-01T13:19:17.000Z</published>
-    <updated>2018-02-04T13:38:36.510Z</updated>
+    <updated>2018-03-25T08:29:41.779Z</updated>
     
     <content type="html"><![CDATA[<h1 id="Ioc"><a href="#Ioc" class="headerlink" title="Ioc"></a>Ioc</h1><h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><ol>
 <li>BeanFactory</li>
@@ -583,6 +1954,159 @@ innodb_buffer_pool_size=1G
 <li>autowiring：Spring IoC容器的依赖自动装配功能，不需要对Bean属性的依赖关系做显式的声明，只需要在配置好autowiring属性，IoC容器会自动使用反射查找属性的类型和名称，然后基于属性的类型或者名称来自动匹配容器中管理的Bean，从而自动地完成依赖注入。</li>
 </ol>
 <p>Spring IoC容器的autowiring属性自动依赖注入是一个很方便的特性，可以简化开发时的配置，但是凡是都有两面性，自动属性依赖注入也有不足，首先，Bean的依赖关系在配置文件中无法很清楚地看出来，对于维护造成一定困难。其次，由于自动依赖注入是Spring容器自动执行的，容器是不会智能判断的，如果配置不当，将会带来无法预料的后果，所以自动依赖注入特性在使用时还是综合考虑。</p>
+<h2 id="应用中启动应用Spring容器"><a href="#应用中启动应用Spring容器" class="headerlink" title="应用中启动应用Spring容器"></a>应用中启动应用Spring容器</h2><ul>
+<li>把配置文件放到web.xml中，随应用程序被Tomcat等servlet容器加载的时候加载。</li>
+<li><p>在code中手动加载，下面是一种加载方式：</p>
+<pre><code>//启动上下文容器
+ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
+//获取配置文件中配置的实例对象，或者是通过注解注释的类的对象
+EagerSingleton1 singleton1 = ctx.getBean(&quot;eagerSingleton1&quot;, EagerSingleton1.class);
+</code></pre></li>
+</ul>
+<h3 id="Spring实例化bean方式"><a href="#Spring实例化bean方式" class="headerlink" title="Spring实例化bean方式"></a>Spring实例化bean方式</h3><ul>
+<li><p>使用setter</p>
+<pre><code>public class StudentHandler {
+    public Student addName(String name) {
+        Student student = new Student();
+        student.setName(name);
+        System.out.println(&quot;handler add name&quot;);
+        return student;
+    }
+}
+
+public class StudentServiceImpl implements IStudentService {
+    private StudentHandler handler;
+
+    @Override
+    public String getSudentName() {
+        Student student = handler.addName(&quot;fengyu&quot;);
+        return student.getName();
+    }
+
+    public StudentHandler getHandler() {
+        return handler;
+    }
+    //这个方法时必须的，不然注入不了实例化对象
+    public void setHandler(StudentHandler handler) {
+        this.handler = handler;
+    }
+
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;!-- 使用setter方式实例化 --&gt;
+&lt;bean id=&quot;handler&quot; class=&quot;com.daniel.study.spring.handler.StudentHandler&quot;&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;studentManager&quot; class=&quot;com.daniel.study.spring.service.impl.StudentServiceImpl&quot;&gt;
+    &lt;property name=&quot;handler&quot; ref=&quot;handler&quot;&gt;&lt;/property&gt;
+&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+<pre><code>@Test
+public void test() {
+    ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
+    IStudentService studenManager = (IStudentService) ctx.getBean(&quot;studentManager&quot;);
+    String stName = studenManager.getSudentName();
+    System.out.println(stName);
+}
+</code></pre></li>
+<li><p>使用构造器，上面的handler实例的定义就是通过构造器实现的，只不过没有参数而已。</p>
+<p>  测试：</p>
+<pre><code>@Test
+public void test1() {
+    ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
+    StudentHandler handler = ctx.getBean(&quot;handler&quot;, StudentHandler.class);
+    Student student = handler.addName(&quot;fengyu&quot;);
+    System.out.println(student.getName());
+}
+</code></pre></li>
+<li><p>静态构造方法</p>
+<pre><code>public class Student {
+    private String name;
+    private int age;
+
+    private Book book;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+    //静态工厂方法
+    public static Student getStudentInstance() {
+        return new Student();
+    }
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;！-- lazy-init只有到了真正使用的时候才实例化 --&gt;
+&lt;bean id=&quot;student&quot; class=&quot;com.daniel.study.spring.entity.Student&quot; factory-method=&quot;getStudentInstance&quot; lazy-init=&quot;true&quot;&gt;&lt;/bean&gt; 
+</code></pre><p>  测试：</p>
+<pre><code>@Test
+public void test() {
+    ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
+    Student student = ctx.getBean(&quot;student&quot;, Student.class);
+    System.out.println(student.getName());
+}
+</code></pre></li>
+<li><p>实例化工厂方法</p>
+<pre><code>//需要实例化的类
+public class Book {
+    private String name;
+    private String publisher;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+}
+
+//需要实例化的工厂
+public class BookFactory {
+    public Book createBook() {
+        return new Book();
+    }
+}
+</code></pre><p>  配置：</p>
+<pre><code>&lt;!-- 工厂实例化方法 --&gt;
+&lt;bean id=&quot;bookFactory&quot; class=&quot;com.daniel.study.spring.factory.BookFactory&quot;&gt;&lt;/bean&gt;
+&lt;bean id=&quot;book&quot; factory-bean=&quot;bookFactory&quot; factory-method=&quot;createBook&quot; &gt;&lt;/bean&gt;
+</code></pre><p>  测试：</p>
+<pre><code>@Test
+public void test() {
+    ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
+    Book book = ctx.getBean(&quot;book&quot;, Book.class);
+    System.out.println(book.getName());
+}
+</code></pre></li>
+</ul>
 ]]></content>
     
     <summary type="html">
@@ -599,7 +2123,7 @@ innodb_buffer_pool_size=1G
     <link href="http://yoursite.com/2018/01/28/JVM/"/>
     <id>http://yoursite.com/2018/01/28/JVM/</id>
     <published>2018-01-28T01:09:55.000Z</published>
-    <updated>2018-01-28T14:38:44.843Z</updated>
+    <updated>2018-03-17T02:35:54.004Z</updated>
     
     <content type="html"><![CDATA[<h1 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h1><h2 id="JVM内存划分"><a href="#JVM内存划分" class="headerlink" title="JVM内存划分"></a>JVM内存划分</h2><ol>
 <li>虚拟机栈</li>
@@ -663,6 +2187,65 @@ innodb_buffer_pool_size=1G
 <p>-XX:SurvivorRatio=4：设置年轻代中Eden区与Survivor区的大小比值。设置为4，则两个Survivor区与一个Eden区的比值为2:4，一个Survivor区占整个年轻代的1/6</p>
 <p>-XX:MaxPermSize=16m：设置持久代大小为16m。</p>
 <p>-XX:MaxTenuringThreshold=0：设置垃圾最大年龄。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。<br> – Ratio 比率<br> – Eden 伊甸<br> – Survivor 幸存者</p>
+<h1 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h1><p>类的生命周期：</p>
+<ol>
+<li>加载</li>
+<li>链接（验证+准备+解析）</li>
+<li>初始化（使用前的准备）</li>
+<li>使用</li>
+<li>卸载</li>
+</ol>
+<p>类加载的过程包括了加载、验证、准备、解析、初始化五个阶段，在这五个阶段中，加载、验证、准备和初始化这四个阶段发生的顺序是确定的，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持Java语言的运行时绑定。这里的几个阶段是<strong>按顺序开始，而不是按顺序进行或完成</strong>，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。</p>
+<h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><ol>
+<li>通过类的全限定名获取类的字节码文件，以字节流的方式加载入jvm中</li>
+<li>将这个字节流所代表的静态存储结构转为方法区的运行时数据结构。</li>
+<li>在推中生成一个代表这个类的Class对象。<strong>说明这个Class对象是在class加载阶段创建的。</strong></li>
+</ol>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ol>
+<li>验证：确保被加载类的正确性； </li>
+<li>准备：为类的静态变量分配内存，并将其初始化为默认值； </li>
+<li>解析：把类中的符号引用转换为直接引用；</li>
+</ol>
+<h2 id="类的初始化"><a href="#类的初始化" class="headerlink" title="类的初始化"></a>类的初始化</h2><p>时机：</p>
+<ol>
+<li>创建实例时</li>
+<li>访问某个类或接口的静态变量，或者对该静态变量赋值</li>
+<li>调用类的静态方法 </li>
+<li>反射</li>
+<li>初始化一个类的子类，如果该类没有初始化，就会被初始化</li>
+<li>JVM启动时标明的启动类，即文件名和类名相同的那个类。</li>
+</ol>
+<p>初始化的顺序：</p>
+<ol>
+<li>如果这个类还没有被加载和链接，那先进行加载和链接。</li>
+<li>假如这个类存在直接父类，并且这个类还没有被初始化，那就初始化直接的父类（不适用于接口） </li>
+<li>加入类中存在初始化语句（如static变量和static块），那就依次执行这些初始化语句。</li>
+<li>总的来说，初始化顺序依次是：（静态变量、静态初始化块）–&gt;（变量、初始化块）–&gt; 构造器；如果有父类，则顺序是：父类static方法 –&gt; 子类static方法 –&gt; 父类构造方法- -&gt; 子类构造方法。</li>
+</ol>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><ol>
+<li>BootstrapClassLoader负责加载$JAVA_HOME$/jre/lib/rt.jar里的所有class，，加载System.getProperty(“sun.boot.class.path”)所指定的路径或jar，C++实现。</li>
+<li>ExtensionClassLoader负责加载java平台中扩展功能的一些jar包，包括$JAVA_HOME中jre/lib/*.jar或-Djava.ext.dirs指定目录下的jar包。载System.getProperty(“java.ext.dirs”)所指定的路径或jar。父类加载器为null</li>
+<li>AppClassLoader负责加载classpath中指定的jar包及目录中的class文件。</li>
+<li>CustomClassLoader属于应用程序根据自身需要自定义的ClassLoader，如tomcat、jboss都会根据j2ee规范自行实现</li>
+</ol>
+<p>加载过程中会先检查类是否被已加载，检查顺序是自底向上，从Custom ClassLoader到BootStrap ClassLoader逐层检查，只要某个classloader已加载就视为已加载此类，保证此类只所有ClassLoader加载一次。而加载的顺序是自顶向下，也就是由上层来逐层尝试加载此类。 在加载类时，每个类加载器会将加载任务上交给其父，如果其父找不到，再由自己去加载。</p>
+<p>类加载的机制是使用双亲委派模型，这样做的好处是<strong>Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，</strong>当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。其次是考虑到安全因素，java核心api中定义类型不会被随意替换，</p>
+<h2 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h2><p>常见的GC算法：</p>
+<ol>
+<li>标记清除</li>
+<li>复制算法</li>
+<li>标记整理</li>
+<li>分代收集：主要是对新生代来说的，分代收集法是目前大部分JVM所采用的方法，其核心思想是根据对象存活的不同生命周期将内存划分为不同的域，一般情况下将GC堆划分为老生代(Tenured/Old Generation)和新生代(Young Generation)。老生代的特点是每次垃圾回收时只有少量对象需要被回收，新生代的特点是每次垃圾回收时都有大量垃圾需要被回收，因此可以根据不同区域选择不同的算法。新生代一般选择的是复制算法。</li>
+</ol>
+<h3 id="java堆的逻辑划分"><a href="#java堆的逻辑划分" class="headerlink" title="java堆的逻辑划分"></a>java堆的逻辑划分</h3><p>java堆逻辑上被分为3大部分：新生代、老生代和永久代，其中的新生代有被划分为Eden、Suvivor0和Suvivor1三个区。Suvivor0和Suvivor1两个区的大小相等，新生代的垃圾回收策略是基于复制回收算法的。这里提到的永久带就是我们说的方法区，只有在HotSpot虚拟机中才存在该区。并非所有的对象创建都会在Eden区中分配内存空间。对于Serial和ParNew垃圾收集器,通过指定-XX:PretenureSizeThreshold={size}来设置超过这个阈值大小的对象直接进入老年代。</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/jvm%20memory.png" alt=""></p>
+<h2 id="java命令"><a href="#java命令" class="headerlink" title="java命令"></a>java命令</h2><p>java 虚拟机参数分为基本和扩展两类，基本的选项列表通过在命令行窗口中输入java 列出，扩展的选项列表通过java -X命令就可以查看。</p>
+<p>java命令的基本格式：</p>
+<pre><code>java [-options] class [args...]
+</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.cnblogs.com/z-sm/p/5674684.html" target="_blank" rel="external">Java 命令行运行参数大全</a></li>
+<li><a href="http://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="external">深入理解Java类加载器</a></li>
+</ul>
 ]]></content>
     
     <summary type="html">
@@ -1353,1330 +2936,6 @@ rd.forward(request, response);
     
     </summary>
     
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/10/20/hello-world/"/>
-    <id>http://yoursite.com/2017/10/20/hello-world/</id>
-    <published>2017-10-20T12:49:03.277Z</published>
-    <updated>2016-09-02T14:57:49.035Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>jdk 源码阅读</title>
-    <link href="http://yoursite.com/2017/08/30/jdk-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
-    <id>http://yoursite.com/2017/08/30/jdk-源码阅读/</id>
-    <published>2017-08-30T15:16:11.000Z</published>
-    <updated>2017-08-30T15:42:15.801Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h1><ul>
-<li>Java中一个Unicode字符占两个字节</li>
-<li>UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度，当字符在ASCII<br>码的范围时，就用一个字节表示，保留了ASCII字符一个字节的编码做为它的一部分，注意的是unicode一个中文字符占2个字节，而UTF-8一个中<br>文字符占3个字节）。从unicode到uft-8并不是直接的对应，而是要过一些算法和规则来转换</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;IO&quot;&gt;&lt;a href=&quot;#IO&quot; class=&quot;headerlink&quot; title=&quot;IO&quot;&gt;&lt;/a&gt;IO&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;Java中一个Unicode字符占两个字节&lt;/li&gt;
-&lt;li&gt;UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="后端，Java" scheme="http://yoursite.com/tags/%E5%90%8E%E7%AB%AF%EF%BC%8CJava/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Vue学习</title>
-    <link href="http://yoursite.com/2017/08/06/Vue%E5%AD%A6%E4%B9%A0/"/>
-    <id>http://yoursite.com/2017/08/06/Vue学习/</id>
-    <published>2017-08-06T14:53:02.000Z</published>
-    <updated>2017-08-06T14:58:52.011Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"><a href="#在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法" class="headerlink" title="在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法"></a>在基于vue-cli模板开发的组件的工程中使用font-awesome字体图标库的方法</h1><p>方法一、</p>
-<p>npm install –save-dev font-awesome</p>
-<p>在main.js里添加</p>
-<p>import ‘font-awesome/css/font-awesome.css’</p>
-<p>方法二、</p>
-<p>在官网下载代码到本地，现在应该是font-awesome-4.7，把整个文件夹放到资源文件夹中，然后在index.html中加上：</p>
-<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/font-awesome-4.7/css/font-awesome.min.css&quot;&gt;
-</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      学习Vue中遇到的一些问题的解决方法
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="前端" scheme="http://yoursite.com/tags/%E5%89%8D%E7%AB%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>webpack 入门</title>
-    <link href="http://yoursite.com/2017/07/11/webpack-%E5%85%A5%E9%97%A8/"/>
-    <id>http://yoursite.com/2017/07/11/webpack-入门/</id>
-    <published>2017-07-11T13:36:14.000Z</published>
-    <updated>2017-07-11T13:56:20.640Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="创建第一个webpack的前端项目"><a href="#创建第一个webpack的前端项目" class="headerlink" title="创建第一个webpack的前端项目"></a>创建第一个webpack的前端项目</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>安装nodejs和npm（nodejs package managemer），新版本的nodejs都是自带npm的，安装完nodejs，默认就安装了npm，最好是把npm的包下载路径指向国内的镜像，方便下载。常用的有cnpm。</p>
-<h2 id="初始化webpack前端工程"><a href="#初始化webpack前端工程" class="headerlink" title="初始化webpack前端工程"></a>初始化webpack前端工程</h2><ul>
-<li>mkdir webpack-demo &amp; cd webpack-demo</li>
-<li>npm init -y</li>
-<li>npm install –save-dev webpack</li>
-</ul>
-<h2 id="创建目录结构"><a href="#创建目录结构" class="headerlink" title="创建目录结构"></a>创建目录结构</h2><ul>
-<li>mkdir src</li>
-<li>mkdir dist</li>
-<li>在src目录下创建 index.js文件，其中的内容</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      webpack是前端代码的包管理工具，依赖管理工具，类似后端开发中的maven
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="总结" scheme="http://yoursite.com/tags/%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spring Framework 指导文档</title>
-    <link href="http://yoursite.com/2017/05/02/Spring-Framework-%E6%8C%87%E5%AF%BC%E6%96%87%E6%A1%A3/"/>
-    <id>http://yoursite.com/2017/05/02/Spring-Framework-指导文档/</id>
-    <published>2017-05-02T14:15:58.000Z</published>
-    <updated>2017-06-06T15:37:58.620Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="Spring-依赖和依赖于Spring"><a href="#Spring-依赖和依赖于Spring" class="headerlink" title="Spring 依赖和依赖于Spring"></a>Spring 依赖和依赖于Spring</h4><p>尽管Spring为大量的企业和其他非Spring的工具提供集成和支持， 但Spring特意使依赖于它的应用尽可能的依赖一个绝对小的包集合：为了在一个小的用例中使用Spring，你不必搜索（定位）和下载大量的jar库文件。对于基本的依赖注入，只有一个强制的外部依赖，就是日志记录相关的依赖。<br>接下来我们即将概述配置一个依赖于Spring应用所必须的基本步骤，首先，通过maven配置，接着是通过gradle配置，最后是通过Ivy配置。在任何一种配置方式下，如果有不清楚的，参考你的依赖管理系统文档，或者查看一些样例的编码——Spring本身在构建的时候就是使用gradle管理依赖的，我们的样例大多也是是应用gradle和Maven来做依赖管理的。</p>
-<h4 id="Maven-依赖管理"><a href="#Maven-依赖管理" class="headerlink" title="Maven 依赖管理"></a>Maven 依赖管理</h4><p>如果你使用的是maven做依赖管理，你甚至不必明确地提供日志相关的依赖，例如，为创建一个应用环境并使用依赖注入来配置一个应用，你的maven依赖如下：</p>
-<p><code>&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-        &lt;version&gt;5.0.0.M5&lt;/version&gt;
-        &lt;scope&gt;runtime&lt;/scope&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</code></p>
-<p>正如上面所示，注意，如果你不必依赖于Spring的API编译，那么可以通过<scope>声明为运行时依赖，这是一个典型的关于基本的依赖注入的用例。</scope></p>
-<p>上述例子工作在Maven中心库上，为了使用Maven库，必须在maven的配置文件中指定库的位置。只依赖于所有的发布版本的配置：</p>
-<p><code>&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;io.spring.repo.maven.release&lt;/id&gt;
-        &lt;url&gt;http://repo.spring.io/release/&lt;/url&gt;
-        &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;</code></p>
-<p>依赖于里程碑的配置：</p>
-<p><code>&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;io.spring.repo.maven.milestone&lt;/id&gt;
-        &lt;url&gt;http://repo.spring.io/milestone/&lt;/url&gt;
-        &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;</code></p>
-<p>依赖于快照的配置：</p>
-<p><code>&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;io.spring.repo.maven.snapshot&lt;/id&gt;
-        &lt;url&gt;http://repo.spring.io/snapshot/&lt;/url&gt;
-        &lt;snapshots&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/snapshots&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;</code></p>
-<h4 id="Maven-依赖“材料清单”"><a href="#Maven-依赖“材料清单”" class="headerlink" title="Maven 依赖“材料清单”"></a>Maven 依赖“材料清单”</h4><p>在使用Maven的时候，可能不慎混合不同的Spring版本，例如，你会发现一个第三方库，或者另一个Spring工程，引入了一个传递依赖，并且该依赖还是一个较早的发行版本。如果你忘了明确的声明一个直接依赖，许多难以预料的问题会发生。</p>
-<p>为了克服以上描述的问题，maven提供了一个材料清单（bill of materials，BOM）的概念，为了确保所有的Spring依赖（直接或者间接的）是同一个版本，你可以导入<code>spring-framework-bom</code>到你的<code>dependencyManagement</code>区中：</p>
-<p><code>&lt;dependencyManagement&gt;
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-framework-bom&lt;/artifactId&gt;
-            &lt;version&gt;5.0.0.M5&lt;/version&gt;
-            &lt;type&gt;pom&lt;/type&gt;
-            &lt;scope&gt;import&lt;/scope&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-&lt;/dependencyManagement&gt;</code></p>
-<p>使用BOM增加的一个好处是，当依赖Spring框架产品时不必再指定<code>&lt;version&gt;</code>属性：</p>
-<p>`<dependencies><br>    <dependency><br>        <groupid>org.springframework</groupid><br>        <artifactid>spring-context</artifactid><br>    </dependency><br>    <dependency><br>        <groupid>org.springframework</groupid><br>        <artifactid>spring-web</artifactid><br>    </dependency></dependencies></p>
-<dependencies><code>#### Gradle依赖管理 ####
-通过构建系统来使用Spring库，需要在</code>repositories<code>中包含恰当的URL：</code>repositories {<br>    mavenCentral()<br>    // and optionally…<br>    maven { url “<a href="http://repo.spring.io/release" target="_blank" rel="external">http://repo.spring.io/release</a>“ }<br>}<code>你可以根据需求改变</code>repositories<code>中URL的</code>/release<code>为</code>/milestone<code>，或者改变为</code>/snapshot<code>。一旦一个库已经被配置，你可以通过普通的gradle方法声明依赖，如:</code>dependencies{<br>    compile(“org.springframework:spring-context:5.0.0.M5”)<br>    testCompile(“org.springframework:spring-test:5.0.0.M5”)<br> }<code>#### Ivy 依赖管理 ####
-如果你更喜欢使用Ivy管理依赖，也有相似的配置选择。配置Ivy指向Spring库（repository）,需增加如下的</code>resolver<code>到你的</code>ivysettings.xml<code>配置文件中：</code><resolvers><a href="ibiblioname=&quot;io.spring.repo.maven.release&quot;m2compatible=&quot;true&quot;root=&quot;http://repo.spring.io/release/&quot;/">ibiblioname=&quot;io.spring.repo.maven.release&quot;m2compatible=&quot;true&quot;root=&quot;http://repo.spring.io/release/&quot;/</a></resolvers><code>你也可以根据需要修改</code>root<code>URL中的</code>/release/<code>为</code>/milestone/<code>或</code>/snapshot/<code>。一旦配置完成，就可以使用通用的方式增加依赖了，例如（在ivy.xml中）：
-
-
-
-        &lt;dependency org=&quot;org.springframework&quot; 
-                    name=&quot;spring-core&quot; rev=&quot;5.0.0.M5&quot; conf=&quot;compile-&gt;runtime&quot;/&gt;
-
-#### 发布zip文件 ####
-尽管建议使用支持依赖管理的构建系统获取Spring Framework，但仍然可以下载发布的zip文件。
-
-发布的zip文件也被提交到Spring Maven 库（这只是为了方便，你不必使用maven或者是其他的构建工具来下载他们）。
-
-下载发布的zip文件，首先打开浏览器，输入 [http://repo.spring.io/release/org/springframework/spring]( http://repo.spring.io/release/org/springframework/spring)，并选择你想下载的版本对应的子文件夹。发布的文件以</code>-dist.zip<code>结尾，如 spring-framework-{spring-version}-RELEASE-dist.zip。发布文件也被提交到 [milestones](http://repo.spring.io/milestone/org/springframework/spring/) 和[snapshots](http://repo.spring.io/snapshot/org/springframework/spring/)。
-
-#### 2.3.2 Logging ####
-对于Spring来说logging是一个非常重要的依赖，因为：
-a)它是唯一强制依赖的外部依赖
-b)每个人都喜欢从他们使用的工具中输出些东西
-c)Spring集成了许多其他的工具，这些工具都选择logging作为依赖。应用开发者的一个普遍目标是在一个中间位置使用一个作用于整个应用的统一logging配置，包括应用依赖的第三方组件，这也许是比较难的在有许多logging框架可供选择之前。
-
-Spring强制依赖的logging框架是Jakarta Commons Logging API (JCL)。我们依赖JCL编译，我们也使JCL Log对象对于扩展自Spring Framework的classes是可见的。对于用户来说，重要的是所有的Spring版本都依赖于同一个logging库：因为向后兼容，所以好迁移，扩展自Spring的应用也是支持向后兼容的。为了支持向后兼容，我使Spring中的一个模块明确地依赖上</code>commons-logging<code>（JCL的标准实现），然后使所有的其他Spring模块在编译时期依赖于这个模块。举个例，如果你正在使用Maven，且不知道在哪里记录</code>commons-logging<code>的依赖，其实这个依赖来自Spring，更准确的说是来自Spring的核心模块</code>spring-core<code>。
-
-关于</code>commons-logging<code>的一个好处是你不需要额外的库就能使你的应用正常运行，有一个运行时发掘算法，可以从classpath指定的地方寻找别的logging框架，并使用一个它认为合适的（或者你可以直接告诉这个算法你要使用哪一个）。如果没有可用的logging框架，你还可以使用JDK自带的logging框架（java.util.logging，JUL）。当你的Spring应用运行起来后，你应该会看到console窗口快速的输出大部分重要情况下的日志。
-##### 不用 Common Loging #####
-不幸的是，</code>commons-logging<code>中的运行时探查算法尽管方便了终端用户，但也是有问题的。回到之前，我们重新启动，Spring会使用一个不同的日志依赖。我们的首选可能是 Simple Logging Facade for Java ( 面向Java的简单日志管理，SLF4J),它也被用在人们使用的许多其他工具中，这些工具和Spring一起被使用在人们的应用中。
-
-这有两种基础的方法来关闭</code>commons-logging<code>：
-1. 从</code>spring-core<code>（因为它是唯一明确依赖</code>commons-logging<code>的模块）模块中排出</code>commons-logging<code>相关的依赖，
-
-2. 依赖一个特殊的</code>commons-logging<code>依赖，该依赖被一个空的jar包替换（更多详情见 [SLF4J FAQ](https://www.slf4j.org/faq.html#excludingJCL)）。
-
-为了排出</code>commons-logging<code>，增加如下内容到</code>dependencyManagement`标签中：<br><br>    <dependencies><br>        <dependency><br>            <groupid>org.springframework</groupid><br>            <artifactid>spring-core</artifactid><br>            <version>5.0.0.M5</version><br>            <exclusions><br>                <exclusion><br>                    <groupid>commons-logging</groupid><br>                    <artifactid>commons-logging</artifactid><br>                </exclusion><br>            </exclusions><br>        </dependency><br>    </dependencies>
-
-<p>这时这个应用可能出现问题，因为在classpath中没有JCL API的实现，为了修复这个问题，需要提供一个新的实现。在下一节，我们将通过使用SLF4J作为例子，介绍怎么样提供一个可选择的JCL实现。</p>
-<h5 id="使用SLF4J"><a href="#使用SLF4J" class="headerlink" title="使用SLF4J"></a>使用SLF4J</h5><p>比起<code>commons-logging</code>，SLF4J是一个更轻量的依赖，且在运行时更有效，因为它是在编译时期绑定，而别的集成日志框架是在运行时刻发现。这也就意味着你必须更加明确在运行期需要做什么，并因此声明，或者配置它。SLF4J给许多通用日志框架提供粘合剂，因此你通常可以选择一个你已经在使用的日志框架，并通过绑定到SLF4J上对它配置和管理。</p>
-<p>SLF4J给许多通用日志框架提供粘合剂功能，配合JCL，它也可以做一些别致的事：把别的日志框架和它本身连接起来。因此为了在Spring中使用SLF4J，你必须用SLF4J-JCL替换<code>commons-logging</code>依赖。一旦你替换了<code>commons-logging</code>依赖，日志调用将由Spring内部转变为SLF4J API调用，所以如果在你的应用中别的库使用了<code>commons-logging</code>依赖，你都可以在一个单一地方配置和管理日志。</p>
-<p>一个普遍的选择将有可能是在Spring和SLF4J中架起桥梁，在SLF4J和Log4j之间提供明确的绑定。你需要提供几种依赖（消除存在的<code>common-logging</code>依赖）：桥梁，SLF4J 实现Log4j，Log4j实现它自身，在Maven中，你可以想这样配置：</p>
-<pre><code>&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
-        &lt;version&gt;5.0.0.M5&lt;/version&gt;
-        &lt;exclusions&gt;
-            &lt;exclusion&gt;
-                &lt;groupId&gt;commons-logging&lt;/groupId&gt;
-                &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
-            &lt;/exclusion&gt;
-        &lt;/exclusions&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-        &lt;artifactId&gt;jcl-over-slf4j&lt;/artifactId&gt;
-        &lt;version&gt;1.7.22&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-        &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
-        &lt;version&gt;2.7&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-        &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
-        &lt;version&gt;2.7&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-        &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
-        &lt;version&gt;2.7&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre><p>这看起来似乎有许多依赖，而且只是为了看到一些日志。对，就是如此，但这是可选的，而且考虑到类加载器的问题，尤其是在一个有限制的容器中，如OSGi平台，比起<code>common-logging</code>,上面的这种选择应该更好，综上，使用SLF4J-JCL有一个性能上的好处，因为它的绑定时在编译期，而不是运行期。</p>
-<p>在SLF4J的用户中，一个更常见的选择是，直接绑定<a href="https://logback.qos.ch/" target="_blank" rel="external">Logback</a>,因为它使用较少的步骤和生成较少的依赖。Logback消除了额外的绑定步骤，因为它直接实现了SLF4J，因此你只需要绑定两个（<code>jcl-over-slf4j</code> 和<code>logback</code>）而不是四个库。如果你绑定的是Logback，你还需要消除来自其他依赖（不是Spring）的对slf4j-api的依赖，因为你需要确保在classpath中只依赖一个slf4j版本的API。</p>
-<h5 id="Using-Log4j"><a href="#Using-Log4j" class="headerlink" title="Using Log4j"></a>Using Log4j</h5><p>Note：Log4j1.x已经不更新了，下面讲解的是Log4j2。</p>
-<p>为了配置和管理的目的，许多人使用Log4j作为日志框架。Log4j是高效和稳定的，实际上它也正是我们在构建和测试Spring的运行时刻所使用的。Spring也提供了一些实用工具来配置和初始化Log4j，所以在Spring的一些模块中Log4j是一个可选择的编译时依赖。</p>
-<p>为了并用Log4j和JCL，你所需要做的就是把Log4j加入classpath中，并为他提供一个配置文件（<code>log4j2.xml</code>,<code>log4j2.properties</code>,或者它支持的其他配置格式），对于Maven的使用者，最少的依赖配置是：</p>
-<pre><code>&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-        &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
-        &lt;version&gt;2.7&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-        &lt;artifactId&gt;log4j-jcl&lt;/artifactId&gt;
-        &lt;version&gt;2.7&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre><p>如果你还希望使用SLF4J，如下的依赖是必要的：</p>
-<pre><code>&lt;dependencies&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-    &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
-    &lt;version&gt;2.7&lt;/version&gt;
-  &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre><p>这里有一个关于把日志定向到控制台的<code>log4j2.xml</code>配置例子：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;Configuration status=&quot;WARN&quot;&gt;
-  &lt;Appenders&gt;
-    &lt;Console name=&quot;Console&quot; target=&quot;SYSTEM_OUT&quot;&gt;
-      &lt;PatternLayout pattern=&quot;%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n&quot;/&gt;
-    &lt;/Console&gt;
-  &lt;/Appenders&gt;
-  &lt;Loggers&gt;
-    &lt;Logger name=&quot;org.springframework.beans.factory&quot; level=&quot;DEBUG&quot;/&gt;
-    &lt;Root level=&quot;error&quot;&gt;
-      &lt;AppenderRef ref=&quot;Console&quot;/&gt;
-    &lt;/Root&gt;
-  &lt;/Loggers&gt;
-&lt;/Configuration&gt;
-</code></pre><h5 id="自带本地JCL的运行时容器"><a href="#自带本地JCL的运行时容器" class="headerlink" title="自带本地JCL的运行时容器"></a>自带本地JCL的运行时容器</h5><p>许多人在一个实现了JCL的的容器中运行他们的Spring应用。IBM的Websphere 应用服务器（WAS）就是一个这样的容器。这样的容器经常出现问题，不幸的是还没有一个好的解决方案；大部分情况下，只是简单的把<code>common-logging</code>从你的应用中排出是远远不够的。</p>
-<p>必须清晰的认识到：问题的报告通常不是通过JCL的，甚至也不是通过<code>common-logging</code>，尽管他们把<code>common-logging</code>绑定到了其他的框架（通常是Log4j）上了。这个可能失败的原因为】是<code>common-logging</code>改变了他们上报的方式，在运行时刻发现在一些容器中使用较老的版本（1.0），然而现在许多人用的却是新的版本（1.1）。Spring不使用不通用的JCL API，因此在这里没有问题，但是一旦Spring或者你的应用尝试做一些日志操作，你可能会发现你所绑定的Log4j是不起作用的。</p>
-<p>在这种情况下的 WAS ，最简单的事是反转类加载的层级（IBM称“parent last”），因此是应用控制了JCL的依赖，而不是容器。这种选择不总是可行的，但在公共领域有许多别的建议作为供选择的方法， 依赖正确的版本和容器的特性集合你的旅程可能会产生变化。</p>
-<h1 id="二、核心技术"><a href="#二、核心技术" class="headerlink" title="二、核心技术"></a>二、核心技术</h1><p>这部分指导文档包含了所有的绝对完整的Spring Framework技术。</p>
-<p>其中最重要的是Spring Framework的控制反转（IoC）容器。深入处理Spring Framework的IoC容器离不开Spring的面向切面编程（AOP）的技术，该技术是广泛应用的。spring Framework拥有自己的AOP框架，从概念上来说是比较简单的，在Java的企业级编程中成功的占据了AOP需求的80%的热点。</p>
-<p>这部分内容也会涉及到Spring中集成的AspectJ（一种当前最完善，最成熟的企业级AOP实现的框架）</p>
-<ul>
-<li>第三章，IoC容器</li>
-<li>第四章，资源</li>
-<li>第五章，校验、数据绑定和类型转换</li>
-<li>第六章，Spring表达式语言（SpEL）</li>
-<li>第七章，Spring的面向切面编程</li>
-<li>第八章，Spring AOP APIs</li>
-</ul>
-<h2 id="3-IoC容器"><a href="#3-IoC容器" class="headerlink" title="3. IoC容器"></a>3. IoC容器</h2><h3 id="3-1-Spring-IoC容器和Beans的介绍"><a href="#3-1-Spring-IoC容器和Beans的介绍" class="headerlink" title="3.1 Spring IoC容器和Beans的介绍"></a>3.1 Spring IoC容器和Beans的介绍</h3><p>本质涵盖Spring框架中控制反转规则的实现。IoC也以依赖注入而著称。依赖注入是一种对象凭借什么来定义他们的依赖的方法，依赖指的是对象能有效完成它的工作所借助的其他对象，这些依赖只有通过构造器的参数，工厂方法的参数，或是对象实体的属性来设置，这个对象实体或是被构造的，或是由工厂方法返回的。当容器创建bean的时候，它会注入bean的依赖。这种方式是反转的基础，之所以叫做控制反转（IoC）,是因为bean通过直接使用本身的类构造器，或者是像服务定位器模式的机制来控制实例，或是定位自身的依赖。</p>
-<p><code>org.springframework.beans</code>和<code>org.springframework.context</code>包是Spring框架的IoC容器的基础。<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html" target="_blank" rel="external"><code>BeanFactory</code></a>接口提供一个高级的，能管理各种对象类型的配置机制。<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html" target="_blank" rel="external"><code>ApplicationContext</code></a>是一个<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html" target="_blank" rel="external"><code>BeanFactory</code></a>的子接口，<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html" target="_blank" rel="external"><code>ApplicationContext</code></a>增加了Spring AOP易集成的特性；甚至发布了消息，资源处理机制；特殊的应用层上下文，例如用于web应用中的<code>WebApplicationContext</code></p>
-<p>总之，<code>BeanFactory</code>提供了配置框架和基本功能，ApplicationContext 增加了更多企业特征的功能。<code>ApplicationContext</code> 是<code>BeanFactory</code>的一个完全超级，因此在本章关于Spring IOC容器的说明中特意使用它。如果想了解更多的关于使用BeanFactory的信息， 请参考<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-beanfactory" target="_blank" rel="external">Section 3.16, “The BeanFactory”</a></p>
-<p>在Spring中，各种对象构成了你的应用的主干，被Spring IOC容器管理的对象通常称为<em>beans</em>。一个bean要么是一个实例化的、组装好的对象，要么是一个被Spring IoC容器管理的对象。另外，在你的应用中，一个bean是众多对象中简单的一个。Beans和在他们中的依赖，被映射到容器使用的一个配置元数据中。</p>
-<h3 id="3-2-容器概览"><a href="#3-2-容器概览" class="headerlink" title="3.2 容器概览"></a>3.2 容器概览</h3><p>接口<code>org.springframework.context.ApplicationContext</code>代表Spring IoC容器，它负责实例化、配置和组装前面提到的beans。容器通过读取配置元数据来获取关于实例化、配置和组装对象的说明。配置元数据通过XML文件、Java注解和Java代码来描述。配置元数据允许你表达组成你的应用的对象和这些对象之间的复杂关系。</p>
-<p>Spring提供了几种开箱即用的<code>ApplicationContext</code>接口的实现。在一个单一的应用中，通常需要创建一个<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html" target="_blank" rel="external"><code>ClassPathXmlApplicationContext</code></a>或<a href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/support/FileSystemXmlApplicationContext.html" target="_blank" rel="external"><code>FileSystemXmlApplicationContext</code></a>。XML已经成为定义配置元数据的传统格式，你也可以通知容器使用Java注解或Java代码作为元数据的定义格式，这种方式只需要提供一个小的XML配置以说明可支持这中额外的元数据格式。</p>
-<p>在许多的应用场景中，明确用户代码不必实例化一个或多个SpringIoC的容器的实例。例如，在一个web应用场景中，应用的web.xml文件中只需要简单八行web XML描述符通常就足够了。 (见 3.15.4节, “方便web应用上下文的实例化”)。如果你当前正在使用 <a href="https://spring.io/tools/sts" target="_blank" rel="external"><code>Spring Tool Suite</code></a>，一个加强版的Eclipse开发环境，这个样板配置文件只需简单地点击几次鼠标或是敲几次键盘就被创建。</p>
-<p>下图是一个表示Spring怎样工作的高级视图。你的应用类与配置元数据相结合，因此，创建和初始化<code>ApplicationContext</code>之后，你就拥有了一个完全配置的、可运行的的系统或应用。</p>
-<p><center><br><img src="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/images/container-magic.png.pagespeed.ce.-0JjaOG5As.png" alt="" title="Spring IoC容器"></center></p>
-<p>图 3.1. Spring IoC容器<br></p>
-<h4 id="3-2-1-配置元数据"><a href="#3-2-1-配置元数据" class="headerlink" title="3.2.1 配置元数据"></a>3.2.1 配置元数据</h4><p>正如之前的图所描述的一样，Spring IoC容器需要一个配置元数据。这个配置元数据描绘你作为一个应用开发者应该怎么告诉Spring容器在你的应用中去实例化、配置和组装对象。</p>
-<p>传统第提供配置元数据的方式是通过一个简单的，直接明了的XML格式，这也是本章为了传达Spring IoC容器的关键概念和特征而使用得最多的方式。</p>
-<p><em>注：基于XML的元数据并不是唯一的配置元数据格式。Spring IoC容器与配置元数据的实际书写格式毫无关系。并且进来，许多开发者为他们的Spring应用选择基于Java的配置</em>。</p>
-<p>想要获取更多的关于在Spring容器中使用其他的元数据格式的信息，请查阅：</p>
-<ul>
-<li><p><a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-annotation-config" target="_blank" rel="external">基于注解的配置</a>：Spring2.5引进了注解对元数据配置的支持。</p>
-</li>
-<li><p><a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-java" target="_blank" rel="external">基于Java的配置</a>：从Spring3.0开始，Spring提供了许多特性来支持Java配置工程，这些特性还成为了核心Spring框架的一部分。那就是说，你可以使用Java而非XML文件来定义你的应用的类型的beans的外观。为了使用这些新特性，请查看 <code>@Configuration</code>,<code>@Bean</code>, <code>@Import</code> 和<code>@DependsOn</code> 注解.</p>
-</li>
-</ul>
-<p>Spring配置由至少一个，但通常来说不止一个bean的定义组成，容器必须管理他们。基于XML的配置元数据以处于顶级元素<code>&lt;beans&gt;</code>中的<code>&lt;bean/&gt;</code>元素来表示这些bean的配置。Java配置通常使用@Bean注解@Configuration类中的方法。</p>
-<p>这些bean定义符合组成应用的实际的对象。通常来说，你需定义服务层对象，数据访问层对象（DAOs）对象,诸如Struts <code>Action</code>实例这样的表示对象，和诸如Hibernate <code>SessionFactories</code>，JMS队列之类的底层对象。一般来说，在容器中，不必配置细粒度的领域对象，因为创建和加载领域对象通常是DAOs和业务逻辑的责任。然而，你可以使用Spring中集成的AspectJ来配置那些脱离IoC容器控制而创建的对象。查看<a href="ocs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#aop-atconfigurable">使用AspectJ和Spring一起依赖注入领域对象</a></p>
-<p>如下展示了基于XML的配置元数据的基本结构：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;
-        &lt;!-- collaborators and configuration for this bean go here --&gt;
-    &lt;/bean&gt;
-
-    &lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;
-        &lt;!-- collaborators and configuration for this bean go here --&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- more bean definitions go here --&gt;
-
-&lt;/beans&gt;
-</code></pre><p><code>id</code>属性是一个字符串，用来鉴别bean定义的唯一性；<code>class</code>属性定义了bean的类型，且使用的是全限定类名。id属性的值涉及到对象协作。在这个例子中，XML没有展现协作对象之间的引用；获取更多信息，请查看<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-dependencies" target="_blank" rel="external">依赖</a></p>
-<h4 id="3-2-2-实例化一个容器"><a href="#3-2-2-实例化一个容器" class="headerlink" title="3.2.2 实例化一个容器"></a>3.2.2 实例化一个容器</h4><p>实例化一个Spring IoC容器很简单，提供给ApplicationContext的构造器的位置路径（可以多个）就是实际的资源位置字符串，他们允许容器从一系列的外部资源，如本地文件系统，从Java <code>classpath</code>等加载配置元数据。</p>
-<pre><code>ApplicationContext context =
-    new ClassPathXmlApplicationContext(new String[] {&quot;services.xml&quot;, &quot;daos.xml&quot;});
-</code></pre><p>注：在你了解了Spring IoC容器后，你也许想知道更多的关于Spring的<code>Resource</code>抽象，正如在第四章，资源中描述的一样，资源提供了方便的机制读取来自URI语法定义的位置的输入。尤其Resource路径被用来构建应用 上下文，正如<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#resources-app-ctx" target="_blank" rel="external">4.7节 应用上下文和资源路径</a>所描述的。</p>
-<p>如下展示了服务层对象配置文件<code>（services.xml）</code>:</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;!-- services --&gt;
-
-    &lt;bean id=&quot;petStore&quot; class=&quot;org.springframework.samples.jpetstore.services.PetStoreServiceImpl&quot;&gt;
-        &lt;property name=&quot;accountDao&quot; ref=&quot;accountDao&quot;/&gt;
-        &lt;property name=&quot;itemDao&quot; ref=&quot;itemDao&quot;/&gt;
-        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- more bean definitions for services go here --&gt;
-
-&lt;/beans&gt;
-</code></pre><p>如下展示了数据访问对象配置文件<code>（daos.xml）</code>：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;accountDao&quot;
-        class=&quot;org.springframework.samples.jpetstore.dao.jpa.JpaAccountDao&quot;&gt;
-        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
-    &lt;/bean&gt;
-
-    &lt;bean id=&quot;itemDao&quot; class=&quot;org.springframework.samples.jpetstore.dao.jpa.JpaItemDao&quot;&gt;
-        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- more bean definitions for data access objects go here --&gt;
-
-&lt;/beans&gt;
-</code></pre><p>之前的例子中，服务层由<code>PetStoreServiceImpl</code>类与<code>JpaAccountDao</code> 和<code>JpaItemDao</code>（基于JPA对象/关系映射标准）两个数据访问对象类型组成，<code>property name</code>元素引用Javabean的属性名字，<code>ref</code>元素引用另一个bean定义的名称。id和ref之间的链接了表达了协作对象之间的依赖。想了解一个对象的依赖的详细配置方式，查看<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-dependencies" target="_blank" rel="external">依赖</a>。</p>
-<h5 id="基于XML的配置元数据的组成"><a href="#基于XML的配置元数据的组成" class="headerlink" title="基于XML的配置元数据的组成"></a>基于XML的配置元数据的组成</h5><p>把bean的定义放到多个XML文件中是有用的。在你的架构中，常常每个独立的XML配置文件代表一个逻辑层或模块。</p>
-<p>你可以使用应用上下文构造器来从所有这些XML片段中加载bean的定义。这个构造器提取多<code>Resource</code>位置，如前一节所示。作为一种选择，使用一个或多个<code>&lt;import/&gt;</code>元素来从别的文件加载bean定义，如：</p>
-<pre><code>&lt;beans&gt;
-    &lt;import resource=&quot;services.xml&quot;/&gt;
-    &lt;import resource=&quot;resources/messageSource.xml&quot;/&gt;
-    &lt;import resource=&quot;/resources/themeSource.xml&quot;/&gt;
-
-    &lt;bean id=&quot;bean1&quot; class=&quot;...&quot;/&gt;
-    &lt;bean id=&quot;bean2&quot; class=&quot;...&quot;/&gt;
-&lt;/beans&gt;
-</code></pre><p>在前面的例子中，外部的bean定义加载自三个文件：<code>services.xml</code>, <code>messageSource.xml</code>, 和<code>themeSource.xml</code>。所有的位置路径与导入的定义文件相关，因此<code>services.xml</code>必须在完全一样的目录，或classpath位置中，正如文件中的导入活动。因此，<code>messageSource.xml</code> 和 <code>themeSource.xml</code>必须在一个<code>Resource</code>位置中，这个位置在导入文件的位置下。    如你所见，一个引导斜线被忽视了，但是如果加上了斜线，这些路径就是相对的，不使用斜线是更好的格式。一旦文件的内容被导入，包括最上层的<code>&lt;beans/&gt;</code>元素，都必须根据Spring的模式校验XMLbean的定义。</p>
-<p>注：<em>使用相对路径（../）引用在父目录中的文件是可以的，但是不建议这样做。如果这样做了，就会创建一个不再当前应用中的文件的依赖。尤其，这个不建议用于“classpath：”URLs (例如, “classpath:../services.xml”),运行时的解决方法是选择“最近”的classpath的根目录，之后在它的父目录中搜寻。Classpath配置的改变会导致选择一个不同的错误的目录。</em></p>
-<p><em>你可以总是资源的全限定位置而不是相对路径：如，”file:C:/config/services.xml” 或”classpath:/config/services.xml”。然而，你应该意识到你正在使你的应用的配置与特殊的绝对位置相耦合了。</em></p>
-<p>import指令是beans命名空间本身提供的一个特征。超出了普通的bean定义的，更深层次的配置特征在一个选择的spring提供的XML命名空间中是可用的，如，“context”和“util”命名空间。</p>
-<h5 id="Groovy的bean定义——DSL（领域专用语言）"><a href="#Groovy的bean定义——DSL（领域专用语言）" class="headerlink" title="Groovy的bean定义——DSL（领域专用语言）"></a>Groovy的bean定义——DSL（领域专用语言）</h5><p>作为一个具体的配置元数据的高级例子，bean定义也可以通过spring的Groovy的bean定义——DSL来表示，这可以通过Grails框架来了解。通常来说，这样的配置是配置在一个.groovy文件中的，其结构如下：</p>
-<p>beans{<br>    dataSource(BasicDataSource) {<br>   driverClassName = “org.hsqldb.jdbcDriver”<br>url = “jdbc:hsqldb:mem:grailsDB”<br>username = “sa”<br>password = “”<br>settings = [mynew:”setting”]<br>}<br>sessionFactory(SessionFactory) {<br>dataSource = dataSource<br>}<br>myService(MyService) {<br>nestedBean = { AnotherBean bean -&gt;<br>dataSource = dataSource<br>}<br>}<br>}</p>
-<p>这中配置的格式大部分等价于XMLbean定义，甚至支持spring的XML配置命名空间。通过一个“importBeans”指令，这种配置也允许导入XML bean定义文件。</p>
-<h4 id="3-2-3-使用容器"><a href="#3-2-3-使用容器" class="headerlink" title="3.2.3 使用容器"></a>3.2.3 使用容器</h4><p><code>ApplicationContext</code>是一个高级工厂接口，并且有能力维护不同的beans的注册和他们的依赖。使用方法<code>T getBean(String name, Class&lt;T&gt; requiredType)</code>，可以检索你的bean的实体。</p>
-<p><code>ApplicationContext</code>使你能够读取bean定义并使用他们，如下所示：</p>
-<pre><code>// create and configure beans
-ApplicationContext context = new ClassPathXmlApplicationContext(&quot;services.xml&quot;, &quot;daos.xml&quot;);
-
-// retrieve configured instance
-PetStoreService service = context.getBean(&quot;petStore&quot;, PetStoreService.class);
-
-// use configured instance
-List&lt;String&gt; userList = service.getUsernameList();
-</code></pre><p>使用Groovy的配置，引导程序看起来与上面非常相似，只是一个不同的上下文实现类，体现出Groovy（但也了解XML bean的定义）</p>
-<pre><code>ApplicationContext context = new GenericGroovyApplicationContext(&quot;services.groovy&quot;, &quot;daos.groovy&quot;);
-</code></pre><p>结合阅读器代理，<code>GenericApplicationContext</code>成为最灵活多变的变体，例如与读取XML文件的<code>XmlBeanDefinitionReader</code>相结合：</p>
-<pre><code>GenericApplicationContext context = new GenericApplicationContext();
-new XmlBeanDefinitionReader(ctx).loadBeanDefinitions(&quot;services.xml&quot;, &quot;daos.xml&quot;);
-   context.refresh();
-</code></pre><p>与读取Groovy文件的<code>GroovyBeanDefinitionReader</code>相结合：</p>
-<pre><code>GenericApplicationContext context = new GenericApplicationContext();
-new GroovyBeanDefinitionReader(ctx).loadBeanDefinitions(&quot;services.groovy&quot;, &quot;daos.groovy&quot;);
-   context.refresh();
-</code></pre><p>如果需要，这些阅读器代理可以在同一个<code>ApplicationContext</code>上混合和配合使用，从不同的配置源读取bean定义。</p>
-<p>之后你可以使用getBean检索bean的实体。<code>ApplicationContext</code>接口还有几个别的方法可以检索beans，理想的应用编码不应该使用它们。的确，你的应用编码不应该调用<code>getBean()</code>方法，从而你的应用一点都不依赖Spring APIs。例如，Spring与web框架的集成为了不同的web框架组件提供依赖注入，这些组件如controller和JSF管理beans,允许你声明通过元数据在特殊的bean上声明依赖（如，autowiring 注解）</p>
-<h3 id="Bean概览"><a href="#Bean概览" class="headerlink" title="Bean概览"></a>Bean概览</h3><p>一个Spring IoC容器管理一个或多个beans。这些beans是通过提供给容器的配置元数据来创建的，如在XML<code>&lt;beans/&gt;</code>标签中定义的格式。</p>
-<p>在容器中，这些bean定义被描述为<code>BeanDefinition</code>对象，这些对象包含（以及其他信息）如下的元数据</p>
-<ul>
-<li>一个包全限定类名：典型地实际实现类型</li>
-<li>bean行为的配置元素，声明了bean在容器中应该有的行为（范围，声明周期回调等等）。</li>
-<li>引用那些对当前bean工作来说是必要的bean，这些引用通常叫合作者或是依赖者。</li>
-<li>别的设置在新创建的对象中的配置，如，使用在一个bean中的连接次数，可以用来管理连接池，或是限制一个连接池的大小。</li>
-</ul>
-<p>这些元数据翻译为一系列组成每个bean定义的属性。</p>
-<p>表3.1. bean定义</p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Explained in</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>class</td>
-<td>Section 3.3.2, “Instantiating beans”</td>
-</tr>
-<tr>
-<td>name</td>
-<td>Section 3.3.1, “Naming beans”</td>
-</tr>
-<tr>
-<td>scope</td>
-<td>Section 3.5, “Bean scopes”</td>
-</tr>
-<tr>
-<td>constructor arguments</td>
-<td>Section 3.4.1, “Dependency Injection”</td>
-</tr>
-<tr>
-<td>properties</td>
-<td>Section 3.4.1, “Dependency Injection”</td>
-</tr>
-<tr>
-<td>autowiring mode</td>
-<td>Section 3.4.5, “Autowiring collaborators”</td>
-</tr>
-<tr>
-<td>lazy-initialization mode</td>
-<td>Section 3.4.4, “Lazy-initialized beans”</td>
-</tr>
-<tr>
-<td>initialization method</td>
-<td>the section called “Initialization callbacks”</td>
-</tr>
-<tr>
-<td>destruction method</td>
-<td>the section called “Destruction callbacks”</td>
-</tr>
-</tbody>
-</table>
-<p><code>ApplicationContext</code> 的实现，除了bean定义外还包含关于如何创建一个特殊的bean的信息，也允许注册已存在的，用户在容器外面创建的对象。由返回工厂实现<code>DefaultListableBeanFactory</code>的<code>getBeanFactory()</code>方法访问ApplicationContext的Bean工厂来完成这个功能。凭借方法registerSingleton(..) 和 registerBeanDefinition(..)，<code>DefaultListableBeanFactory</code>支持注册。然而，有经过元数据定义的beans定义，典型的应用能独立工作。</p>
-<p><em>注：Bean metadata and manually supplied singleton instances need to be registered as early as possible, in order for the container to properly reason about them during autowiring and other introspection steps. While overriding of existing metadata and existing singleton instances is supported to some degree, the registration of new beans at runtime (concurrently with live access to factory) is not officially supported and may lead to concurrent access exceptions and/or inconsistent state in the bean container</em>.</p>
-<h4 id="命名-beans"><a href="#命名-beans" class="headerlink" title="命名 beans"></a>命名 beans</h4><p>每个bean都有一个或多个标识符。在持有bean的容器中，这些标识符必须是独一无二的。一个bean通常只有一个标识符，但如果需要多个标识符，额外的可以看做别名。</p>
-<p>在基于XML的配置元数据中，使用<code>id</code>和/或<code>name</code>属性来指定bean标识符。<code>id</code>属性允许精确指定一个ID。按照惯例，这些名称是字母和数字的组合（’myBean’,’fooService’等），但也可以含有特殊字符。如果你想采用bean的别名，你可以在<code>name</code>属性中指定他们，并通过逗号（,），分号（；）或空格分隔。按历史的标记，在版本Spring3.1前，<code>id</code>属性被定义为<code>xsd:ID</code> 类型，它约束合理的字符。从3.1开始，<code>id</code>属性被定义为<code>xsd:string</code>类型。注意，尽管不再通过XML解析，但容器依然强制bean id独一无二的特性。</p>
-<p>不要求你给bean提供一个名称或ID。如果没有明确的提供名称或ID，容器会给bean生成一个独一无二的名称。然而，如果你想通过名称引用bean，或通过使用<code>ref</code>元素或者<a href="">服务定位器</a>来查看bean,都必须提供一个名称。不给bean提供名称的动机是与使用<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-inner-beans" target="_blank" rel="external">内部bean</a>s和<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-autowire" target="_blank" rel="external">自动包装者</a></p>
-<blockquote>
-<p><strong>bean命名约定</strong></p>
-<p>当命名beans时，约定就是使用标准的Java实例化域名称的约定，也就是bean名称以一个小写字符开始，之后按驼峰形式。这样的名称如<code>&#39;accountManager&#39;</code>, <code>&#39;accountService&#39;</code>, <code>&#39;userDao&#39;</code>, <code>&#39;loginController&#39;</code>等等。</p>
-<p>命名beans时，一贯主张配置容易阅读和理解，如果你使用Spring AOP，这命名约定是很有帮助的，当通过名字应用通知到一系列的相关beans上时。</p>
-</blockquote>
-<p>注：通过组件扫描classpath，Spring会按如下规则为没有命名的组件生成bean名称：基本上是，获取简单的class名称，把第一个字母变为小写。然而在特殊的情况下，有超过一个字符且第一个和第二个字符都是大写，原始的方式就不起作用了。    这些规则与<code>java.beans.Introspector.decapitalize</code>（Spring在这里用到的）定义的规则是相同的。</p>
-<h5 id="Aliasing-a-bean-outside-the-bean-definition"><a href="#Aliasing-a-bean-outside-the-bean-definition" class="headerlink" title="Aliasing a bean outside the bean definition"></a>Aliasing a bean outside the bean definition</h5><p>在bean的自定义中，可以提供多个名称给bean，通过使用一个组合决定一个名称，该名称由<code>id</code>属性和在<code>name</code>属性中任何数量的名称指定。这些名称可以等价于同一个bean的别名，且在许多情况下是有用的，比如，通过使用一个特殊的bean名称，允许在同一个应用中的每个组件引用一个共同的依赖。</p>
-<p>然而，在bean被实际定义的地方指定所有的别名并不总是适合的，。有时为一个在其他地方定义的bean启用一个别名是值得的。这种情况在大型系统是常见的，这种系统中配置被分配到每个子系统，每个子系统都有它自己的一系列对象定义。在基于XML的配置元数据中，可以使用<alias>元素来完成别名的定义：</alias></p>
-<pre><code>&lt;alias name=&quot;fromName&quot; alias=&quot;toName&quot;/&gt;
-</code></pre><p>在这种情况下，在同一个容器，一个bean被命名为<code>fromName</code>，也许，在使用完这个别名定义后，又被<code>toName</code>引用。</p>
-<p>例如，子系统A的配置元数据引用名称为<code>subsystemA-dataSource</code>的DataSource。子系统B的配置元数据引用名称为<code>subsystemB-dataSource</code>的DataSource。当使用这两个子系统来组合成一个主应用，且这个主应用引用名称为<code>myApp-dataSource</code>的DataSource。为了使这三个名称引用相同的对象，需要添加如下的别名定义到MyApp配置元数据：</p>
-<pre><code>&lt;alias name=&quot;subsystemA-dataSource&quot; alias=&quot;subsystemB-dataSource&quot;/&gt;
-&lt;alias name=&quot;subsystemA-dataSource&quot; alias=&quot;myApp-dataSource&quot; /&gt;
-</code></pre><p>现在，每个组件和主应用都可以通过一个独立的（有效的创建一个命名空间），并且保证不与其他定义冲突的名称来引用dataSource，而且引用的是相同的bean。</p>
-<blockquote>
-<p><strong>Java 配置</strong></p>
-<p>如果使用Java配置，@Bean注解可以用来提供别名，详情见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-java-bean-annotation" target="_blank" rel="external"> 3.12.3, “使用 @Bean 注解”</a>。</p>
-</blockquote>
-<h4 id="3-3-2-实例化bean"><a href="#3-3-2-实例化bean" class="headerlink" title="3.3.2 实例化bean"></a>3.3.2 实例化bean</h4><p>一个bean的定义本质上来说是一个创建一个或多个对象的食谱。当接收到请求，容器会查询食谱找到一个命名的bean，并使用被bean定义封装的配置元数据来创建一个实际的对象。</p>
-<p>如果你使用的是基于XML的配置元数据，指定实例化在<code>&lt;bean/&gt;</code>元素中的<code>class</code>属性中的对象类型。这个class属性，内部是一个在<code>BeanDefinition</code> 实体上的Class属性，通常是强制的。（例子见，“<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-class-instance-factory-method" target="_blank" rel="external">使用一个实例工厂方法实例化</a>”这节和 3.7 “<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-child-bean-definitions" target="_blank" rel="external">Bean定义的继承</a>”）。有一种或两种方法使用<code>Class</code>属性。</p>
-<ul>
-<li>典型地是为了指定构造bean的类，容器直接通过调用构造函数创建bean的情况，有点像使用Java代码的<code>new</code>操作。</li>
-<li>为了指定包含用来创建对象的静态工厂方法的实际类类型，容器回调一个在类中的静态工厂方法来创建对象并不是常见的情况。</li>
-</ul>
-<blockquote>
-<p><strong>内部类名称</strong>。如果你想为一个<code>static</code>的内部类（nested class）配置一个bean定义,你必须使用这个内部类的二元名称。</p>
-<p>例如，如果你在<code>com.example</code>包中有一个名叫Foo的类,且在Foo中有一个<code>static</code>内部类叫Bar，那么一个bean定义中的<code>class</code>属性的值会是：</p>
-<pre><code>com.example.Foo$Bar
-</code></pre><p>注意在类名称中使用<code>$</code>字符来分隔内部类名称和外部类名称。</p>
-</blockquote>
-<h5 id="构造函数实例化"><a href="#构造函数实例化" class="headerlink" title="构造函数实例化"></a>构造函数实例化</h5><p>当通过构造方法来创建一个bean时，对所有正常的类都是可以的，并且与Sprin是兼容的。也就是说，开发的类（class）不必实现任何特殊的接口，或者以特殊的方式编码。简单地指定bean类就足够了。但是，根据你用什么类型的IoC来定义特殊bean，你也许需要一个默认的构造函数。</p>
-<p>Spring IoC容器实质上能管理任何你想管理的类型；不限制管理真实的JavaBean。在容器中，大部分的Spring使用者更喜欢只有一个默认构造函数的和在内容之后有恰当的setter和getter模式的真实JavaBean。在容器中，你可能有更特殊的非bean风格的类。例如，如果你需要使用一个遗留下来的连接池，它绝对不遵循JavaBean规范，Spring也可以管理它。</p>
-<p>通过基于XML的配置元数据，你可以照着下面指定你的bean:</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;/&gt;
-
-&lt;bean name=&quot;anotherExample&quot; class=&quot;examples.ExampleBeanTwo&quot;/&gt;
-</code></pre><p>关于提供参数给构造函数和在对象被创建之后设置对象实体的内容的原理的详细信息，见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-collaborators" target="_blank" rel="external">注入依赖</a></p>
-<h5 id="静态工厂方法实例化"><a href="#静态工厂方法实例化" class="headerlink" title="静态工厂方法实例化"></a>静态工厂方法实例化</h5><p>当定义一个用静态工厂方法来创建的bean时，使用<code>class</code>属性来指定包含<code>static</code>工厂方法的的类，使用<code>factory-method</code>属性来指定工厂方法本身的名称。你应该可以调用这个方法，返回一个存活的对象，随后被认为是否已经通过构造函数被创建。这样的bean定义的一个用法是在遗留代码中调用静态工厂。</p>
-<p>如下的bean定义表明bean将通过调用一个工厂方法来创建。这个定义没有指定返回对象的类型（class）,只指定了含有工厂的类。在这个例子中，<code>createInstance()</code>方法必定是一个静态方法。</p>
-<pre><code>&lt;bean id=&quot;clientService&quot;
-    class=&quot;examples.ClientService&quot;
-    factory-method=&quot;createInstance&quot;/&gt;
-</code></pre><p>-</p>
-<pre><code>public class ClientService {
-    private static ClientService clientService = new ClientService();
-    private ClientService() {}
-
-    public static ClientService createInstance() {
-        return clientService;
-    }
-}
-</code></pre><p>关于提供参数给工厂方法和对象在工厂返回后设置对象实体内容的原理的详细信息，见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-properties-detailed" target="_blank" rel="external">依赖和配置详情</a></p>
-<h5 id="使用一个实例工厂方法实例化"><a href="#使用一个实例工厂方法实例化" class="headerlink" title="使用一个实例工厂方法实例化"></a>使用一个实例工厂方法实例化</h5><p>与静态工厂方法实例化类似，通过一个实例工厂方法实例化，会回调一个已经存在容器中的bean的非静态的方法来创建一个新的bean。    为了使用该原理，保留<code>class</code>属性为空，并在<code>factory-bean</code>属性中，为在当前（或父/祖先）容器中的bean指定名称，该bean包含用来创建对象的实例方法。通过<code>factory-method</code>属性为工厂方法本身设置名称。</p>
-<pre><code>&lt;!-- the factory bean, which contains a method called createInstance() --&gt;
-&lt;bean id=&quot;serviceLocator&quot; class=&quot;examples.DefaultServiceLocator&quot;&gt;
-    &lt;!-- inject any dependencies required by this locator bean --&gt;
-&lt;/bean&gt;
-
-&lt;!-- the bean to be created via the factory bean --&gt;
-&lt;bean id=&quot;clientService&quot;
-    factory-bean=&quot;serviceLocator&quot;
-    factory-method=&quot;createClientServiceInstance&quot;/&gt;
-</code></pre><p>.</p>
-<pre><code>public class DefaultServiceLocator {
-
-    private static ClientService clientService = new ClientServiceImpl();
-    private DefaultServiceLocator() {}
-
-    public ClientService createClientServiceInstance() {
-        return clientService;
-    }
-}
-</code></pre><p>如下，一个工厂类可以拥有多余一个的工厂方法：</p>
-<pre><code>&lt;bean id=&quot;serviceLocator&quot; class=&quot;examples.DefaultServiceLocator&quot;&gt;
-    &lt;!-- inject any dependencies required by this locator bean --&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;clientService&quot;
-    factory-bean=&quot;serviceLocator&quot;
-    factory-method=&quot;createClientServiceInstance&quot;/&gt;
-
-&lt;bean id=&quot;accountService&quot;
-    factory-bean=&quot;serviceLocator&quot;
-    factory-method=&quot;createAccountServiceInstance&quot;/&gt;
-</code></pre><p>.</p>
-<pre><code>public class DefaultServiceLocator {
-
-    private static ClientService clientService = new ClientServiceImpl();
-    private static AccountService accountService = new AccountServiceImpl();
-
-    private DefaultServiceLocator() {}
-
-    public ClientService createClientServiceInstance() {
-        return clientService;
-    }
-
-    public AccountService createAccountServiceInstance() {
-        return accountService;
-    }
-
-}
-</code></pre><p>这种方式表明工厂bean(factory bean )本身可以通过依赖注入（DI）来管理和配置，见见<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-properties-detailed" target="_blank" rel="external">依赖和配置详情</a></p>
-<p>注意：在Spring文档中，工厂bean(factory bean)指的是这样一种bean，就是被配置在Spring容器中，可以通过<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-class-instance-factory-method" target="_blank" rel="external">实例</a>或<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-class-static-factory-method" target="_blank" rel="external">静态</a>工厂方法来创建对象的bean。通过对比，<code>FactoryBean</code>（注意大写）是指一个特殊的Spring <a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean" target="_blank" rel="external"><code>FactoryBean</code></a></p>
-<h3 id="3-4-依赖"><a href="#3-4-依赖" class="headerlink" title="3.4 依赖"></a>3.4 依赖</h3><p>一个典型的企业应用不是由单个对象（Spring称为bean）组成。甚至最简单的应用都有几个对象协同工作，呈现给终端用户所见的是一个紧凑的应用。下一节说明你怎么从定义若干的独一无二的bean定义迈向一个完全实际的应用，该应用中对象之间为了完成一个目标而协作。</p>
-<h4 id="3-4-1-依赖注入"><a href="#3-4-1-依赖注入" class="headerlink" title="3.4.1 依赖注入"></a>3.4.1 依赖注入</h4><p><em>依赖注入</em>（DI）是一个方法，该方法通过对象定义他们的依赖，也就是与他们一起运作的别的对象，只有通过构造参数，工厂方法参数，或者是在它被构造或者从一个工厂方法返回后设置在对象实体上的内容。当容器创建bean的时候会注入那些依赖。这种方法是基础的反转，因此称<em>控制反转</em>（IoC），通过使用直接的类构造方法或者服务定位模式，bean自己控制实例化或者它自己的依赖的位置。</p>
-<p>使用DI原理，代码更清晰，当通过对象的依赖提供对象，能更有效的解耦。对象不查询它自己的依赖，也不知道依赖的位置或类。照此，你的类变得更容易测试，尤其是当依赖是接口或抽象的基类时，它们允许打桩或模仿实现被用到单元测试中。</p>
-<p>DI存在两大变体，基于构造器的依赖注入和基于Setter的依赖注入。</p>
-<h5 id="基于构造器的注入"><a href="#基于构造器的注入" class="headerlink" title="基于构造器的注入"></a>基于构造器的注入</h5><p>容器回调一个有若干参数的构造器，其中的每个参数代表一个依赖，完成基于构造器的依赖注入，。与调用一个有特殊参数的<code>static</code>工厂方法来构造bean是几乎等价的，本文论点是处理构造器的参数和类似地处理<code>static</code>工厂方法的参数。下面的例子展示的是一个只能通过构造器注入的依赖注入的的类。注意这个类没有任何特殊性，它只是一个POJO，没有依赖容器的特殊接口，基类和注解。     </p>
-<pre><code>public class SimpleMovieLister {
-
-    // the SimpleMovieLister has a dependency on a MovieFinder
-    private MovieFinder movieFinder;
-
-    // a constructor so that the Spring container can inject a MovieFinder
-    public SimpleMovieLister(MovieFinder movieFinder) {
-        this.movieFinder = movieFinder;
-    }
-
-    // business logic that actually uses the injected MovieFinder is omitted...
-
-}
-</code></pre><h5 id="构造参数解析"><a href="#构造参数解析" class="headerlink" title="构造参数解析"></a>构造参数解析</h5><p>使用参数类型来解决构造参数匹配的问题。如果没有潜在的不确定性存在bean定义的构造器参数中，构造器参数的顺序被定义在一个bean定义中，当bean被实例化时，正是那些参数的顺序被提供给恰当的构造器。请仔细想想下面的类：</p>
-<pre><code>package x.y;
-
-public class Foo {
-
-    public Foo(Bar bar, Baz baz) {
-        // ...
-    }
-
-}
-</code></pre><p>假设<code>Bar</code>和<code>Baz</code>类与继承不相关，那么就没有潜在的不确定性存在。如此，下面的配置就工作正常，你也不必在<code>&lt;constructor-arg/&gt;</code>元素中明确地指定构造参数索引和/或类型。</p>
-<pre><code>&lt;beans&gt;
-    &lt;bean id=&quot;foo&quot; class=&quot;x.y.Foo&quot;&gt;
-        &lt;constructor-arg ref=&quot;bar&quot;/&gt;
-        &lt;constructor-arg ref=&quot;baz&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;bean id=&quot;bar&quot; class=&quot;x.y.Bar&quot;/&gt;
-
-    &lt;bean id=&quot;baz&quot; class=&quot;x.y.Baz&quot;/&gt;
-&lt;/beans&gt;
-</code></pre><p>当另一个bean被引用，且类型是已知的，那么匹配就可能发生（正如前面的例子）。当一个简单的类型被使用，如<code>&lt;value&gt;true&lt;/value&gt;</code>，Spring不能决定这个值的类型，因此在没有帮助的情况下不能匹配，请仔细想想下面的类：</p>
-<pre><code>package examples;
-
-public class ExampleBean {
-
-    // Number of years to calculate the Ultimate Answer
-    private int years;
-
-    // The Answer to Life, the Universe, and Everything
-    private String ultimateAnswer;
-
-    public ExampleBean(int years, String ultimateAnswer) {
-        this.years = years;
-        this.ultimateAnswer = ultimateAnswer;
-    }
-
-}
-</code></pre><p>在前面的场景中，如果使用<code>type</code>属性明确指定构造器参数的类型的话，容器就可以使用类型来匹配简单的类型，如：</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
-    &lt;constructor-arg type=&quot;int&quot; value=&quot;7500000&quot;/&gt;
-    &lt;constructor-arg type=&quot;java.lang.String&quot; value=&quot;42&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>使用<code>index</code>属性来精确指定构造器参数的索引，如：</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
-    &lt;constructor-arg index=&quot;0&quot; value=&quot;7500000&quot;/&gt;
-    &lt;constructor-arg index=&quot;1&quot; value=&quot;42&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>除了解决多个简单值的不确定性外，指定索引还可以解决一个构造器有两个相同类型的参数的不确定性。注意索引值是从0起步的。</p>
-<p>你也可以使用构造器参数名消除值的歧异：</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
-    &lt;constructor-arg name=&quot;years&quot; value=&quot;7500000&quot;/&gt;
-    &lt;constructor-arg name=&quot;ultimateAnswer&quot; value=&quot;42&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>记住，为使这种配置在你的代码之外起作用，必须在调试标记可用可用的情况下编译，那样的话，Spring可以从构造器中浏览参数的名称。如果不能再调试标记下编译你的代码（或者是不想），你可以使用JDK注解 <a href="http://docs.oracle.com/javase/6/docs/api/java/beans/ConstructorProperties.html" target="_blank" rel="external">@ConstructorProperties</a>明确你的构造器参数的名称。样例类必须看起来如下：</p>
-<pre><code>package examples;
-
-public class ExampleBean {
-
-    // Fields omitted
-
-    @ConstructorProperties({&quot;years&quot;, &quot;ultimateAnswer&quot;})
-    public ExampleBean(int years, String ultimateAnswer) {
-        this.years = years;
-        this.ultimateAnswer = ultimateAnswer;
-    }
-
-}
-</code></pre><h5 id="基于setter的依赖注入"><a href="#基于setter的依赖注入" class="headerlink" title="基于setter的依赖注入"></a>基于setter的依赖注入</h5><p>容器回调一个无参的构造器或无参的static工厂方法来构造你的bean后，接着调用bean上的setter方法完成依赖注入。</p>
-<p>如下例子展示一个使用纯setter注入来进行依赖注入的类，这个类是符合Java的习惯的，它只是一个POJO，没有依赖容器的特殊接口，基类和注解。</p>
-<pre><code>public class SimpleMovieLister {
-
-    // the SimpleMovieLister has a dependency on the MovieFinder
-    private MovieFinder movieFinder;
-
-    // a setter method so that the Spring container can inject a MovieFinder
-    public void setMovieFinder(MovieFinder movieFinder) {
-        this.movieFinder = movieFinder;
-    }
-
-    // business logic that actually uses the injected MovieFinder is omitted...
-
-}
-</code></pre><p><code>ApplicationContext</code> 支持基于构造器和基于setter的DI注入它所管理的bean。在一些依赖已经通过构造器方法注入胡，容器也还支持基于setter的依赖注入。你以一个<code>BeanDefinition</code>的格式配置依赖，你把<code>BeanDefinition</code>与<code>PropertyEditor</code>的实例结合用来转换属性的格式到另一种格式，然而，大部分的Spring使用者不直接使用这些类（i.e.,以编程的方式），而是使用XML的bean定义，注解组件（以<code>@Component</code>, <code>@Controller</code>等注解类），或者是基于Java的<code>@Configuration</code>的类中的<code>@Bean</code> 方法。在内部，这些类被转化为<code>BeanDefinition</code>实例，并被用来加载一个完整的Spring IoC容器实例。</p>
-<blockquote>
-<p><strong>是基于构造器函数，还是基于setter依赖注入？</strong></p>
-<p>因为你可以混用基于构造函数和及与setter的依赖注入，为强制的依赖使用构造函数，为可选的依赖使用setter方法或配置方式，是一个好的经验法则。注意，在一个setter方法上使用@Required注解，可以用来使使属性成为必须的依赖。</p>
-<p>Spring团队通常提倡构造函数注入，因为这种方式能使一个不可变对象来实现应用程序组件，并确保必须的依赖不为<code>null</code>。更重要的是构造函数注入的组件总是以一个完全初始化的状态返回给客户端代码。附注一点，大量的构造函数参数是一种不好的代码风格，这意味着这个类可能有许多的职责，这样的代码需要重构以更好的解决本身独立的关注点。</p>
-<p>根本上来讲，setter注入只能被用来注入，可选的依赖，在类的内部可以给这种依赖分配合适的默认值。否则，在代码使用依赖的每个地方都必须进行非空检查。setter注入的一个好处是setter方法使得类依赖的对象能重新配置或者重新注入。因此通过JMX MBeans管理，是一个使用setter注入的很好的使用案例。</p>
-<p>使用DI的风格最适合一个特定的类。有时，当处理没有源码的第三方类时，你就可以选择依赖注入。例如，如果一个第三方类没有暴露任何setter方法，那么构造函数注入也许是唯一的可获得DI形式。</p>
-</blockquote>
-<h5 id="依赖解析过程"><a href="#依赖解析过程" class="headerlink" title="依赖解析过程"></a>依赖解析过程</h5><p>容器按如下步骤完成bean依赖的解析：</p>
-<ul>
-<li>通过描述所有bean的配置元数据来创建和初始化<code>ApplicationContext</code>。配置元数据可以由XML、Java代码和注解指定。</li>
-<li>对于每个bean，以属性、构造参数，或者一个静态工厂方法的参数的形式来表示它们的依赖，如果你使用的不是一个正常的构造函数而是静态工厂方法。当bean被创建时，这些依赖被提供给bean。</li>
-<li>每一个属性或者构造函数参数都是要设置的值，或是容器中的另一个bean的引用的实际定义。</li>
-<li>每个属性或者构造函数的参数是一个值，被从指定格式转变为属性或构造函数参数的实际类型。默认情况下，Spring可以把字符串格式的值转化为一个内置的类型，如int,long,String,boolean等等。</li>
-</ul>
-<p>当Spring容器被创建时，会校验每个bean的配置。然而，bean属性的值不会被设置，除非bean被实际创建。Beans是单例，被设置为在容器创建时创建的实例——预置实例（默认）。相关知识点被定义在<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-scopes" target="_blank" rel="external">3.5 “Bean知识点”</a>。不然的话，bean只有在被请求时才被创建了。创建一个bean会潜在地创建一个beans的图表，作为bean的依赖，并创建和分配它的依赖的依赖（以此类推）。注意，在第一次创建bean时，解析依赖中的不匹配将会在下面介绍。</p>
-<blockquote>
-<p>循环依赖</p>
-<p>如果你主要使用构造函数注入，导致一个难以解决的循环依赖情形是可能的。</p>
-<p>如，类A需要一个通过构造函数注入的类B的实例，类B需要一个通过构造函数注入的类A的实例。如果你为类A和类B配置beans,且相互注入，Spring IoC容器在运行时发现这个循环引用，就会抛出一个<code>BeanCurrentlyInCreationException</code>异常。</p>
-<p>一个解决的办法是编辑一些类的源码，这些类通过sette函数r而不是构造函数配置。另外一种办法是，避免构造函数注入而只用setter注入。换句话，虽然不建议setter注入，但你可以使用它来配置循环依赖。</p>
-<p>与标准的情况（没有循环依赖）不同，bean A和bean B之间的循环依赖强制其中的一个bean以完全初始化本身的方式注入另一个bean（一个典型的蛋鸡问题）</p>
-</blockquote>
-<p>通常来说，你可以相信Spring会做正确的事。在容器加载的时候，它会检查配置问题，如引用一个不存在的bean和循环依赖。Spring尽可能晚地设置属性和解决依赖，直到bean被实际创建。这也就意味着Spring容器正确地加载后可能生成一个异常，当你请求一个对象，在创建这个对象或它的依赖时出现了一个问题。如，当找不结果或属性非法时bean会抛出一个异常。这可能会推迟一些配置问题的可见性，这也是为什么<code>ApplicationContext</code>实现默认的预实例化单例bean的原因。在实际需要这些bean之前，花费一些预付的时间和空间来创建他们，你会在创建<code>ApplicationContext</code>的时候发现配置问题，而不是在这之后。你可以推翻这些默认行为以使单例bean被懒初始化，而不被预实例化。</p>
-<p>当一个或多个协作的bean被注入到一个依赖的bean中，如果不存在循环依赖，每个协同工作的bean完全地优先配置以便注入依赖bean中。这也就意味着，如果bean A有一个在 bean B上的依赖，Spring IoC容器彻底地优先配置bean B 通过调用bean A上的setter方法。换句话，bean被实例化（如果没有单独预实例化），它的依赖被设置，生命周期相关的方法被调用（如<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-lifecycle-initializingbean" target="_blank" rel="external">配置初始化方法</a>或 <a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-lifecycle-initializingbean" target="_blank" rel="external">InitializingBean回调方法</a>）。</p>
-<h5 id="依赖注入例子"><a href="#依赖注入例子" class="headerlink" title="依赖注入例子"></a>依赖注入例子</h5><p>下面的例子使用基于XML配置元数据的setter DI。Spring 以XML配置文件的以小部分列举了一些bean定义：</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
-    &lt;!-- setter injection using the nested ref element --&gt;
-    &lt;property name=&quot;beanOne&quot;&gt;
-        &lt;ref bean=&quot;anotherExampleBean&quot;/&gt;
-    &lt;/property&gt;
-
-    &lt;!-- setter injection using the neater ref attribute --&gt;
-    &lt;property name=&quot;beanTwo&quot; ref=&quot;yetAnotherBean&quot;/&gt;
-    &lt;property name=&quot;integerProperty&quot; value=&quot;1&quot;/&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;anotherExampleBean&quot; class=&quot;examples.AnotherBean&quot;/&gt;
-&lt;bean id=&quot;yetAnotherBean&quot; class=&quot;examples.YetAnotherBean&quot;/&gt;
-</code></pre><p>-</p>
-<pre><code>public class ExampleBean {
-
-    private AnotherBean beanOne;
-    private YetAnotherBean beanTwo;
-    private int i;
-
-    public void setBeanOne(AnotherBean beanOne) {
-        this.beanOne = beanOne;
-    }
-
-    public void setBeanTwo(YetAnotherBean beanTwo) {
-        this.beanTwo = beanTwo;
-    }
-
-    public void setIntegerProperty(int i) {
-        this.i = i;
-    }
-
-}
-</code></pre><p>在前面的例子中，setter方法声明匹配在XML文件中指定的属性，下面的例子使用构造函数 DI：</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot;&gt;
-    &lt;!-- constructor injection using the nested ref element --&gt;
-    &lt;constructor-arg&gt;
-        &lt;ref bean=&quot;anotherExampleBean&quot;/&gt;
-    &lt;/constructor-arg&gt;
-
-    &lt;!-- constructor injection using the neater ref attribute --&gt;
-    &lt;constructor-arg ref=&quot;yetAnotherBean&quot;/&gt;
-
-    &lt;constructor-arg type=&quot;int&quot; value=&quot;1&quot;/&gt;
-&lt;/bean&gt;  
-
-&lt;bean id=&quot;anotherExampleBean&quot; class=&quot;examples.AnotherBean&quot;/&gt;
-&lt;bean id=&quot;yetAnotherBean&quot; class=&quot;examples.YetAnotherBean&quot;/&gt;
-</code></pre><p>-</p>
-<pre><code>public class ExampleBean {
-
-    private AnotherBean beanOne;
-    private YetAnotherBean beanTwo;
-    private int i;
-
-    public ExampleBean(
-        AnotherBean anotherBean, YetAnotherBean yetAnotherBean, int i) {
-        this.beanOne = anotherBean;
-        this.beanTwo = yetAnotherBean;
-        this.i = i;
-    }
-
-}
-</code></pre><p>构造函数参数在bean定义中指定，将被用作<code>ExampleBean</code>的构造函数的参数。</p>
-<p>现在思考下这个例子的一个变体，要求Spring通过调用一个static工厂方法来返回该对象的一个实例，而不是使用构造方法来创建该对象的一个实例。</p>
-<pre><code>&lt;bean id=&quot;exampleBean&quot; class=&quot;examples.ExampleBean&quot; factory-method=&quot;createInstance&quot;&gt;
-    &lt;constructor-arg ref=&quot;anotherExampleBean&quot;/&gt;
-    &lt;constructor-arg ref=&quot;yetAnotherBean&quot;/&gt;
-    &lt;constructor-arg value=&quot;1&quot;/&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;anotherExampleBean&quot; class=&quot;examples.AnotherBean&quot;/&gt;
-&lt;bean id=&quot;yetAnotherBean&quot; class=&quot;examples.YetAnotherBean&quot;/&gt;
-</code></pre><p>-</p>
-<pre><code>public class ExampleBean {
-
-    // a private constructor
-    private ExampleBean(...) {
-        ...
-    }
-
-    // a static factory method; the arguments to this method can be
-    // considered the dependencies of the bean that is returned,
-    // regardless of how those arguments are actually used.
-    public static ExampleBean createInstance (
-        AnotherBean anotherBean, YetAnotherBean yetAnotherBean, int i) {
-
-        ExampleBean eb = new ExampleBean (...);
-        // some other operations...
-        return eb;
-    }
-
-}
-</code></pre><p><code>static</code>工厂方法的参数由<code>&lt;constructor-arg/&gt;</code> 元素提供，与实际使用构造函数一模一样。虽然在本例子中是相同，但是工厂方法返回的类的类型不必与包含该static工厂方法的类的类型相同。可以以本质上相同的方式（除了使用<code>factory-bean</code>属性替代<code>class</code>属性）使用一个工厂方法（非静态的），这里不做详细讨论。</p>
-<h4 id="3-4-2-依赖和详细配置"><a href="#3-4-2-依赖和详细配置" class="headerlink" title="3.4.2 依赖和详细配置"></a>3.4.2 依赖和详细配置</h4><p>正如前面章节提及的，您可以定义bean属性和构造函数参数作为对其他托管bean（协作者）的引用，或作为值的内部定义。Spring的基于XML的配置元数据支持子元素类型，其中的<code>&lt;property/&gt;</code>和 <code>&lt;constructor-arg/&gt;</code>元素就是为了该目的。</p>
-<h5 id="连续值（原语，字符串等等）"><a href="#连续值（原语，字符串等等）" class="headerlink" title="连续值（原语，字符串等等）"></a>连续值（原语，字符串等等）</h5><p><code>&lt;property/&gt;</code>元素的<code>value</code>属性指明了一个属性或者构造函数参数，并用人类能识别的字符串来表示。Spring的<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#core-convert-ConversionService-API" target="_blank" rel="external">文件扫描服务</a>用来把这些值从<code>字符串</code>转换为实际的属性或参数类型。</p>
-<pre><code>&lt;bean id=&quot;myDataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; destroy-method=&quot;close&quot;&gt;
-    &lt;!-- results in a setDriverClassName(String) call --&gt;
-    &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
-    &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/mydb&quot;/&gt;
-    &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
-    &lt;property name=&quot;password&quot; value=&quot;masterkaoli&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>为了更加简洁的XML配置，下面的例子使用<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-p-namespace" target="_blank" rel="external"> p-namespace</a></p>
-<pre><code>&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;myDataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;
-        destroy-method=&quot;close&quot;
-        p:driverClassName=&quot;com.mysql.jdbc.Driver&quot;
-        p:url=&quot;jdbc:mysql://localhost:3306/mydb&quot;
-        p:username=&quot;root&quot;
-        p:password=&quot;masterkaoli&quot;/&gt;
-
-&lt;/beans&gt;
-</code></pre><p>上面这个XML配置更加简洁，然而，打字错误只能在运行时期而不是设计时期被发现，除非你使用的是一个IDE，如 <a href="https://www.jetbrains.com/idea/" target="_blank" rel="external">IntelliJ IDEA</a>或 <a href="https://spring.io/tools/sts" target="_blank" rel="external">Spring Tool Suite</a>（STS），当你创建bean定义时，它们都支持自动补全属性。强烈建议这样的ID帮助。</p>
-<p>你也可以配置一个<code>java.util.Properties</code>实例，如下：</p>
-<pre><code>&lt;bean id=&quot;mappings&quot;
-    class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-
-    &lt;!-- typed as a java.util.Properties --&gt;
-    &lt;property name=&quot;properties&quot;&gt;
-        &lt;value&gt;
-            jdbc.driver.className=com.mysql.jdbc.Driver
-            jdbc.url=jdbc:mysql://localhost:3306/mydb
-        &lt;/value&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>Spring容器通过使用JavaBeans <code>PropertyEditor</code>原理来把<code>&lt;value/&gt;</code>元素之间的文本转化为一个<code>java.util.Properties</code>实例。这是一个很好的精简，也是Spring团队倾向于使用内嵌<code>&lt;value/&gt;</code>元素替换value属性样式的几个为数不多的地方之一（This is a nice shortcut, and is one of a few places where the Spring team do favor the use of the nested <value> element over the value attribute style.）。</value></p>
-<h5 id="idref-元素"><a href="#idref-元素" class="headerlink" title="idref 元素"></a>idref 元素</h5><p><code>idref</code> 元素值是一个error-proof方式，该方式是用来把容器中的另一个bean的<code>id</code>(字符串值-不是一个引用)传递到<code>&lt;constructor-arg/&gt;</code> 或 <code>&lt;property/&gt;</code>元素中。</p>
-<pre><code>&lt;bean id=&quot;theTargetBean&quot; class=&quot;...&quot;/&gt;
-
-&lt;bean id=&quot;theClientBean&quot; class=&quot;...&quot;&gt;
-    &lt;property name=&quot;targetName&quot;&gt;
-        &lt;idref bean=&quot;theTargetBean&quot;/&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>上面的bean定义片段完全等价于下面的定义片段：</p>
-<pre><code>&lt;bean id=&quot;theTargetBean&quot; class=&quot;...&quot; /&gt;
-
-&lt;bean id=&quot;client&quot; class=&quot;...&quot;&gt;
-    &lt;property name=&quot;targetName&quot; value=&quot;theTargetBean&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>比起第二中，第一种形式更可取，因为使用<code>idref</code>元素允许容器在部署的时候校验引用和该名称的bean的真实存在。第二种变体，在值上没有校验行为，这些值被传递给<code>client</code> bean的<code>targetName</code>属性。只有当<code>client</code> bean真正被实例化的时候，其中的错别字才会被发现。如果<code>client</code> bean是一个<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-factory-scopes" target="_blank" rel="external">原型</a>（prototype）bean。那么这些拼写错误和异常结果只能被发现得更晚，直到容器被部署时。</p>
-<p>在4.0 beans xsd中，不再支持<code>idref</code>上的<code>local</code>属性，因为它不再提供任何超过常规bean引用的值。当升级到4.0模式的时候，只需要简单的改变存在的<code>idref local</code>引用为<code>idref bean</code>引用。与用<code>&lt;idref/&gt;``元素携带值相同的一个地方是在一个AOP拦截器的配置中配置一个ProxyFactoryBean</code> bean定义的地方。当你指定拦截器的名字时，使用<code>&lt;idref/&gt;</code>元素可以避免一个拦截器id的拼写错误。</p>
-<h5 id="引用其他bean（协作者）"><a href="#引用其他bean（协作者）" class="headerlink" title="引用其他bean（协作者）"></a>引用其他bean（协作者）</h5><p><code>ref</code>元素是在<code>&lt;constructor-arg/&gt;</code>或 <code>property/&gt;</code>定义元素中的最后一个元素。这里设置指定的bean的属性的值，该值是容器管理的另一bean（一个协作者）的引用。该引用bean是被设置属性的bean的依赖，一旦需要就会在属性设置前初始化。（如果合作者是一个单例bean，可能已经被容器初始化）。所有的引用最终都是另一个对象的引用。审视和校验依赖于你是否通过<code>bean</code>, <code>local</code>,或<code>parent</code>属性指定别的对象的id/name。</p>
-<p>通过<code>&lt;ref/&gt;</code>标签的bean属性指定目标bean是最通用的形式，在同一个容器或父容器中允许任何bean引用的创建，且不管是否在同一个XML文件中。<code>bean</code>属性的值也许会与目标bean的<code>id</code>属性相同，或是作为目标bean的name属性中值之一。</p>
-<pre><code>&lt;ref bean=&quot;someBean&quot;/&gt;
-</code></pre><p>通过<code>parent</code>属性创建一个在父容器或当前容器中的bean的引用来指定目标bean。<code>parent</code>属性的值要不与目标bean的id属性值相同，要不是目标bean的<code>name</code>属性中的值之一，且目标bean必须在当前容器的一个父容器中。当你有一个分层的容器，且想通过一个名称可能与父bean相同的代理来封装一个存在父容器中bean时，主要使用这种bean引用的变体。</p>
-<pre><code>&lt;!-- in the parent context --&gt;
-&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.SimpleAccountService&quot;&gt;
-    &lt;!-- insert dependencies as required as here --&gt;
-&lt;/bean&gt;
-</code></pre><p>-</p>
-<pre><code>&lt;!-- in the child (descendant) context --&gt;
-&lt;bean id=&quot;accountService&quot; &lt;!-- bean name is the same as the parent bean --&gt;
-    class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;
-    &lt;property name=&quot;target&quot;&gt;
-        &lt;ref parent=&quot;accountService&quot;/&gt; &lt;!-- notice how we refer to the parent bean --&gt;
-    &lt;/property&gt;
-    &lt;!-- insert other configuration and dependencies as required here --&gt;
-&lt;/bean&gt;
-</code></pre><blockquote>
-<p>在 4.0 beans xsd中，ref元素不再支持local属性，因为它不再提供任何超过常规bean引用的值。当升级到4.0模式时，只需要简单的改变存在的<code>ref local</code> 引用为<code>ref bean</code>引用。</p>
-</blockquote>
-<h5 id="内部bean"><a href="#内部bean" class="headerlink" title="内部bean"></a>内部bean</h5><p>在<code>&lt;property/&gt;</code> 或 <code>&lt;constructor-arg/&gt;</code>元素中的一个<bean>元素定义了一个所谓的<em>内部bean</em>。</bean></p>
-<pre><code>&lt;bean id=&quot;outer&quot; class=&quot;...&quot;&gt;
-    &lt;!-- instead of using a reference to a target bean, simply define the target bean inline --&gt;
-    &lt;property name=&quot;target&quot;&gt;
-        &lt;bean class=&quot;com.example.Person&quot;&gt; &lt;!-- this is the inner bean --&gt;
-            &lt;property name=&quot;name&quot; value=&quot;Fiona Apple&quot;/&gt;
-            &lt;property name=&quot;age&quot; value=&quot;25&quot;/&gt;
-        &lt;/bean&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>一个内部bean的定义不需要id或name的定义；即便指定，容器也不会使用这个值作为一个标识。容器还忽略了创建物（bean）上的<code>scope</code>标记：内部bean总是匿名的，且他们总是用外部bean来创建。把内部bean注入到协作的bean中是不可能的，除非进入封装的bean中，或是能独立地访问它们。作为一个少见的问题，不可能收到来自用户的销毁方法的回调，一个请求中，内部bean被包含在一个单例bean中：内部bean实例的创建会被绑定到包含它的bean上，但在请求范围的生命周期中销毁方法的回调允许它参与。这是一个不常见的情况；内部bean只是简单的享有包含它们的bean的作用域。</p>
-<h5 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h5><p>在<code>&lt;list/&gt;</code>,<code>&lt;set/&gt;</code>, <code>&lt;map/&gt;</code>, 和 <code>&lt;props/&gt;</code> 元素中，你可以分别设置Java集合类型List、Set、Map和Properties的属性和参数。</p>
-<pre><code>&lt;bean id=&quot;moreComplexObject&quot; class=&quot;example.ComplexObject&quot;&gt;
-    &lt;!-- results in a setAdminEmails(java.util.Properties) call --&gt;
-    &lt;property name=&quot;adminEmails&quot;&gt;
-        &lt;props&gt;
-            &lt;prop key=&quot;administrator&quot;&gt;administrator@example.org&lt;/prop&gt;
-            &lt;prop key=&quot;support&quot;&gt;support@example.org&lt;/prop&gt;
-            &lt;prop key=&quot;development&quot;&gt;development@example.org&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-    &lt;!-- results in a setSomeList(java.util.List) call --&gt;
-    &lt;property name=&quot;someList&quot;&gt;
-        &lt;list&gt;
-            &lt;value&gt;a list element followed by a reference&lt;/value&gt;
-            &lt;ref bean=&quot;myDataSource&quot; /&gt;
-        &lt;/list&gt;
-    &lt;/property&gt;
-    &lt;!-- results in a setSomeMap(java.util.Map) call --&gt;
-    &lt;property name=&quot;someMap&quot;&gt;
-        &lt;map&gt;
-            &lt;entry key=&quot;an entry&quot; value=&quot;just some string&quot;/&gt;
-            &lt;entry key =&quot;a ref&quot; value-ref=&quot;myDataSource&quot;/&gt;
-        &lt;/map&gt;
-    &lt;/property&gt;
-    &lt;!-- results in a setSomeSet(java.util.Set) call --&gt;
-    &lt;property name=&quot;someSet&quot;&gt;
-        &lt;set&gt;
-            &lt;value&gt;just some string&lt;/value&gt;
-            &lt;ref bean=&quot;myDataSource&quot; /&gt;
-        &lt;/set&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>一个map的key或value，或者是一个集合的value的值,也可以再次成为如下的任何元素的值：</p>
-<pre><code>bean | ref | idref | list | set | map | props | value | null
-</code></pre><h5 id="集合归并"><a href="#集合归并" class="headerlink" title="集合归并"></a>集合归并</h5><p>Spring容器也支持集合的归并。一个应用的开发者可以定义一个父样式<code>&lt;list/&gt;</code>, <code>&lt;map/&gt;</code>, <code>&lt;set/&gt;</code>或<code>&lt;props/&gt;</code>元素，并且有一个子样式<code>&lt;list/&gt;</code>, <code>&lt;map/&gt;</code>, <code>&lt;set/&gt;</code> 或 <code>&lt;props/&gt;</code>元素继承和复写来自父集合的值。也就是说，子集合的值是归并父和子集合元素的结果，孩子的集合元素覆盖在父集合中指定的值。</p>
-<p>本部分合并讨论父子bean的原理。读者如果不熟悉父和子的bean定义，在继续之前可以先阅读下<a href="http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/htmlsingle/#beans-child-bean-definitions" target="_blank" rel="external">相关的章节</a></p>
-<p>下面例子示范了集合的归并：</p>
-<pre><code>&lt;beans&gt;
-    &lt;bean id=&quot;parent&quot; abstract=&quot;true&quot; class=&quot;example.ComplexObject&quot;&gt;
-        &lt;property name=&quot;adminEmails&quot;&gt;
-            &lt;props&gt;
-                &lt;prop key=&quot;administrator&quot;&gt;administrator@example.com&lt;/prop&gt;
-                &lt;prop key=&quot;support&quot;&gt;support@example.com&lt;/prop&gt;
-            &lt;/props&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-    &lt;bean id=&quot;child&quot; parent=&quot;parent&quot;&gt;
-        &lt;property name=&quot;adminEmails&quot;&gt;
-            &lt;!-- the merge is specified on the child collection definition --&gt;
-            &lt;props merge=&quot;true&quot;&gt;
-                &lt;prop key=&quot;sales&quot;&gt;sales@example.com&lt;/prop&gt;
-                &lt;prop key=&quot;support&quot;&gt;support@example.co.uk&lt;/prop&gt;
-            &lt;/props&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-&lt;beans&gt;
-</code></pre><p>注意使用在<code>child bean</code>定义的<code>adminEmails</code>属性的<props>元素上的<code>merge=true</code>属性。当<code>child</code> bean被容器解析和实例化，由此产生的实例有一个<code>adminEmails Properties</code>集合，该集合包含归并孩子的<code>adminEmails</code>集合和父亲的<code>adminEmails</code> 集合的结果。</props></p>
-<p>administrator=administrator@example.com</p>
-<p>sales=sales@example.com</p>
-<p>support=support@example.co.uk</p>
-<p>孩子<code>Properties</code> 集合的值被设置为从父元素<code>&lt;props/&gt;</code>继承所有的属性元素，孩子的值，也就是<code>support</code>值覆盖父集合中的值。</p>
-<p>这种合并行为同样适用于<code>&lt;list/&gt;</code>, <code>&lt;map/&gt;</code>, 和 <code>&lt;set/&gt;</code>集合类型。在<list>元素的特殊情况下，器语言与<code>List</code>集合类型相关。也就是说，一个<code>ordered</code>集合的值的概念是被保持的，父集合的值在所有孩子链表的值的前面。在Map，Set和Properties集合的类型的情形下，是没有顺序可说的。因此没有顺序语义影响集合类型，这些类型成为相关的Map，Set和Properties的容器内部使用的实现类型的基础</list></p>
-<h5 id="集合合并的限制"><a href="#集合合并的限制" class="headerlink" title="集合合并的限制"></a>集合合并的限制</h5><p>不能和并不同的集合类型（如Map和List），如果你尝试这样做，就会抛出一个恰当的异常。<code>merge</code>属性必须在下级的，继承的孩子定义上指定。在一个父集合定义上指定<code>merge</code>属性是多余的，且可能不会产生希望的合并结果。</p>
-<h5 id="强类型集合"><a href="#强类型集合" class="headerlink" title="强类型集合"></a>强类型集合</h5><p>随着Java5中泛型的引入，你可以使用强类型的集合了。也就是说，可以申明一个<code>Collection</code>类型，因此，这个集合中只可以包含<code>String</code>元素（例如）。如果你使用Spring依赖注入一个强类型<code>Collection</code>到一个Bean中，你可以利用Spring的类型转换支持强类型<code>Collection</code>的实例的元素转变为合适的类型，这个类型是先被加入<code>Collection</code>中的。</p>
-<pre><code>public class Foo {
-
-    private Map&lt;String, Float&gt; accounts;
-
-    public void setAccounts(Map&lt;String, Float&gt; accounts) {
-        this.accounts = accounts;
-    }
-}
-</code></pre><p>-</p>
-<pre><code>&lt;beans&gt;
-    &lt;bean id=&quot;foo&quot; class=&quot;x.y.Foo&quot;&gt;
-        &lt;property name=&quot;accounts&quot;&gt;
-            &lt;map&gt;
-                &lt;entry key=&quot;one&quot; value=&quot;9.99&quot;/&gt;
-                &lt;entry key=&quot;two&quot; value=&quot;2.75&quot;/&gt;
-                &lt;entry key=&quot;six&quot; value=&quot;3.99&quot;/&gt;
-            &lt;/map&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre><p>当<code>foo</code> bean的<code>accounts</code>属性准备好注入时，通过反射，关于强类型<code>Map&lt;String, Float&gt;</code>的元素类型的通用信息是可以获得的。</p>
-<h5 id="Null-和空字符串值"><a href="#Null-和空字符串值" class="headerlink" title="Null 和空字符串值"></a>Null 和空字符串值</h5><p>Spring处理属性的空参数如同处理空<code>Strings</code>.如下的基于XML的配置元数据的片段，设置<code>email</code>属性为空<code>String</code>值（””）</p>
-<pre><code>&lt;bean class=&quot;ExampleBean&quot;&gt;
-    &lt;property name=&quot;email&quot; value=&quot;&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>上面的例子等价于如下的Java代码：</p>
-<pre><code>exampleBean.setEmail(&quot;&quot;)
-</code></pre><p><code>&lt;null/&gt;</code>元素处理<code>null</code>值，如：</p>
-<pre><code>&lt;bean class=&quot;ExampleBean&quot;&gt;
-    &lt;property name=&quot;email&quot;&gt;
-        &lt;null/&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>上面的配置等价于如下的Java代码：</p>
-<pre><code>exampleBean.setEmail(null)
-</code></pre><h5 id="通过p-namespace精简XML配置"><a href="#通过p-namespace精简XML配置" class="headerlink" title="通过p-namespace精简XML配置"></a>通过p-namespace精简XML配置</h5><p>p 命名空间使你可以使用<code>bean</code>元素的属性替代嵌套的<code>&lt;property/&gt;</code>元素来描述你的属性值和/或协作bean。</p>
-<p>通过命名空间，Spring支持可扩展的配置格式，这是基于一个XML Schema 定义。本章讨论的配置格式被定义在一个 XML Schema文档中。然而 p-namespace并没有定义在XSD文件中，值存在Spring的核心中。</p>
-<p>下面的例子中包含两个XML片段，都是用来解决相同的问题：第一个使用标准的XML格式，第二个使用p-namespace。</p>
-<pre><code>&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean name=&quot;classic&quot; class=&quot;com.example.ExampleBean&quot;&gt;
-        &lt;property name=&quot;email&quot; value=&quot;foo@bar.com&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;bean name=&quot;p-namespace&quot; class=&quot;com.example.ExampleBean&quot;
-        p:email=&quot;foo@bar.com&quot;/&gt;
-&lt;/beans&gt;
-</code></pre><p>上面的例子演示了在p-namespace bean的定义中一个叫做email的属性。告诉Spring包含一个属性声明。正如前面提及的，p-namespace没有schema定义，因此你可以设置这个属性名到属性（property）名。</p>
-<p>下列含有超过两个bean的定义，都引用另一个bean：</p>
-<pre><code>&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean name=&quot;john-classic&quot; class=&quot;com.example.Person&quot;&gt;
-        &lt;property name=&quot;name&quot; value=&quot;John Doe&quot;/&gt;
-        &lt;property name=&quot;spouse&quot; ref=&quot;jane&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;bean name=&quot;john-modern&quot;
-        class=&quot;com.example.Person&quot;
-        p:name=&quot;John Doe&quot;
-        p:spouse-ref=&quot;jane&quot;/&gt;
-
-    &lt;bean name=&quot;jane&quot; class=&quot;com.example.Person&quot;&gt;
-        &lt;property name=&quot;name&quot; value=&quot;Jane Doe&quot;/&gt;
-    &lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre><p>如你所见，本例包含了不止一个使用p-namespace的属性值，但都使用了一个特殊的格式 来声明属性的引用。第一个bean的定义使用<code>&lt;property name=&quot;spouse&quot; ref=&quot;jane&quot;/&gt;</code>创建了一个<code>John</code>到<code>Jane</code>的引用，第二个bean定义使用<code>p:spouse-ref=&quot;jane&quot;</code>作为一个属性来完成完全相同的事。在本例中<code>spouse</code> 是属性名，鉴于<code>-ref</code>部分，表明这个不是直接的值，而是相当于对另一个bean的引用。</p>
-<blockquote>
-<p>p-namespace并不比标准的XML格式灵活，例如，这种格式声明的属性引用会与以<code>ref</code>结尾的属性冲突，然而标准的XML格式就不会有这个问题。为避免在同一时间使用所有的三种方式来生成XML文档，我们建议仔细选择你的方式，并把这个信息传达给你的团队成员。</p>
-</blockquote>
-<h5 id="通过c-namespace精简XML配置"><a href="#通过c-namespace精简XML配置" class="headerlink" title="通过c-namespace精简XML配置"></a>通过c-namespace精简XML配置</h5><p>与“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-p-namespace" target="_blank" rel="external">通过p-namespace精简XML配置</a>”节相似，c-namespace在Spring3.1开始引入，允许使用内部属性来配置构造函数的参数代替内嵌的<code>constructor-arg</code>元素。</p>
-<p>回顾“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-constructor-injection" target="_blank" rel="external">基于构造函数依赖注入</a>”章节关于<code>c:</code>命名空间的例子：</p>
-<pre><code>&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:c=&quot;http://www.springframework.org/schema/c&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;bar&quot; class=&quot;x.y.Bar&quot;/&gt;
-    &lt;bean id=&quot;baz&quot; class=&quot;x.y.Baz&quot;/&gt;
-
-    &lt;!-- traditional declaration --&gt;
-    &lt;bean id=&quot;foo&quot; class=&quot;x.y.Foo&quot;&gt;
-        &lt;constructor-arg ref=&quot;bar&quot;/&gt;
-        &lt;constructor-arg ref=&quot;baz&quot;/&gt;
-        &lt;constructor-arg value=&quot;foo@bar.com&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- c-namespace declaration --&gt;
-    &lt;bean id=&quot;foo&quot; class=&quot;x.y.Foo&quot; c:bar-ref=&quot;bar&quot; c:baz-ref=&quot;baz&quot; c:email=&quot;foo@bar.com&quot;/&gt;
-
-&lt;/beans&gt;
-</code></pre><p>关于通过名称设置构造函数参数，c:命名空间使用与p:命名空间相同的约定（bean的引用以-ref结尾）。即便你没有在XSD模式中定义它，这也无妨，你只需要声明就行。</p>
-<p>对于构造参数不可用（通常如果编译的字节码没有debuggig信息的话）的稀有情景，你可以使用给参数加上索引的备用方法：</p>
-<pre><code>&lt;!-- c-namespace index declaration --&gt;
-&lt;bean id=&quot;foo&quot; class=&quot;x.y.Foo&quot; c:_0-ref=&quot;bar&quot; c:_1-ref=&quot;baz&quot;/&gt;
-</code></pre><blockquote>
-<p>由于XML的语法的原因，索引符号需要以<code>_</code>开头，就像XML的属性名称一样，不能以数字开头（即便有些IDE是允许这样的）。</p>
-</blockquote>
-<p>实际上，在匹配参数上构造函数解决<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-factory-ctor-arguments-resolution" target="_blank" rel="external">机制</a>是十分有效的。所以除非真的需要，否建议使用name符号贯穿整个配置。</p>
-<h5 id="混合属性名称"><a href="#混合属性名称" class="headerlink" title="混合属性名称"></a>混合属性名称</h5><p>当设置bean属性时，可以使用混合的或者嵌套的属性名称，只要所有的path组件出最终属性属性名外都不是<code>null</code>。思考如下的bean定义：</p>
-<pre><code>&lt;bean id=&quot;foo&quot; class=&quot;foo.Bar&quot;&gt;
-    &lt;property name=&quot;fred.bob.sammy&quot; value=&quot;123&quot; /&gt;
-&lt;/bean&gt;
-</code></pre><p><code>foo</code> bean有一个<code>fred</code>属性，<code>fred</code>属性有一个<code>bob</code>属性，<code>bob</code>属性有一个<code>sammy</code>属性，最终的<code>sammy</code>属性被设置为<code>123</code>。为了使其能起作用，<code>bean</code>构造后，<code>foo</code>的<code>fred</code>属性，<code>fred</code>的<code>bob</code>属性必须不是<code>null</code>，或者不能抛出<code>NullPointerException</code>异常。 </p>
-<h4 id="3-4-3-使用依赖"><a href="#3-4-3-使用依赖" class="headerlink" title="3.4.3 使用依赖"></a>3.4.3 使用依赖</h4><p>如果一个bean另一个bean的依赖，那通常就表示这个bean被设置为了另一个bean的属性（内容）。典型的是，通过基于XML的配置元数据中的<ref>元素来完成这项功能。然而，有时候bean之间的依赖并不是直接的；如，在一个class中的一个静态初始化方法需要被触发，比如数据库驱动注册（database driver registration）。在bean使用的元素被初始化之前，<code>depends-on</code>属性可以明确地强制一个或多个bean初始化。如下，使用<code>depends-on</code>属性来传递了一个单bean上的依赖。</ref></p>
-<pre><code>&lt;bean id=&quot;beanOne&quot; class=&quot;ExampleBean&quot; depends-on=&quot;manager&quot;/&gt;
-&lt;bean id=&quot;manager&quot; class=&quot;ManagerBean&quot; /&gt;
-</code></pre><p>为了表示在多个bean上的依赖，提供一个bean的名称列表作为<code>depends-on</code>属性的值，其中的逗号，空格和分号作为校验分隔符：</p>
-<pre><code>&lt;bean id=&quot;beanOne&quot; class=&quot;ExampleBean&quot; depends-on=&quot;manager,accountDao&quot;&gt;
-    &lt;property name=&quot;manager&quot; ref=&quot;manager&quot; /&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;manager&quot; class=&quot;ManagerBean&quot; /&gt;
-&lt;bean id=&quot;accountDao&quot; class=&quot;x.y.jdbc.JdbcAccountDao&quot; /&gt;
-</code></pre><p>在bean的定义中的<code>depends-on</code>属性既可以指定初始化时的依赖，如果只是一个单例bean的话，也可以指定对应的销毁时的依赖，从属的bean定义了一个<code>depends-on</code>与一个给定bean关系，且会被首先销毁，优先销毁给定的bean自身，也就是说<code>depends-on</code>也可以控制关闭顺序。</p>
-<h4 id="3-4-4-bean的Lazy初始化"><a href="#3-4-4-bean的Lazy初始化" class="headerlink" title="3.4.4 bean的Lazy初始化"></a>3.4.4 bean的Lazy初始化</h4><p>默认情况下，ApplicationContext 实现希望创建和配置所有的单例beans，以作为初始化程序的一部分。一般情况下，这种预先实例化的方式是很有必要的，因为在配置中或者与环境相关的错误会及时被发现，不然的话很可能是几个小时，甚至几天之后才会被发现。当不满意这样的行为时，你可以通过标记bean定义为lazy-initialized来阻止一个单例bean的预实例化。一个lazy-initialied bean告知IoC容器，只有当一个bean第一次被请求时才创建其实例化，而不是在启动的时候就创建。</p>
-<p>在XML文件中，通过,<bean>元素的lazy-init属性来控制lazy初始化行为。例如：</bean></p>
-<pre><code>&lt;bean id=&quot;lazy&quot; class=&quot;com.foo.ExpensiveToCreateBean&quot; lazy-init=&quot;true&quot;/&gt;
-&lt;bean name=&quot;not.lazy&quot; class=&quot;com.foo.AnotherBean&quot;/&gt;
-</code></pre><p>当上面的配置被一个<code>ApplicationContext</code>消费时，在<code>ApplicationContext</code> 启动时，命名为<code>lazy</code>的bean需希望被预实例化，而命名为<code>not.lazy</code>的可以预实例化。</p>
-<p>然而，当一个lazy初始化bean是一个非lazy初始化的单例bean的依赖时，<code>ApplicationContext</code> 就会在启动时创建lazy初始化bean，这是为了满足单例的依赖。lazy初始化的bean被注入到一个单例bean中，那么在别的地方就不再是lazy bean。</p>
-<p>通过使用<code>&lt;beans/&gt;</code>元素上的<code>default-lazy-init属</code>性，可以在容器级别控制懒初始化。例如：</p>
-<pre><code>&lt;beans default-lazy-init=&quot;true&quot;&gt;
-    &lt;!-- no beans will be pre-instantiated... --&gt;
-&lt;/beans&gt;
-</code></pre><h4 id="3-4-5-自动装配协作对象"><a href="#3-4-5-自动装配协作对象" class="headerlink" title="3.4.5 自动装配协作对象"></a>3.4.5 自动装配协作对象</h4><p>Spring容器可以在协作bean之间进行自动关联，你可以允许Spring通过检查ApplicationContext中的内容，以自动地解决你的bean的协作者（其他的bean）。自动封装有一下一些优势：</p>
-<ul>
-<li>自动封装明显地减少需要指定的属性或者构造参数（就这点而言，别的机制，如在本章其他地方讨论的bean模板也是有价值的）。</li>
-<li>当你的对象演变时，自动封装可以更新配置。例如，如果你需要为一个class增加依赖，它可以自动满足需求而不需要修改配置。也就是说自动装配在开发的时候是特别有用的，不可否认，当代码基础变得稳定后可以切换到精确配置这个选项上来。</li>
-</ul>
-<p>在使用基于XML的配置元数据时，你可以为一个通过<bean>元素的autowire属性定义的bean指定自动装配的模式。自动装配功能有四种模式，你可以为每个bean指定自动装配机制，也就是说你可以选择为哪一个bean进行自动装配。</bean></p>
-<p>表3.2 自动装配模式</p>
-<p><table><br>    <tr><br>        <th>模式</th><th><br>        </th><th>解释</th><th><br>    </th></tr><tr><br>    </tr><tr><br>        <td>no</td><td><br>        </td><td>（默认）没有自动包装，bean的引用必须通过<code>ref</code>元素定义，对于比较大的部署，不建议改变默认设置，因为精确地描述一个协作者，需要提供更多的控制和透明度，一定程度上来说，这种方式记录了系统的结构</td><td><br>    </td></tr><tr><br>    </tr><tr><br>        <td>byName</td><td><br>        </td><td>通过属性名称自动封装，Spring查询有相同属性名的，需要自动封装的bean。例如，如果一个bean的定义被设置为通过名称自动封装，并且包含一个master属性（就是 有一个setMaster(..)方法），Spring寻找一个名称为<code>master</code>的bean定义，并使用它来设置属性</td><td><br>    </td></tr><tr><br>    </tr><tr><br>        <td>byType</td><td><br>        </td><td>如果恰好一个bean的属性类型存在一个容器中，那么可以自动封装该属性。如果存在超过一个，就会抛出一个毁灭性的异常，这就表明你可能没使用<em>byType</em>自动包装这个bean，如果没有匹配的bean，就什么都不会发生，属性就不会被设置</td><td><br>    </td></tr><tr><br>    </tr><tr><br>        <td>constructor</td><td><br>        </td><td>类似<em>byType</em>，但是使用了构造参数，如果在容器中恰好不存在一个构造器的参数类型的bean，那么就会产生一个严重错误</td><td><br>    </td></tr><tr></tr></table></p>
-<table>
-
-
-
-
-<p>通过<em>byType</em>和<em>constructor</em>的自动封装模式，你可以包装数组和有类型集合，在这种情形下，容器中的所有的匹配所需类型的自动包装候选者用于满足依赖。如果key的类型是<code>String</code>，你可以自动包装强类型的Map。一个自动包装的Map的值将由满足预期类型bean实例组成，Map的键会包含相应的bean名称。</p>
-<p>你可以把自动包装行为和依赖检查结合起来，依赖检查是在自动包装后执行的。</p>
-<h5 id="自动包装的劣势和限制"><a href="#自动包装的劣势和限制" class="headerlink" title="自动包装的劣势和限制"></a>自动包装的劣势和限制</h5><p>在整个项目中一直使用自动包装机制，使得自动包装能更好的起作用。如果自动包装不被普遍使用，而只被使用来包装一两个bean定义会令开发者感到迷惑。</p>
-<p>考虑自动包装的限制和缺点：</p>
-<ul>
-<li>在<code>property</code>和<code>constructor-arg</code>中设置的明确依赖总是会覆盖自动包装。你不能封装所谓的简单属性，比如基本类型，<code>Strings</code>，和<code>Classes</code>（和这些简单类型的数组），这个限制是设计时就有的。</li>
-<li>自动封装没有精确封装准确。尽管如上表所诉，但Spring还是很小心的避免在模拟两可的情况下进行猜测，这种情况也许会导致难以预料的结果，Spring所管理的对象之间关系不再被精确的记录。</li>
-<li>包装信息对于从Spring容器生成一个文档的工具来说可能是没有用的。</li>
-<li>容器中的多个bean定义可以匹配setter方法和构造函数参数指定的类型，从而达到自动包装。对于数组，集合或Maps，这都不是问题。然而对于单值的依赖，这种含糊是难以解决的。如果非独立的bean定义是可用的，就会抛出一个异常。</li>
-</ul>
-<p>在最新的方案中，你有以下几种选择：</p>
-<ul>
-<li>放弃自动包装而改用精确的封装</li>
-<li>如下一节描述的一样，为避免对一个<code>bean</code>定义进行自动包装，可以通过设置它的<code>autowire-candidate</code>属性为<code>false</code>。</li>
-<li>通过设置bean元素的<code>primary</code>属性为<code>true</code>,指派一个单例bean定义作为最初的候选者。</li>
-<li>通过基于注解的配置可以实施更细粒度的控制，如<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-annotation-config" target="_blank" rel="external">3.9 “基于注解的容器配置”</a>中所述。</li>
-</ul>
-<h5 id="排除bean自动包装"><a href="#排除bean自动包装" class="headerlink" title="排除bean自动包装"></a>排除bean自动包装</h5><p>在每个bean的基础上，可以排除一个bean的自动包装，在spring的XML格式中，设置<code>&lt;bean/&gt;</code>元素的<code>autowire-candidate</code>属性为<code>false</code>;容器使得特殊的bean定义不能包装基础构件（包括注解方式的配置，如<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-autowired-annotation" target="_blank" rel="external"><code>@Autowired</code></a>）</p>
-<blockquote>
-<p>autowire-candidate属性被设计成只影响基于类型的自动包装。它不影响通过名称的精确引用，该引用将会转变，即便指定的bean没有被标记为一个自动包装的候选对象。因此，通过名字的自动包装将不会注入，除非名称匹配。</p>
-</blockquote>
-<p>通过基于bean名称相关的模式匹配，你可以限制自动包装的候选者。顶级的<beans>元素，在它的default-autowire-candidates属性中，可以接受一个或多个模式。例如，为了限制任何名称以Repository结尾的bean的自动包装候选者的状态，以*Repository作为值。为了提供多个模式，把它们定义在以逗号分隔的list中。一个bean定义的autowire-candidate属性的精确值，true或者false,总是被优先考虑，对于这样的bean，模式匹配规则不起作用。</beans></p>
-<p>这种技术对那些你从来不想通过自动包装注入到其他bean中的bean来说是有用的。这也并不意味着被排除的bean不能通过自动包装配置。也就是说，bean本身不能成为包装其他bean的候选者。</p>
-<h4 id="3-4-6-方法注入"><a href="#3-4-6-方法注入" class="headerlink" title="3.4.6 方法注入"></a>3.4.6 方法注入</h4><p>在大部分的应用场景中，容器中的大部分bean是单例。当一个单例bean需要与另一个单例bean协作，或者是一个非单例bean需要与另一个非单例bean协作，你典型的处理依赖的方式是定义一个bean成为另一个bean的依赖。当bean的生命周期不同的时候，就会导致一个问题。假设单例bean A需要使用非单例bean B，或许在A的每个方法调用上。容器只会创建单例bean一次，也就是说只有一次机会设置属性，容器不能给bean A 提供一个bean B的实例在每次需要一个bean B的时候。</p>
-<p>一个解决办法是放弃一些依赖倒置。你可以通过实现ApplicationContextAware接口使得bean A能意识到容器的存在，每当bean A需要bean B的时候，可以通过创建一个getBean(“B”)来调用容器获取bean B实例。如下是该方法的一个例子：</p>
-<pre><code>// a class that uses a stateful Command-style class to perform some processing
-package fiona.apple;
-
-// Spring-API imports
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
-public class CommandManager implements ApplicationContextAware {
-
-    private ApplicationContext applicationContext;
-
-    public Object process(Map commandState) {
-        // grab a new instance of the appropriate Command
-        Command command = createCommand();
-        // set the state on the (hopefully brand new) Command instance
-        command.setState(commandState);
-        return command.execute();
-    }
-
-    protected Command createCommand() {
-        // notice the Spring API dependency!
-        return this.applicationContext.getBean(&quot;command&quot;, Command.class);
-    }
-
-    public void setApplicationContext(
-            ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-}
-</code></pre><p>前面的方法难以令人满意，因为业务代码与Spring Framework耦合在一起了。方法注入，有点Spring IoC容器的优秀特点，允许以一个清晰的方式处理这个用例。</p>
-<pre><code>你可以[这篇博客条目](https://spring.io/blog/2004/08/06/method-injection/)中阅读更多的关于方法注入的的优势。
-</code></pre><h5 id="Lookup方法注入"><a href="#Lookup方法注入" class="headerlink" title="Lookup方法注入"></a>Lookup方法注入</h5><p>Lookup方法注入是容器覆盖在容器管理的bean上的方法的能力，为容器中的另一个bean返回查询结果。lookup涉及到的特殊情况是一个原型bean，正如在前面的章节的场景中所描述的一样。Spring Framework实现这种方法注入是通过字节码生成器，该生成器是使用CGLIB 库动态地生成一个复写该方法的子类。</p>
-<blockquote>
-<ul>
-<li>为了使这个动态的子类生效，Spring bean容器将要收集的这个类不能是final的，将要被覆盖的方法也不能是final的。</li>
-<li>单元测试一个有abstract方法的类，要求你自己子类化该类，并为该abstract方法提供一个桩(stub)实现。</li>
-<li>对于要求具体类来完成的组件组件扫描，具体的方法也是必须的。 </li>
-<li>一个最关键的限制是lookup方法不能与工厂方法一起工作，尤其是不能与配置类中的使用@Bean注解的方法一起工作，因为在这种情况下容器不负责创建实例，因此不能在运行时快速生成子类。</li>
-</ul>
-</blockquote>
-<p>看看在前面的代码片段中的CommandManager 类，你会发现Spring容器会动态的覆盖createCommand()方法的实现。你的CommandManager 类将会没有的任何的Spring依赖，正如下面重写的例子所示;</p>
-<pre><code>package fiona.apple;
-
-// no more Spring imports!
-
-public abstract class CommandManager {
-
-    public Object process(Object commandState) {
-        // grab a new instance of the appropriate Command interface
-        Command command = createCommand();
-        // set the state on the (hopefully brand new) Command instance
-        command.setState(commandState);
-        return command.execute();
-    }
-
-    // okay... but where is the implementation of this method?
-    protected abstract Command createCommand();
-}
-</code></pre><p>在客户端类中包含将要注入的方法（如这种情形下的CommandManager 类），需要被注入的类要求有一个如下的格式的签名：</p>
-<pre><code>&lt;public|protected&gt; [abstract] &lt;return-type&gt; theMethodName(no-arguments);
-</code></pre><p>如果该方法是abstract的，需要动态生成的子类实现该方法。否则的话，动态生成的子类需要覆盖在原始类中定义的具体的方法。如：</p>
-<pre><code>&lt;!-- a stateful bean deployed as a prototype (non-singleton) --&gt;
-&lt;bean id=&quot;myCommand&quot; class=&quot;fiona.apple.AsyncCommand&quot; scope=&quot;prototype&quot;&gt;
-    &lt;!-- inject dependencies here as required --&gt;
-&lt;/bean&gt;
-
-&lt;!-- commandProcessor uses statefulCommandHelper --&gt;
-&lt;bean id=&quot;commandManager&quot; class=&quot;fiona.apple.CommandManager&quot;&gt;
-    &lt;lookup-method name=&quot;createCommand&quot; bean=&quot;myCommand&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>无论什么时候，标识为commandManager 的bean需要一个myCommand bean的新实例，它都会调用它自己的createCommand()方法。如果真的需要把myCommand bean部署为一个原型，你必须小心谨慎的。如果它是一个单例，每次都返回myCommand bean的同一个实例。</p>
-<p>或者在一个基于注解的组件模型中，你可能会通过@Lookup注解声明一个lookup方法：</p>
-<pre><code>public abstract class CommandManager {
-
-    public Object process(Object commandState) {
-        Command command = createCommand();
-        command.setState(commandState);
-        return command.execute();
-    }
-
-    @Lookup(&quot;myCommand&quot;)
-    protected abstract Command createCommand();
-}
-</code></pre><p>或者，更常用的是，你可以依赖目标bean获取解决方法，依靠lookup方法声明的返回类型：</p>
-<pre><code>public abstract class CommandManager {
-
-    public Object process(Object commandState) {
-        MyCommand command = createCommand();
-        command.setState(commandState);
-        return command.execute();
-    }
-
-    @Lookup
-    protected abstract MyCommand createCommand();
-}
-</code></pre><p>注意，为了使这些方法与Spring的组件扫在描默认情况下忽略抽象类的规则兼容，你可以有代表性地声明这样的带有注解的lookup方法，使得其有一个具体的桩(stub)实现。</p>
-<blockquote>
-<p>另一种访问不同作用域的目标bean的方法是一个ObjectFactory/ Provider注入点。查看章节“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-factory-scopes-other-injection" target="_blank" rel="external">Scoped beans as dependencies</a>”。</p>
-<p>感兴趣的读者也可以查看ServiceLocatorFactoryBean（在org.springframework.beans.factory.config包中） 的使用。</p>
-</blockquote>
-<h5 id="任意的方法替换"><a href="#任意的方法替换" class="headerlink" title="任意的方法替换"></a>任意的方法替换</h5><p>一个比lookup方法注入更少使用的方法注入形式是替所换管理的通过另一个方法实现的bean中的任何方法的能力。</p>
-<p>根据基于XML配置的元数据，为了部署bean，你可以使用replaced-method元素替换一个存在的，通过另一个bean实现的方法。考虑如下的类，它有一个computeValue方法，这个方法是我们想覆盖的：</p>
-<pre><code>public class MyValueCalculator {
-
-    public String computeValue(String input) {
-        // some real code...
-    }
-
-    // some other methods...
-
-}
-</code></pre><p>一个实现了org.springframework.beans.factory.support.MethodReplacer接口的类提供了一个新的方法定义：</p>
-<pre><code>/**
- * meant to be used to override the existing computeValue(String)
- * implementation in MyValueCalculator
- */
-public class ReplacementComputeValue implements MethodReplacer {
-
-    public Object reimplement(Object o, Method m, Object[] args) throws Throwable {
-        // get the input value, work with it, and return a computed result
-        String input = (String) args[0];
-        ...
-        return ...;
-    }
-}
-</code></pre><p>部署原始类并指定覆盖的方法的bean定义，就像下面这样：</p>
-<pre><code>&lt;bean id=&quot;myValueCalculator&quot; class=&quot;x.y.z.MyValueCalculator&quot;&gt;
-    &lt;!-- arbitrary method replacement --&gt;
-    &lt;replaced-method name=&quot;computeValue&quot; replacer=&quot;replacementComputeValue&quot;&gt;
-        &lt;arg-type&gt;String&lt;/arg-type&gt;
-    &lt;/replaced-method&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;replacementComputeValue&quot; class=&quot;a.b.c.ReplacementComputeValue&quot;/&gt;
-</code></pre><p>你可以使用一个或多个包在<replaced-method>元素中的<arg-type>元素来指定将要被覆盖的方法的签名。在类中，只有方法被重载和存在多个变体的情况，参数才需要签名。为方便起见，输入的参数字符串可以是全限定类名的字符串的子串。例如，如下的都匹配java.lang.String：</arg-type></replaced-method></p>
-<pre><code>java.lang.String
-String
-Str
-</code></pre><p>因为参数的数量通常足够区分每个可能的选择，这个简写可以节约键入次数，允许你只键入最短的字符串就可以匹配一个参数类型。</p>
-<h3 id="3-5-Bean作用域"><a href="#3-5-Bean作用域" class="headerlink" title="3.5 Bean作用域"></a>3.5 Bean作用域</h3><p>当你创建一个bean定义的时候，实际上是为通过bean定义定义的类的创建真实的实例建立了一个菜谱。把一个bean的定义看做菜谱的观点是很重要的，因为这意味着，就一个类来说，你可以从一个单一的菜谱创建许多对象实例。</p>
-<p>你能控制的不只有各种各样的依赖和塞入一个由一个特殊的bean定义创建的对象中的配置值，而且还包括由特殊bean定义创建的对象的作用域。在你能选择的对象的作用域中，这种方法是强大和灵活的，所选折的对象是通过配置而不是必须在Java类级别的对象作用域中创建的。可以把Bean定义为部署到多个作用域中的一个：创造性地，Spring Framework 支持留个作用域，其中的五个只有在你使用web方面的<code>ApplicationContext</code>时才起效。</p>
-<p>如下的作用域支持开箱即用，你也可以创建传统的作用域：</p>
-<p><table><br>    <tr><br>        <th>Scope</th><br>        <th>描述</th><br>    </tr><br>    <tr><br>        <th>singleton</th><br>        <th>(默认)每个Spring IoC容器都会把单一的bean定义映射为一个单一的对象实例</th><br>    </tr><br>    <tr><br>        <th>prototype</th><br>        <th>把一个单一的bean定义映射到任何数量的对象实例</th><br>    </tr><br>    <tr><br>        <th>request</th><br>        <th>把一个单一的bean定义映射到单个HTTP请求的生命周期中，也就会说每个HTPP请求有一个它自身的一个bean实例，该bean反复被一个单一的bean定义创建，只有在web感知的Spring ApplicationContext的上下文中才有效</th><br>    </tr><br>    <tr><br>        <th>session</th><br>        <th>Scopes a single bean definition to the lifecycle of an HTTP Session. Only valid in the context of a web-aware Spring ApplicationContext.</th><br>    </tr><br>    <tr><br>        <th>application</th><br>        <th>Scopes a single bean definition to the lifecycle of a ServletContext. Only valid in the context of a web-aware Spring ApplicationContext.</th><br>    </tr><br>    <tr><br>        <th>application</th><br>        <th>Scopes a single bean definition to the lifecycle of a WebSocket. Only valid in the context of a web-aware Spring ApplicationContext.</th><br>    </tr><br></table></p>
-<blockquote>
-<p>Spring3.0之后，一个线程级的作用域是可用的，但没有默认注册。更多的信息见<a href="http://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/javadoc-api/org/springframework/context/support/SimpleThreadScope.html" target="_blank" rel="external"><code>SimpleThreadScope</code></a>相关的文档。关于怎样注册这个作用或者其他的惯用的作用域，查看“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-factory-scopes-custom-using" target="_blank" rel="external">使用一个常用作用域</a>”这节。</p>
-</blockquote>
-<h4 id="3-5-1-单例作用域"><a href="#3-5-1-单例作用域" class="headerlink" title="3.5.1 单例作用域"></a>3.5.1 单例作用域</h4><p>一个被管理的单例bean只有一个共享的实例，所有通过ID或IDS匹配bean定义的bean请求导致一个特殊的bean实例被Spring容器返回。</p>
-<p>换句话说，当你定义一个bean定义，它被定义为一个单例，Spring IoC容器精确地创建一个通过bean定义定义的对象实例。这个单实例被存储在一个类似单例bean的缓存中，所有后面的关于这个bean的请求和引用，返回的都是这个对象。</p>
-<p><img src="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/singleton.png.pagespeed.ce.U0lSEQUK39.png" alt=""><br>Spring单例bean的概念不同于在 Gang of Four (GoF)中定义的单例模式。GoF单例硬编码一个对象的作用域，对于每个类加载器一个特殊的类只被创建一次，Spring单例的作用域最好描述为一个容器一个bean。这意味着在一个单一的容器中如果你为一个特殊的类定义了一个bean，那么Spring容器创建一个，且只创建一个通过bean定义定义的类实例。Spring中的单例作用域就是默认的作用域。为了在XML文件中把一个bean定义为单例，你会像下面一样编写这个XML文件：</p>
-<pre><code>&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.DefaultAccountService&quot;/&gt;
-
-&lt;!-- the following is equivalent, though redundant (singleton scope is the default) --&gt;
-&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.DefaultAccountService&quot; scope=&quot;singleton&quot;/&gt;
-</code></pre><h3 id="3-5-2-原型作用域"><a href="#3-5-2-原型作用域" class="headerlink" title="3.5.2 原型作用域"></a>3.5.2 原型作用域</h3><p>非单例，bean的原型作用域的部署导致一个新的bean实例创建，每次对这个特殊bean的请求都会创建这个bean。也就是说，这个bean被注入到另一个bean中，或者你可以通过getBean()方法在容器上回调来请求这个bean。作为一个规则，为所有有状态的bean使用原型作用域，为所有的无状态的bean使用单例。</p>
-<p>下图阐明了Spring的原型作用域，一个数据访问对象（DAO）通常不配置为一个原型，因为一个典型的DAO没有持有任何的会话状态。这里作者只是简单的复用单例图的核心：</p>
-<p><img src="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/prototype.png.pagespeed.ce._EP1ydjN29.png" alt=""><br>如下例子，在XML文件中定义了一个原型bean：</p>
-<pre><code>&lt;bean id=&quot;accountService&quot; class=&quot;com.foo.DefaultAccountService&quot; scope=&quot;prototype&quot;/&gt;
-</code></pre><p>与其他的作用域进行对比，Spring并没有管理一个原型bean的完整生命周期：容器实例化、配置，另外还集合一个原型对象，并把它推送给用户，除此之外并没有更多的关于原型实例的记录。    那就是，尽管初始化生命周期的回调方法在所有不分作用域的对象上被调用，但是在原型作用域的情况下，销毁生命周期回调函数的配置不被调用。客户端代码必须清理原型作用域对象，并且释放原型bean占有的宝贵的资源。为了获得Spring容器释放的被原型作用域bean占有的资源，试着使用一个常用的 bean 提交处理器，该处理器拥有需要被清理的bean的引用。</p>
-<p>某些情况下，Spring容器关于原型作用域bean的角色是Java new操作符的代替者。全生命周期管理越过那个点，就必须被客户端处理。（关于Spring容器中的bean的生命周期的详细信息，可以参考3.6.1节，“<a href="http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-factory-lifecycle" target="_blank" rel="external">生命周期回调</a>”）</p>
-</table></dependencies>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;Spring-依赖和依赖于Spring&quot;&gt;&lt;a href=&quot;#Spring-依赖和依赖于Spring&quot; class=&quot;headerlink&quot; title=&quot;Spring 依赖和依赖于Spring&quot;&gt;&lt;/a&gt;Spring 依赖和依赖于Spring&lt;/h4&gt;&lt;p&gt;尽管
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>GVim的编码设置</title>
-    <link href="http://yoursite.com/2017/04/04/GVim%E7%9A%84%E7%BC%96%E7%A0%81%E8%AE%BE%E7%BD%AE/"/>
-    <id>http://yoursite.com/2017/04/04/GVim的编码设置/</id>
-    <published>2017-04-04T10:48:09.000Z</published>
-    <updated>2017-04-04T10:53:17.538Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="gvim的基本设置"><a href="#gvim的基本设置" class="headerlink" title="gvim的基本设置"></a>gvim的基本设置</h1><hr>
-<h2 id="编码设置"><a href="#编码设置" class="headerlink" title="编码设置"></a>编码设置</h2><p><code>set fileencodings=utf-8,chinese,latin-1</code></p>
-<p><code>set termencoding=utf-8</code></p>
-<p><code>set encoding=utf-</code></p>
-]]></content>
-    
-    <summary type="html">
-    
-      在使用vim过程中的一些总结
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="工具类学习" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   

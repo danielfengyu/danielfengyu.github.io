@@ -1,0 +1,459 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Tomcat工作原理 | 山间听雨者主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Daniel">
+    
+    <meta name="description" content="背景随着互联网的发展，java也在不断的改善进步。B/S架构的发展也是进展迅速，java为了支持B/S架构，出现了Servlet和jsp等服务端小程序，客户端小程序applet等。在servlet规范或是标准出现前，编写服务端程序需要在服务器集成通过其他语言实现的CGI程序，这个方式对java的平台">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="山间听雨者主页" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/abao.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/abao.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/abao.jpg">
+    
+
+  
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山间听雨者主页">山间听雨者主页</a></h1>
+				<h2 class="blog-motto">个人学习总结</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/aboutme">关于</a></li>
+					
+					<li>
+					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
+						</form>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/05/19/Tomcat工作原理/" title="Tomcat工作原理" itemprop="url">Tomcat工作原理</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-05-19T13:12:59.000Z" itemprop="datePublished">2018-05-19</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaEE-J2EE"><span class="toc-number">2.</span> <span class="toc-text">JavaEE/J2EE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Servlet与CGI"><span class="toc-number">3.</span> <span class="toc-text">Servlet与CGI</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Jsp"><span class="toc-number">4.</span> <span class="toc-text">Jsp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Jsp的内置对象"><span class="toc-number">4.1.</span> <span class="toc-text">Jsp的内置对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置指令："><span class="toc-number">4.2.</span> <span class="toc-text">内置指令：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#aaplet"><span class="toc-number">5.</span> <span class="toc-text">aaplet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tomcat的源码调试步骤"><span class="toc-number">6.</span> <span class="toc-text">Tomcat的源码调试步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tomcat处理用户HTTP请求的流程"><span class="toc-number">7.</span> <span class="toc-text">Tomcat处理用户HTTP请求的流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#各种器的关系"><span class="toc-number">8.</span> <span class="toc-text">各种器的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>随着互联网的发展，java也在不断的改善进步。B/S架构的发展也是进展迅速，java为了支持B/S架构，出现了Servlet和jsp等服务端小程序，客户端小程序applet等。在servlet规范或是标准出现前，编写服务端程序需要在服务器集成通过其他语言实现的CGI程序，这个方式对java的平台无关性的影响很大，为此javaee中推出了servlet来替代CGI，servlet是用java实现的，属于javaee标准，且性能较高。为了能运行java编写的servlet程序，需要一个能支持servlet的web服务器，就这样Tomcat诞生了，Tomcat提供了对Servlet标准的支持，运行于服务端的servlet程序可以长期驻留在服务器上，即保留在web容器的servlet容器中。使用servlet写web的都知道比较费劲，为此根据.NET 中的ASP技术衍生出了JSP（Java Server Page）。其实JSP只是Servlet的一种表现形式，JSP最终都会被web服务器（如Tomcat）编译为Servlet，要编译jsp为servlet，需要web服务器中提供jsper解析器，jsper的功能就是把jsp解析为servlet。</p>
+<p>Servlet和CGI一样，都可以提供动态服务。但有时候客户端的动态变化，是不需要与服务器交互的，为此，javaee体系提供了applet网络小程序，该程序可以在客户端运行，需要客户端能特殊支持，由于该技术的复杂特性，导致被JavaScript技术取代。</p>
+<h1 id="JavaEE-J2EE"><a href="#JavaEE-J2EE" class="headerlink" title="JavaEE/J2EE"></a>JavaEE/J2EE</h1><p>JavaEE是J2EE的新叫法。JavaEE是一套使用Java进行企业级Web应用开发的大家一致遵循的工业标准，提供了一个机遇组件开发的方法来加快设计，开发，部署等。满足开放性，分布性和平台无关性。</p>
+<p>JavaEE是对JavaSE的扩展。</p>
+<p>JavaEE核心标准（规范）：</p>
+<ul>
+<li>jdbc</li>
+<li>jndi(Java Naming and Directory Interfaces)Java 的命名和目录接口</li>
+<li>EJB（Enterprise JavaBean）</li>
+<li>RMI（Remote Method Invoke）远程方法调用</li>
+<li>Java IDL（Interface Description Language）/CORBA（Common Object Broker Architecture）Java 接口定义语言/公用对象请求代理程序体系结构.</li>
+<li>JSP（Java Server Pages）</li>
+<li>Servlet</li>
+<li>XML</li>
+<li>JMS（Java Message Service）Java 消息服务</li>
+<li>JTA（Java Transaction API）Java 事务 API</li>
+<li>JTS（Java Transaction Service）Java 事务服务</li>
+<li>JavaMail</li>
+<li>JAF（JavaBean Activation Framework）</li>
+</ul>
+<p>JavaEE抽象了java应用的开发模式，提升了设计，开发，部署等效率。现在有许多框架都是在已有的JavaEE上再次抽象得到的，目的也是为了提升设计，开发和部署的效率，同时兼顾考虑了性能等大规模部署的问题。</p>
+<p>我们常说的MVC模式在JavaEE就体现得很充分：EJB（M）+JSP(V)+Servlet（C）。我们通常说的SpringMVC和Struts都是对Servlet的抽象。</p>
+<h1 id="Servlet与CGI"><a href="#Servlet与CGI" class="headerlink" title="Servlet与CGI"></a>Servlet与CGI</h1><p>Servlet是JavaEE的标准规范之一，运行在Web服务器或者应用服务器上，作为来自 Web 浏览器或其他 HTTP 客户端的请求和 HTTP 服务器上的数据库或应用程序之间的中间层，由服务器启动并初始化，初始化后能保存在服务器上的servlet容器中，客户的请求都会被服务器分发到特定的servlet处理。servlet是以多线程的方式运行的，对于每个请求都会启动一个单独的线程与之对接。servlet所需的数据老子HTTPServletRequest和web.xml。</p>
+<p>CGI（Common Gateway Interface），CGI 是Web 服务器运行时外部程序的规范(编程模型)，按CGI 编写的程序可以扩展服务器功能。几乎所有服务器都支持CGI,可用任何语言编写CGI,标准CGI 使用<strong>命令行参数或环境变量</strong>表示服务器的详细请求，服务器与浏览器通信采用标准输入输出方式。间接CGI 又称缓冲CGI,在CGI 程序和CGI 接口之间插入一个缓冲程序，缓冲程序与CGI 接口间用标准输入输出进行通信。<br>对于每次请求，CGI方式都是启动一个新的进程，处理完请求后销毁该进程，这种工作模式限制了CGI服务器的并发量。CGI的另一个缺点是与平台强相关。Java Servlet是运行JVM上的与平台无关。</p>
+<h1 id="Jsp"><a href="#Jsp" class="headerlink" title="Jsp"></a>Jsp</h1><p>Jsp是一种特殊的servlet，经过jsper处理后成为Servlet。Servlet侧重于解决运算和业务逻辑问题，JSP则侧重于解决展示问题。</p>
+<h2 id="Jsp的内置对象"><a href="#Jsp的内置对象" class="headerlink" title="Jsp的内置对象"></a>Jsp的内置对象</h2><p>Jsp共有九个内置对象：</p>
+<ul>
+<li>request</li>
+<li>response</li>
+<li>session，作用域是同一个用户的不同请求</li>
+<li>application，可将信息保存在服务器中，直到服务器关闭，否则application对象中保存的信息会在整个应用中都有效。</li>
+<li>out </li>
+<li>pageContext 取得任何范围的参数</li>
+<li>config 取得服务器的配置信息，通过web.xml可以一个servlet的初始化信息存入config中。</li>
+<li>page Jsp本身,类似java对象的this。page隐含对象本质上包含当前 Servlet接口引用的变量，类似于Java编程中的 this 指针。</li>
+<li>exception 作用是显示异常，只有在包含 isErrorPage=”true” 的页面中才可以被使用。</li>
+</ul>
+<p>这些内置对象之间的关系是有一定的规律可寻的，Servlet容器根据HTTP的请求生成request，并根据响应生成response。web容器通过request和response可以得到pageContex，session通过服务器自动创建，但可以通过pageContext获取，还可以通过pageContext获取application、out、config等。page只和jsp本身相关。</p>
+<h2 id="内置指令："><a href="#内置指令：" class="headerlink" title="内置指令："></a>内置指令：</h2><ul>
+<li>编译指令：page、include、taglib 。使用&lt;%@ 指令 属性%&gt;</li>
+<li>动作指令：forward、include、useBean、setProperty、getProperty、plugin、param。使用<jsp:指令 属性=""></jsp:指令></li>
+</ul>
+<h1 id="aaplet"><a href="#aaplet" class="headerlink" title="aaplet"></a>aaplet</h1><p>applet是浏览器客户端运行的java小程序，是为了在客户端HTML实现动态的技术，类似于JavaScript，但是目前已经很少使用这门技术了。目前的主流就是JavaScript。</p>
+<h1 id="Tomcat的源码调试步骤"><a href="#Tomcat的源码调试步骤" class="headerlink" title="Tomcat的源码调试步骤"></a>Tomcat的源码调试步骤</h1><ol>
+<li><p>从GitHub上clone源码： </p>
+<pre><code>&gt; git clone https://github.com/apache/tomcat.git
+</code></pre></li>
+<li>在源码目录下复制一份build.properties.default，并命名为build.properties，把该文件放到与build.properties.default同一个目录</li>
+<li>修改build.properties其中的配置，把base.path的值设置为你指定的目录，该目录的作用是用来存放在编译Tomcat时所需要的依赖包的，在编译时会从网上把这些包下载到该目录。</li>
+<li><p>开始编译，运行命令：</p>
+<pre><code>&gt; ant
+</code></pre></li>
+<li>编译成功后在源码根目录下会输出一个output目录，该目录是存放编译好的Tomcat，可以直接运行的</li>
+<li><p>为了能把源码导入eclipse，需要生成一些和eclipse相关的配置文件，如classpath。运行如下命令：</p>
+<pre><code>&gt; ant ide-eclipse
+</code></pre></li>
+<li>如果6执行成功，则在源码跟目录下我们会看见 .classpath、.project和.settings等文件或文件夹。</li>
+<li>这个就可以把该工程导入eclipse了。</li>
+<li><p>导入的工程会报classpath变量的绑定出错，应该是找不到相应的环境变量，需要修改eclipse的环境变量配置。</p>
+<p> <img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_143600.png" alt=""></p>
+</li>
+<li><p>打开6生成的.classpath文件，我们会看到相应的配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;classpath&gt;
+    &lt;classpathentry kind=&quot;src&quot; path=&quot;java&quot;/&gt;
+    &lt;classpathentry excluding=&quot;deployment/|tld/|webapp*/|webresources/&quot; kind=&quot;src&quot; path=&quot;test&quot;/&gt;
+    &lt;classpathentry kind=&quot;src&quot; path=&quot;webapps/examples/WEB-INF/classes&quot;/&gt;
+    &lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&quot;/&gt;
+    &lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.junit.JUNIT_CONTAINER/4&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;ANT_HOME/lib/ant.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/jaxrpc-1.1-rc4/geronimo-spec-jaxrpc-1.1-rc4.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/wsdl4j-1.6.2/wsdl4j-1.6.2.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/ecj-4.7.3a/ecj-4.7.3a.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/easymock-3.2/easymock-3.2.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/hamcrest-1.3/hamcrest-core-1.3.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/cglib-2.2.3/cglib-nodep-2.2.3.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/objenesis-1.2/objenesis-1.2.jar&quot;/&gt;
+    &lt;classpathentry kind=&quot;output&quot; path=&quot;.settings/output&quot;/&gt;
+&lt;/classpath&gt;
+</code></pre><ol>
+<li>src是源文件输出目的的。</li>
+<li>output是类文件输出目的地。</li>
+<li>con是eclipse运行时所需的核心包。</li>
+<li>var是eclipse通过环境变量的形式增加的一些JAR包。</li>
+<li>lib是直接加入的JAR包</li>
+</ol>
+</li>
+<li><p>根据9中错误提示，可以看出是在绑定环境变量指定的包的时候出错了。说明eclipse是没相应的环境变量，需要设置ANT_HOME和TOMCAT_LIBS_BASE环境变量。其中的ANT_HOME是ant安装目录，TOMCAT_LIBS_BASE是3中配置的目录。配置eclipse环境变量的步骤：Window-&gt;Preferences-&gt;Java-&gt;Build Path-&gt;Classpath Variables。然后使用New添加环境变量即可。</p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_145110.png" alt=""></p>
+</li>
+<li>两个环境变量添加完后就没有错误了，可以通过org.apache.catalina.startup.Bootstrap在eclipse中以源码的方式启动Tomcat了。</li>
+<li><p>启动成功后，通过<a href="http://localhost:8080/就可以访问Tomcat的默认页面" target="_blank" rel="external">http://localhost:8080/就可以访问Tomcat的默认页面</a></p>
+<h1 id="Tomcat处理用户HTTP请求的流程"><a href="#Tomcat处理用户HTTP请求的流程" class="headerlink" title="Tomcat处理用户HTTP请求的流程"></a>Tomcat处理用户HTTP请求的流程</h1></li>
+<li><p>Tomcat的某个service的connector在某个指定端口上监听用户HTTP请求，封装HttpServletRequest和HttpServletResponse</p>
+</li>
+<li>接收到请求，connector把请求转发到其对应的service下的engine</li>
+<li>engine解析request的URL得到需要转发的host</li>
+<li>host解析URL得到serve它的容器Context</li>
+<li>servlet容器解析URL得到对应的servlet</li>
+<li>servlet处理请求，包装返回结果并返回（这里暂时不请求返回的机制是原路返回到connector，然后通过connector把结果通过socket的输出流返回给客户端；还是直接在servlet就返回给客户端了。个人觉得是后者的情况比较准确，因为在servlet我们已经能获取socket的输出流了。所以下图可能不是特别准确）。</li>
+</ol>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B.png" alt=""></p>
+<h1 id="各种器的关系"><a href="#各种器的关系" class="headerlink" title="各种器的关系"></a>各种器的关系</h1><p>在java的开发过程中，我们会遇到很多的“器”，比如服务器，应用服务器，web应用服务器，IOC容器，web容器，servlet容器，docker容器等。所以我觉得有必要理清下这些“器”的作用，使用场景，特征，它们之间的关系等。</p>
+<ul>
+<li>对容器的通俗解释：容器是一个接口集合，解耦应用程序与服务器或底层软件的耦合。</li>
+<li>对服务器的通俗理解：基于硬件，加上某些容器或应用，能对外提供服务的网络设备。注意其不单纯指硬件，也不单纯指软件，而是二者之间的和谐配合。</li>
+</ul>
+<p>下面用我自己的话来对上面的各种器进行解释：</p>
+<ol>
+<li>服务器：提供某种软件服务的硬件设备。</li>
+<li>应用服务器：提供一个完整的应用生态的服务器，本质是服务器。如果这个服务器上安装了Tomcat等，可以提供用户进行web访问功能的应用，叫web应用服务器。</li>
+<li>web服务器：只提供web资源，不提供web服务，如部署了Nginx的。</li>
+<li>各种容器的功能大体一致，就是给用户提供统一的接口。IOC容器提供了访问bean等接口，web容器提供了部署web应用的接口，servlet容器提供了统一管理servlet的接口。docker容器提供了统一管理服务部署额接口。</li>
+</ol>
+<p>Tomcat（提供web应用服务）=Tomcat（提供应用服务）+Nginx（提供web服务）</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://www.jianshu.com/p/83385852f711" title="https://www.jianshu.com/p/83385852f711" target="_blank" rel="external">https://www.jianshu.com/p/83385852f711</a></li>
+<li><a href="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" title="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" target="_blank" rel="external">https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html</a></li>
+<li><a href="https://blog.csdn.net/skp127/article/details/52026150" title="https://blog.csdn.net/skp127/article/details/52026150" target="_blank" rel="external">https://blog.csdn.net/skp127/article/details/52026150</a></li>
+<li><a href="https://blog.csdn.net/tjiyu/article/details/53148174" title="https://blog.csdn.net/tjiyu/article/details/53148174" target="_blank" rel="external">https://blog.csdn.net/tjiyu/article/details/53148174</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/05/19/Tomcat工作原理/" data-title="Tomcat工作原理 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/04/12/Mybatis-源码解读/"  title="Mybatis 源码解读">
+ <strong>旧一篇:</strong><br/> 
+ <span>Mybatis 源码解读
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="Tomcat工作原理" data-thread-key="Tomcat工作原理" data-author-key="Daniel" data-url="http://yoursite.com/post/Tomcat工作原理"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© Daniel/山间听雨者</span>
+		
+	<div>
+</div></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>
