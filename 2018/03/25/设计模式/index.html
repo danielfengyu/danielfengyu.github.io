@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>设计模式 | 山间听雨者主页</title>
@@ -50,7 +50,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -68,6 +68,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -123,10 +125,8 @@ var _hmt = _hmt || [];
     public void test() {
         System.out.println(&quot;test&quot;);
     }
-}
-</code></pre><p>  配置：</p>
-<pre><code>&lt;bean id=&quot;eagerSingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.EagerSingleton1&quot;&gt;&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+}</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;eagerSingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.EagerSingleton1&quot;&gt;&lt;/bean&gt;</code></pre><p>  测试：</p>
 <pre><code>@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
 public class EagerSingleton1Test {
@@ -140,13 +140,11 @@ public class EagerSingleton1Test {
         System.out.println(eagerSingleton1 == singleton1);//2 false，说明破坏了单例
     }
 
-}
-</code></pre><p>  输出结果：</p>
+}</code></pre><p>  输出结果：</p>
 <pre><code>load class!
 call constructor!com.daniel.study.design_model.singleton.EagerSingleton1
 call constructor!sun.reflect.NativeConstructorAccessorImpl
-false
-</code></pre><p>  对这种方式续做几点说明：</p>
+false</code></pre><p>  对这种方式续做几点说明：</p>
 <ol>
 <li>这种方式的单例是不安全的，任然可以通过IOC的注入，IOC在实例化eagerSingleton1时调用了private的构造函数。因为Spring的IOC容器在实例化对象时使用反射方式，故知道反射可以破坏单例模式</li>
 <li>从结果看1处别调用了两次，第二次是Spring实例化，第一次是在类加载的时候实例化的。</li>
@@ -171,10 +169,8 @@ public class EagerSingleton2 {
     public static EagerSingleton2 getInstance() {
         return SINGLETON;
     }
-}
-</code></pre><p>  配置：</p>
-<pre><code>&lt;bean id=&quot;eagerSingleton2&quot; class=&quot;com.daniel.study.design_model.singleton.EagerSingleton2&quot;&gt;&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+}</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;eagerSingleton2&quot; class=&quot;com.daniel.study.design_model.singleton.EagerSingleton2&quot;&gt;&lt;/bean&gt;</code></pre><p>  测试：</p>
 <pre><code>@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
 public class EagerSingleton2Test {
@@ -188,13 +184,11 @@ public class EagerSingleton2Test {
         System.out.println(eagerSingleton2 == singleton1);
     }
 
-}
-</code></pre><p>  结果：</p>
+}</code></pre><p>  结果：</p>
 <pre><code>load class!
 call constructor!com.daniel.study.design_model.singleton.EagerSingleton2
 call constructor!sun.reflect.NativeConstructorAccessorImpl
-false
-</code></pre><p>可以看出与前一种方式没有太大的区别，如果没有反射机制的话，这种两种方式都是比较好的实例化单例的方式，是线程安全的，且效率高。因为这两种方式都是在类加载的时候进行实例化，因为一个类在被卸载前只会加载一次。但由于反射机制的存在导致了单例设计被破坏。因为Spring的实例化就是借助的反射，所以使用Spring进行依赖注入单例对象，导致了创建了两个不同的对象。还有就是上面这两种方式都是饿汉模式，咋类加载的时候就实例化了，而不是在使用的时候实例化。在使用的时候实例化称作懒汉式。</p>
+false</code></pre><p>可以看出与前一种方式没有太大的区别，如果没有反射机制的话，这种两种方式都是比较好的实例化单例的方式，是线程安全的，且效率高。因为这两种方式都是在类加载的时候进行实例化，因为一个类在被卸载前只会加载一次。但由于反射机制的存在导致了单例设计被破坏。因为Spring的实例化就是借助的反射，所以使用Spring进行依赖注入单例对象，导致了创建了两个不同的对象。还有就是上面这两种方式都是饿汉模式，咋类加载的时候就实例化了，而不是在使用的时候实例化。在使用的时候实例化称作懒汉式。</p>
 </li>
 <li><p>懒汉单例模式</p>
 <pre><code>//需要实例化为单例的类
@@ -216,10 +210,8 @@ public class LazySingleton1 {
         }
         return lazySingleton1;
     }
-}
-</code></pre><p>  配置：</p>
-<pre><code>&lt;bean id=&quot;lazySingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.LazySingleton1&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+}</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;lazySingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.LazySingleton1&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;</code></pre><p>  测试：</p>
 <pre><code>@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
 public class LazySingleton1Test {
@@ -233,13 +225,11 @@ public class LazySingleton1Test {
         System.out.println(lazySingleton1 == lazySingleton2);
     }
 
-}
-</code></pre><p>  结果：</p>
+}</code></pre><p>  结果：</p>
 <pre><code>load class!
 call constructor!sun.reflect.NativeConstructorAccessorImpl //1
 call constructor!com.daniel.study.design_model.singleton.LazySingleton1//2
-false
-</code></pre></li>
+false</code></pre></li>
 </ul>
 <p>这种方式也破坏了单例。但这里是Spring先实例化的，测试代码中的实例化是到调用getInstance静态方法的时候开始的，显然两次实例化的对象不一致，也是破坏了单例。上面的代码还有另外一个问题就是其实线程不安全的，为了保证线程安全，这段单例类的代码有两种改进办法：</p>
 <pre><code>public class LazySingleton2 {
@@ -287,8 +277,7 @@ public class Lazysingleton3 {
         }
         return lazySingleton3;
     }
-}
-</code></pre><ul>
+}</code></pre><ul>
 <li><p>静态内部类进行实例化</p>
 <pre><code>public class LazySingleton4 {
 
@@ -318,10 +307,8 @@ public class Lazysingleton3 {
         return SingletongHandler.lazySingleton4;
     }
 
-}
-</code></pre><p>  配置：</p>
-<pre><code>&lt;bean id=&quot;lazySingleton4_1&quot; class=&quot;com.daniel.study.design_model.singleton.LazySingleton4&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+}</code></pre><p>  配置：</p>
+<pre><code>&lt;bean id=&quot;lazySingleton4_1&quot; class=&quot;com.daniel.study.design_model.singleton.LazySingleton4&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;</code></pre><p>  测试：</p>
 <pre><code>@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
 public class LazySingleton4Test {
@@ -335,16 +322,14 @@ public class LazySingleton4Test {
         System.out.println(lazySingleton4_1 == lazySingleton4_2);
     }
 
-}
-</code></pre><p>  结果：</p>
+}</code></pre><p>  结果：</p>
 <pre><code>loader class 1
 loader class 2
 LazySingleton4 class loaded!//Spring实例化
 loader class 3
 LazySingleton4 class loaded!//代码中使用getInstance的地方
 loader class 4
-false
-</code></pre></li>
+false</code></pre></li>
 </ul>
 <p>这里的懒汉式与前面不同，前面使用的方式是用代码来控制懒加载的，这里使用的是jvm加载类的原理来进行懒加载的。只有在调用LazySingleton4.getInstance()的时候才会加载类SingletongHandler，而类在卸载前只会被加载一次，故保证了单例的唯一性。但是我们仍需要注意到，Spring的实例化并不是单例对象，即这种方式也会通过反射破坏单例。</p>
 <p>上面的方式，在反射面前都不能保证单例了（Spring就是通过反射的方式实例化对象的，这里用Spring进行实例化的时候，都导致了单例被破坏）。下面介绍一种反射不能破坏的单例模式。</p>
@@ -365,12 +350,10 @@ false
     public void test() {
         System.out.println(this.getName());
     }
-}
-</code></pre><p>  Spring配置枚举的实例：</p>
+}</code></pre><p>  Spring配置枚举的实例：</p>
 <pre><code>&lt;bean id=&quot;INSTANCE&quot; class=&quot;org.springframework.beans.factory.config.FieldRetrievingFactoryBean&quot;&gt;    
     &lt;property name=&quot;staticField&quot; value=&quot;com.daniel.study.design_model.singleton.EnumSingleton.INSTANCE&quot; /&gt;    
-&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+&lt;/bean&gt;</code></pre><p>  测试：</p>
 </li>
 </ul>
 <pre><code>    public class EnumSingletonTest {
@@ -387,8 +370,7 @@ false
 
 结果：
 
-    EnumSingleton:true
-</code></pre><p>可以看出使用Enum实现的单例没有被Spring的实例化破坏，即反射不能破坏Enum单例模式。</p>
+    EnumSingleton:true</code></pre><p>可以看出使用Enum实现的单例没有被Spring的实例化破坏，即反射不能破坏Enum单例模式。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>反射可以破坏单例模式，在设计单例类的时候需要注意这一点，除了反射外，序列化/反序列化，clone（所以单例类不能继承Clonable接口）也会破坏单例模式。如果想单例模式不被反射破坏，可以使用Enum（枚举）来设计单例类。这种方式也可以阻止序列化/反序列化对单例模式的破坏。</p>
 <p>为了保证单例模式不被反射或者序列化/反序列化破坏，可以这样做:声明一个私有的静态成员变量，用来做flag，如果已经调用构造函数实例化了，第二次就不能实例化了。这种方式的依据是无论是反射实例化，还是正常的实例化最终都需要调用构造方法。不过如果getInstance的执行在反射实例化之后，这种方法可能会导致通过getInstance方法获取实例不生效。对于序列化类的实例化，在类中加入readResolve就可以避免单例模式被破坏。</p>
 <p>综上，使用枚举实现单例模式是即安全，有快捷的。</p>
@@ -414,10 +396,8 @@ public class GoodSingleton {
     public static GoodSingleton getInstance() {
         return SINGLETON;
     }
-}
-</code></pre><p>   配置：</p>
-<pre><code>&lt;bean id=&quot;goodSingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.GoodSingleton&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;
-</code></pre><p>   测试：</p>
+}</code></pre><p>   配置：</p>
+<pre><code>&lt;bean id=&quot;goodSingleton1&quot; class=&quot;com.daniel.study.design_model.singleton.GoodSingleton&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;</code></pre><p>   测试：</p>
 <pre><code>@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(&quot;classpath*:/applicationContext.xml&quot;)
 public class GoodSingletonTest {
@@ -431,8 +411,7 @@ public class GoodSingletonTest {
         System.out.println(goodSingleton1 == goodSingleton2);
     }
 
-}
-</code></pre><p>   结果：</p>
+}</code></pre><p>   结果：</p>
 <pre><code>first call
 call constructor!com.daniel.study.design_model.singleton.GoodSingleton//1
 class load
@@ -444,8 +423,7 @@ at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccess
 at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
 at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:170)
-... 43 more
-</code></pre><p>类GoodSingleton加载的时候执行了实例化，就是结果中的1，在这里第一次调用了构造函数。在Spring准备实例化GoodSingleton的时候，flag已是true，所以抛出了异常，即不准调用构造函数两次。对于序列化/反序列化破坏了单例的情况便不能用以上面这种方式解决了，因为反序列化不需要调用构造函数。</p>
+... 43 more</code></pre><p>类GoodSingleton加载的时候执行了实例化，就是结果中的1，在这里第一次调用了构造函数。在Spring准备实例化GoodSingleton的时候，flag已是true，所以抛出了异常，即不准调用构造函数两次。对于序列化/反序列化破坏了单例的情况便不能用以上面这种方式解决了，因为反序列化不需要调用构造函数。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -455,7 +433,7 @@ at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:170)
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/03/25/设计模式/" data-title="设计模式 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/03/25/设计模式/" data-title="设计模式 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -486,7 +464,7 @@ at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:170)
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="设计模式" data-thread-key="设计模式" data-author-key="Daniel" data-url="http://yoursite.com/post/设计模式"></div>
+	<div class="ds-thread" data-title="设计模式" data-thread-key="设计模式" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/设计模式"></div>
 	
 </section>
 

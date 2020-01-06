@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>Tomcat工作原理 | 山间听雨者主页</title>
@@ -49,7 +49,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -67,6 +67,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -144,26 +146,28 @@ var _hmt = _hmt || [];
 <p>这些内置对象之间的关系是有一定的规律可寻的，Servlet容器根据HTTP的请求生成request，并根据响应生成response。web容器通过request和response可以得到pageContex，session通过服务器自动创建，但可以通过pageContext获取，还可以通过pageContext获取application、out、config等。page只和jsp本身相关。</p>
 <h2 id="内置指令："><a href="#内置指令：" class="headerlink" title="内置指令："></a>内置指令：</h2><ul>
 <li>编译指令：page、include、taglib 。使用&lt;%@ 指令 属性%&gt;</li>
-<li>动作指令：forward、include、useBean、setProperty、getProperty、plugin、param。使用<jsp:指令 属性=""></jsp:指令></li>
+<li>动作指令：forward、include、useBean、setProperty、getProperty、plugin、param。使用&lt;jsp:指令 属性/&gt;</li>
 </ul>
 <h1 id="aaplet"><a href="#aaplet" class="headerlink" title="aaplet"></a>aaplet</h1><p>applet是浏览器客户端运行的java小程序，是为了在客户端HTML实现动态的技术，类似于JavaScript，但是目前已经很少使用这门技术了。目前的主流就是JavaScript。</p>
 <h1 id="Tomcat的源码调试步骤"><a href="#Tomcat的源码调试步骤" class="headerlink" title="Tomcat的源码调试步骤"></a>Tomcat的源码调试步骤</h1><ol>
 <li><p>从GitHub上clone源码： </p>
-<pre><code>&gt; git clone https://github.com/apache/tomcat.git
-</code></pre></li>
-<li>在源码目录下复制一份build.properties.default，并命名为build.properties，把该文件放到与build.properties.default同一个目录</li>
-<li>修改build.properties其中的配置，把base.path的值设置为你指定的目录，该目录的作用是用来存放在编译Tomcat时所需要的依赖包的，在编译时会从网上把这些包下载到该目录。</li>
+<pre><code>&gt; git clone https://github.com/apache/tomcat.git</code></pre></li>
+<li><p>在源码目录下复制一份build.properties.default，并命名为build.properties，把该文件放到与build.properties.default同一个目录</p>
+</li>
+<li><p>修改build.properties其中的配置，把base.path的值设置为你指定的目录，该目录的作用是用来存放在编译Tomcat时所需要的依赖包的，在编译时会从网上把这些包下载到该目录。</p>
+</li>
 <li><p>开始编译，运行命令：</p>
-<pre><code>&gt; ant
-</code></pre></li>
-<li>编译成功后在源码根目录下会输出一个output目录，该目录是存放编译好的Tomcat，可以直接运行的</li>
+<pre><code>&gt; ant</code></pre></li>
+<li><p>编译成功后在源码根目录下会输出一个output目录，该目录是存放编译好的Tomcat，可以直接运行的</p>
+</li>
 <li><p>为了能把源码导入eclipse，需要生成一些和eclipse相关的配置文件，如classpath。运行如下命令：</p>
-<pre><code>&gt; ant ide-eclipse
-</code></pre></li>
-<li>如果6执行成功，则在源码跟目录下我们会看见 .classpath、.project和.settings等文件或文件夹。</li>
-<li>这个就可以把该工程导入eclipse了。</li>
+<pre><code>&gt; ant ide-eclipse</code></pre></li>
+<li><p>如果6执行成功，则在源码跟目录下我们会看见 .classpath、.project和.settings等文件或文件夹。</p>
+</li>
+<li><p>这个就可以把该工程导入eclipse了。</p>
+</li>
 <li><p>导入的工程会报classpath变量的绑定出错，应该是找不到相应的环境变量，需要修改eclipse的环境变量配置。</p>
-<p> <img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_143600.png" alt=""></p>
+<p> <img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_143600.png" alt></p>
 </li>
 <li><p>打开6生成的.classpath文件，我们会看到相应的配置：</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
@@ -182,8 +186,7 @@ var _hmt = _hmt || [];
     &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/cglib-2.2.3/cglib-nodep-2.2.3.jar&quot;/&gt;
     &lt;classpathentry kind=&quot;var&quot; path=&quot;TOMCAT_LIBS_BASE/objenesis-1.2/objenesis-1.2.jar&quot;/&gt;
     &lt;classpathentry kind=&quot;output&quot; path=&quot;.settings/output&quot;/&gt;
-&lt;/classpath&gt;
-</code></pre><ol>
+&lt;/classpath&gt;</code></pre><ol>
 <li>src是源文件输出目的的。</li>
 <li>output是类文件输出目的地。</li>
 <li>con是eclipse运行时所需的核心包。</li>
@@ -192,20 +195,26 @@ var _hmt = _hmt || [];
 </ol>
 </li>
 <li><p>根据9中错误提示，可以看出是在绑定环境变量指定的包的时候出错了。说明eclipse是没相应的环境变量，需要设置ANT_HOME和TOMCAT_LIBS_BASE环境变量。其中的ANT_HOME是ant安装目录，TOMCAT_LIBS_BASE是3中配置的目录。配置eclipse环境变量的步骤：Window-&gt;Preferences-&gt;Java-&gt;Build Path-&gt;Classpath Variables。然后使用New添加环境变量即可。</p>
-<p><img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_145110.png" alt=""></p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/2018-05-27_145110.png" alt></p>
 </li>
-<li>两个环境变量添加完后就没有错误了，可以通过org.apache.catalina.startup.Bootstrap在eclipse中以源码的方式启动Tomcat了。</li>
-<li><p>启动成功后，通过<a href="http://localhost:8080/就可以访问Tomcat的默认页面" target="_blank" rel="external">http://localhost:8080/就可以访问Tomcat的默认页面</a></p>
+<li><p>两个环境变量添加完后就没有错误了，可以通过org.apache.catalina.startup.Bootstrap在eclipse中以源码的方式启动Tomcat了。</p>
+</li>
+<li><p>启动成功后，通过<a href="http://localhost:8080/就可以访问Tomcat的默认页面" target="_blank" rel="noopener">http://localhost:8080/就可以访问Tomcat的默认页面</a></p>
 <h1 id="Tomcat处理用户HTTP请求的流程"><a href="#Tomcat处理用户HTTP请求的流程" class="headerlink" title="Tomcat处理用户HTTP请求的流程"></a>Tomcat处理用户HTTP请求的流程</h1></li>
 <li><p>Tomcat的某个service的connector在某个指定端口上监听用户HTTP请求，封装HttpServletRequest和HttpServletResponse</p>
 </li>
-<li>接收到请求，connector把请求转发到其对应的service下的engine</li>
-<li>engine解析request的URL得到需要转发的host</li>
-<li>host解析URL得到serve它的容器Context</li>
-<li>servlet容器解析URL得到对应的servlet</li>
-<li>servlet处理请求，包装返回结果并返回（这里暂时不请求返回的机制是原路返回到connector，然后通过connector把结果通过socket的输出流返回给客户端；还是直接在servlet就返回给客户端了。个人觉得是后者的情况比较准确，因为在servlet我们已经能获取socket的输出流了。所以下图可能不是特别准确）。</li>
+<li><p>接收到请求，connector把请求转发到其对应的service下的engine</p>
+</li>
+<li><p>engine解析request的URL得到需要转发的host</p>
+</li>
+<li><p>host解析URL得到serve它的容器Context</p>
+</li>
+<li><p>servlet容器解析URL得到对应的servlet</p>
+</li>
+<li><p>servlet处理请求，包装返回结果并返回（这里暂时不请求返回的机制是原路返回到connector，然后通过connector把结果通过socket的输出流返回给客户端；还是直接在servlet就返回给客户端了。个人觉得是后者的情况比较准确，因为在servlet我们已经能获取socket的输出流了。所以下图可能不是特别准确）。</p>
+</li>
 </ol>
-<p><img src="http://ocytp9y7u.bkt.clouddn.com/Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B.png" alt=""></p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B.png" alt></p>
 <h1 id="各种器的关系"><a href="#各种器的关系" class="headerlink" title="各种器的关系"></a>各种器的关系</h1><p>在java的开发过程中，我们会遇到很多的“器”，比如服务器，应用服务器，web应用服务器，IOC容器，web容器，servlet容器，docker容器等。所以我觉得有必要理清下这些“器”的作用，使用场景，特征，它们之间的关系等。</p>
 <ul>
 <li>对容器的通俗解释：容器是一个接口集合，解耦应用程序与服务器或底层软件的耦合。</li>
@@ -220,10 +229,10 @@ var _hmt = _hmt || [];
 </ol>
 <p>Tomcat（提供web应用服务）=Tomcat（提供应用服务）+Nginx（提供web服务）</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
-<li><a href="https://www.jianshu.com/p/83385852f711" title="https://www.jianshu.com/p/83385852f711" target="_blank" rel="external">https://www.jianshu.com/p/83385852f711</a></li>
-<li><a href="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" title="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" target="_blank" rel="external">https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html</a></li>
-<li><a href="https://blog.csdn.net/skp127/article/details/52026150" title="https://blog.csdn.net/skp127/article/details/52026150" target="_blank" rel="external">https://blog.csdn.net/skp127/article/details/52026150</a></li>
-<li><a href="https://blog.csdn.net/tjiyu/article/details/53148174" title="https://blog.csdn.net/tjiyu/article/details/53148174" target="_blank" rel="external">https://blog.csdn.net/tjiyu/article/details/53148174</a></li>
+<li><a href="https://www.jianshu.com/p/83385852f711" title="https://www.jianshu.com/p/83385852f711" target="_blank" rel="noopener">https://www.jianshu.com/p/83385852f711</a></li>
+<li><a href="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" title="https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html" target="_blank" rel="noopener">https://www.cnblogs.com/lm002003/archive/2012/03/08/2385006.html</a></li>
+<li><a href="https://blog.csdn.net/skp127/article/details/52026150" title="https://blog.csdn.net/skp127/article/details/52026150" target="_blank" rel="noopener">https://blog.csdn.net/skp127/article/details/52026150</a></li>
+<li><a href="https://blog.csdn.net/tjiyu/article/details/53148174" title="https://blog.csdn.net/tjiyu/article/details/53148174" target="_blank" rel="noopener">https://blog.csdn.net/tjiyu/article/details/53148174</a></li>
 </ol>
   
 	</div>
@@ -234,7 +243,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/05/19/Tomcat工作原理/" data-title="Tomcat工作原理 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/05/19/Tomcat工作原理/" data-title="Tomcat工作原理 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -243,6 +252,14 @@ var _hmt = _hmt || [];
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2018/06/13/一些你必须晓得的java知识/" title="一些你必须晓得的java知识">
+  <strong>新一篇:</strong><br/>
+  <span>
+  一些你必须晓得的java知识</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2018/04/12/Mybatis-源码解读/"  title="Mybatis 源码解读">
@@ -257,7 +274,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Tomcat工作原理" data-thread-key="Tomcat工作原理" data-author-key="Daniel" data-url="http://yoursite.com/post/Tomcat工作原理"></div>
+	<div class="ds-thread" data-title="Tomcat工作原理" data-thread-key="Tomcat工作原理" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/Tomcat工作原理"></div>
 	
 </section>
 

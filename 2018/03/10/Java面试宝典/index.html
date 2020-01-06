@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>Java面试宝典 | 山间听雨者主页</title>
@@ -11,9 +11,12 @@
     
     <meta name="description" content="基础JDK目录结构
 bin JDK开发工具的可执行文件，配置java的环境变量的时候Path需要指向该目录
+
 lib 开发工具使用的归档包路径
+
 jre java运行时环境的根目录，包含java虚拟机，运行时的类包，java应用的启动器,java应用程序要运行起来依赖的最小目录
-include 包含C语">
+
+include 包">
     
     
     
@@ -53,7 +56,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -71,6 +74,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -109,10 +114,14 @@ var _hmt = _hmt || [];
 		</div>
 		
 		<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="JDK目录结构"><a href="#JDK目录结构" class="headerlink" title="JDK目录结构"></a>JDK目录结构</h2><ul>
-<li>bin JDK开发工具的可执行文件，配置java的环境变量的时候Path需要指向该目录</li>
-<li>lib 开发工具使用的归档包路径</li>
-<li>jre java运行时环境的根目录，包含java虚拟机，运行时的类包，java应用的启动器,java应用程序要运行起来依赖的最小目录</li>
-<li>include 包含C语言头文件,支持Java本地接口与Java虚拟机调试程序接口。</li>
+<li><p>bin JDK开发工具的可执行文件，配置java的环境变量的时候Path需要指向该目录</p>
+</li>
+<li><p>lib 开发工具使用的归档包路径</p>
+</li>
+<li><p>jre java运行时环境的根目录，包含java虚拟机，运行时的类包，java应用的启动器,java应用程序要运行起来依赖的最小目录</p>
+</li>
+<li><p>include 包含C语言头文件,支持Java本地接口与Java虚拟机调试程序接口。</p>
+</li>
 <li><p>jre/lib 代码库、树形设置以及JRE使用的源文件。rt.jar是java运行时类库，是用得最多的基础类库，包含java.lang,java.io,java.net,java.util等。</p>
 <ol>
 <li>java.lang：其下的类不需要显示import，包括object类，数据类型相关类（Integer等），Class类，线程相关类Thread，异常类Throable。</li>
@@ -121,15 +130,18 @@ var _hmt = _hmt || [];
 <li>java.util：数据结构相关的类ArrayList、Hashmap，日期类Date，随机数类Random类等。</li>
 </ol>
 </li>
-<li>/jre/lib/ext Java平台的扩展程序(插件等)的默认安装目录。</li>
-<li>/jre/lib/security 包含用于安全管理的文件。这些措施包括安全策略（java.policy）和安全性（java.security）文件。</li>
-<li>db Java实现的数据库</li>
+<li><p>/jre/lib/ext Java平台的扩展程序(插件等)的默认安装目录。</p>
+</li>
+<li><p>/jre/lib/security 包含用于安全管理的文件。这些措施包括安全策略（java.policy）和安全性（java.security）文件。</p>
+</li>
+<li><p>db Java实现的数据库</p>
+</li>
 </ul>
 <p>JDK包含了java程序的运行环境和开发工具。借助java开发工具中的编译器javac.exe，我们可以把.java文件编译为在任何平台上都一样的.class文件。jre（包含jvm，java运行时类库和动态链接库（.dll）等信息）为java的执行提供了运行环境，可以加载javac.exe编译后的.class文件，并把其转化为对应平台上的机器码，由此可见在不同的平台上jvm的实现是不一样的。</p>
 <h2 id="I-O体系架构"><a href="#I-O体系架构" class="headerlink" title="I/O体系架构"></a>I/O体系架构</h2><h2 id="流的分类"><a href="#流的分类" class="headerlink" title="流的分类"></a>流的分类</h2><ul>
 <li><strong>按方向：输入流（Reader和InputStream）和输出流（Writer和OutputStream）</strong>。输入输出是对程序运行的内存来说的，程序运行的部分始终处于内存中。</li>
 <li><strong>按操作单元：字符流(Writer和Reader)和字节流（OutputStream和InputStream）</strong>。字符流操作的单元是两个字节（16bit）,字节流操作的单位是一个字节（8bit）。由此可知java的字符的长度为两个字节。</li>
-<li><strong>按角色划分：节点流和处理流。</strong>可以从/向一个特定的IO设备（如磁盘，网络）读/写数据的流，称为节点流。节点流也被称为低级流。当使用节点流进行输入输出的时候，程序直接连接到实际的数据源，和实际的输入/输出节点进行连接。处理流则用于对一个已存在的流进行连接和封装，通过封装后的流来实现数据的读/写功能。处理流也被称为高级流。当使用处理流进行输入/输出时，程序并不会直接连接到实际的数据源，没有和实际的输入和输出节点连接。使用处理流的一个明显的好处是，只要使用相同的处理流，程序就可以采用完全相同的输入/输出代码来访问不同的数据源，随着处理流所包装的节点流的变化，程序实际所访问的数据源也相应的发生变化。处理流最终必须“套接”在节点流上才能完成输入输出。<br><img src="http://img.blog.csdn.net/20160505135650158" alt=""><h2 id="流的原理"><a href="#流的原理" class="headerlink" title="流的原理"></a>流的原理</h2>所有的输入流都是基于InputStream和Reader的；所有的输出流都是基于OutputStream和Writer的。</li>
+<li><strong>按角色划分：节点流和处理流。</strong>可以从/向一个特定的IO设备（如磁盘，网络）读/写数据的流，称为节点流。节点流也被称为低级流。当使用节点流进行输入输出的时候，程序直接连接到实际的数据源，和实际的输入/输出节点进行连接。处理流则用于对一个已存在的流进行连接和封装，通过封装后的流来实现数据的读/写功能。处理流也被称为高级流。当使用处理流进行输入/输出时，程序并不会直接连接到实际的数据源，没有和实际的输入和输出节点连接。使用处理流的一个明显的好处是，只要使用相同的处理流，程序就可以采用完全相同的输入/输出代码来访问不同的数据源，随着处理流所包装的节点流的变化，程序实际所访问的数据源也相应的发生变化。处理流最终必须“套接”在节点流上才能完成输入输出。<br><img src="http://img.blog.csdn.net/20160505135650158" alt><h2 id="流的原理"><a href="#流的原理" class="headerlink" title="流的原理"></a>流的原理</h2>所有的输入流都是基于InputStream和Reader的；所有的输出流都是基于OutputStream和Writer的。</li>
 </ul>
 <p>输入流使用隐式的记录指针来表示当前正准备从哪个“水滴”开始读取，每当程序从InputStream或者Reader里面取出一个或者多个“水滴”后，记录指针自定向后移动；除此之外，InputStream和Reader里面都提供了一些方法来控制记录指针的移动。</p>
 <p>同样，当执行输出时，程序相当于依次把“水滴”放入到输出流的水管中，输出流同样采用隐示指针来标识当前水滴即将放入的位置，每当程序向OutputStream或者Writer里面输出一个或者多个水滴后，记录指针自动向后移动。</p>
@@ -149,8 +161,8 @@ var _hmt = _hmt || [];
 <h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><p>Selector帮助开发者突破IO的瓶颈，它提供了单线程处理多个 Channel的机制。如果你的应用打开了多个连接（通道），但每个连接的流量都很低，使用Selector就会很方便。<br>要使用Selector，得先向Selector注册Channel，然后调用它的select()方法。这个方法会一直阻塞到某个注册的通道有事件就绪。一旦这个方法返回，线程就可以处理这些事件，事件的例子有如新连接进来，数据接收等.</p>
 <h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><p>Channel是一个对象，可以通过它读取和写入数据，所有的IO在NIO中都从一个Channel 开始。Channel中的数据要么写入Buffer，要么从Buffer读取。通道与流的不同之处在于通道是双向的，而流只是在一个方向上移动(一个流必须是 InputStream 或者 OutputStream 的子类)， 而 通道可以用于读、写或者同时用于读写。</p>
 <h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>NIO操作面向缓冲区，数据从Channel读取到Buffer缓冲区，随后在Buffer中处理数据。Buffer其实就是一块缓存区，内部使用字节数组存储数据，并维护几个特殊变量，实现数据的反复利用。一个Buffer对象是固定数量的数据的容器。其作用是一个存储器,或者分段运输区,在这里数据可被存储并在之后用于检索。尽管缓冲区作用于它们存储的原始数据类型,但缓冲区十分倾向于处理字节。非字节缓冲区可以在后台执行从字节或到字节的转换,这取决于缓冲区是如何创建的。</p>
-<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/ed571e5b8793cae275479b761393a6f0" alt=""></p>
-<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/0fc724bf520f4db008a73c597e7eadef" alt=""></p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/ed571e5b8793cae275479b761393a6f0" alt></p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/0fc724bf520f4db008a73c597e7eadef" alt></p>
 <h2 id="NIO和IO的区别"><a href="#NIO和IO的区别" class="headerlink" title="NIO和IO的区别"></a>NIO和IO的区别</h2><ol>
 <li>Java IO的各种流是阻塞的；ava NIO的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取。而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。非阻塞的写也是如此。</li>
 <li>流失单向的；通道（Channel）是双向的。</li>
@@ -162,7 +174,7 @@ var _hmt = _hmt || [];
 <li>Collection Collection体系中的集合存储的是元素本身，只是每个实现的存储方式不一样。</li>
 <li>Map Map体系中存储的是键值对。</li>
 </ul>
-<p><img src="https://images2015.cnblogs.com/blog/916361/201603/916361-20160322135512683-168468369.jpg" alt=""></p>
+<p><img src="https://images2015.cnblogs.com/blog/916361/201603/916361-20160322135512683-168468369.jpg" alt></p>
 <ol>
 <li>List、Set和Queue等属于Collection接口，其中定义了List、Set和Queue的基本方法增删改查。</li>
 <li>ArrayList是List的一个实现，底层是有数组实现的，其中元素可以重复。</li>
@@ -266,19 +278,18 @@ var _hmt = _hmt || [];
 <h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>Executors工具可以创建普通的线程池以及schedule调度任务的调度池，其实两者实现上还是有一些区别，但是理解了ThreadPoolExecutor，在看ScheduledThreadPoolExecutor就非常轻松了。</p>
 <h2 id="语言本身"><a href="#语言本身" class="headerlink" title="语言本身"></a>语言本身</h2><p>创建java对象的几种方式：</p>
 <ul>
-<li>使用new关键字，可以调用有任意个参数的的构造函数。</li>
-<li>使用Class对象的newInstance()方法，只能调用无参构造函数。</li>
+<li><p>使用new关键字，可以调用有任意个参数的的构造函数。</p>
+</li>
+<li><p>使用Class对象的newInstance()方法，只能调用无参构造函数。</p>
+</li>
 <li><p>使用类的构造器，通过构造器的newInstance()方法创建类的对象，实际上Class的 newInstance()方法就是调用Constructor的newInstance()。</p>
 <pre><code>Constructor&lt;ClassTest&gt; constructor = ClassTest.class.getConstructor();
-Object object2 = constructor.newInstance();
-</code></pre></li>
+Object object2 = constructor.newInstance();</code></pre></li>
 <li><p>使用Clone的方式，无论何时我们调用一个对象的clone方法，JVM就会创建一个新的对象，将调用clone方法的对象的内容全部考备进去，使用clone方法创建对象并不会调用构造函数，要使用clone方法，我们必须先实现Cloneable接口并实现其定义的clone方法。</p>
 <pre><code>Student stu = new Student();
-Student stu1 = (Student)stu.clone();
-</code></pre></li>
+Student stu1 = (Student)stu.clone();</code></pre></li>
 <li><p>使用反序列化，在反序列化时，JVM创建对象并不会调用任何构造函数。</p>
-<pre><code>ObjectInputStream in = new ObjectInputStream (new FileInputStream(&quot;data.obj&quot;)); Student stu3 = (Student)in.readObject();
-</code></pre><p>注意：<strong>Class类的newInstance需要其构造方法是共有的或者对调用方法可见的，而构造器类的newInstance可以在特定环境下调用私有构造方法来创建对象。</strong></p>
+<pre><code>ObjectInputStream in = new ObjectInputStream (new FileInputStream(&quot;data.obj&quot;)); Student stu3 = (Student)in.readObject();</code></pre><p>注意：<strong>Class类的newInstance需要其构造方法是共有的或者对调用方法可见的，而构造器类的newInstance可以在特定环境下调用私有构造方法来创建对象。</strong></p>
 </li>
 </ul>
   
@@ -290,7 +301,7 @@ Student stu1 = (Student)stu.clone();
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/03/10/Java面试宝典/" data-title="Java面试宝典 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/03/10/Java面试宝典/" data-title="Java面试宝典 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -321,7 +332,7 @@ Student stu1 = (Student)stu.clone();
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Java面试宝典" data-thread-key="Java面试宝典" data-author-key="Daniel" data-url="http://yoursite.com/post/Java面试宝典"></div>
+	<div class="ds-thread" data-title="Java面试宝典" data-thread-key="Java面试宝典" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/Java面试宝典"></div>
 	
 </section>
 

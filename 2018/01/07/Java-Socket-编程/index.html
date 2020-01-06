@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>Java Socket 编程 | 山间听雨者主页</title>
@@ -9,14 +9,7 @@
     
     <meta name="author" content="Daniel">
     
-    <meta name="description" content="Socket在网络编程中所处的位置网络分层基于TCP/IP协议族的网络，共分四层：
-
-应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的
-传输层
-网际层
-网络接口层
-
-Socket是位于应用层之下，传输层之上的接口，也就是操作系统提供给用户访问网络的系统接口。我们可以借助于Socke">
+    <meta name="description" content="Socket在网络编程中所处的位置网络分层![](http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsi">
     
     
     
@@ -56,7 +49,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -74,6 +67,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -111,7 +106,9 @@ var _hmt = _hmt || [];
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Socket在网络编程中所处的位置"><span class="toc-number">1.</span> <span class="toc-text">Socket在网络编程中所处的位置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络分层"><span class="toc-number">1.1.</span> <span class="toc-text">网络分层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSI七层模型"><span class="toc-number">1.2.</span> <span class="toc-text">OSI七层模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP"><span class="toc-number">1.3.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器模型"><span class="toc-number">1.4.</span> <span class="toc-text">服务器模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java异步编程"><span class="toc-number">2.</span> <span class="toc-text">Java异步编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java中的回调"><span class="toc-number">2.1.</span> <span class="toc-text">Java中的回调</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程"><span class="toc-number">2.2.</span> <span class="toc-text">多线程</span></a></li></ol></li></ol>
 		</div>
 		
-		<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><p><center><img src="http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></center><br>基于TCP/IP协议族的网络，共分四层：</p>
+		<h1 id="Socket在网络编程中所处的位置"><a href="#Socket在网络编程中所处的位置" class="headerlink" title="Socket在网络编程中所处的位置"></a>Socket在网络编程中所处的位置</h1><h2 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h2><center>![](http://img.blog.csdn.net/20161209121343020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveWpwMTk4NzEwMTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)</center>
+基于TCP/IP协议族的网络，共分四层：
+
 <ol>
 <li>应用层，例如HTTP，FTP。它们都是基于TCP/UDP设计出来的</li>
 <li>传输层</li>
@@ -139,13 +136,15 @@ var _hmt = _hmt || [];
 <li>物理层<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2></li>
 </ul>
 <ol>
-<li>TCP连接的建立需要通过三次握手来完成 </li>
+<li><p>TCP连接的建立需要通过三次握手来完成 </p>
+</li>
 <li><p>TCP连接的关闭通过四次挥手来完成。</p>
 <h2 id="服务器模型"><a href="#服务器模型" class="headerlink" title="服务器模型"></a>服务器模型</h2><p>目前常见的服务器模型主要有三种：</p>
 </li>
 <li><p>阻塞服务器</p>
 </li>
-<li>并发服务器</li>
+<li><p>并发服务器</p>
+</li>
 <li><p>异步服务器</p>
 <ul>
 <li>阻塞式服务器是最好实现的服务器，也是问题最多的服务器。客户端发送到服务端的请求会进行排队，服务器会一次处理这些请求，前一个请求没有处理完，就不会处理下一个请求，这种服务器很容易受到攻击，只需要发送一个处理时间很长的请求就可以阻塞其他的请求。因此这种服务器也只能作为理论上的模型。</li>
@@ -173,7 +172,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/01/07/Java-Socket-编程/" data-title="Java Socket 编程 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/01/07/Java-Socket-编程/" data-title="Java Socket 编程 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -204,7 +203,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Java Socket 编程" data-thread-key="Java-Socket-编程" data-author-key="Daniel" data-url="http://yoursite.com/post/Java-Socket-编程"></div>
+	<div class="ds-thread" data-title="Java Socket 编程" data-thread-key="Java-Socket-编程" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/Java-Socket-编程"></div>
 	
 </section>
 

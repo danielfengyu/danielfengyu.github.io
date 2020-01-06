@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>MyBatis | 山间听雨者主页</title>
@@ -10,11 +10,9 @@
     <meta name="author" content="Daniel">
     
     <meta name="description" content="配置文件中的元素根元素：
-&amp;lt;configuration&amp;gt;&amp;lt;/configuration&amp;gt;
-的子元素:
+&amp;lt;configuration&amp;gt;&amp;lt;/configuration&amp;gt;&amp;lt;configuration&amp;gt;的子元素:
 &amp;lt;properties&amp;gt;&amp;lt;/properties&amp;gt;
-&amp;lt;settings&amp;gt;&amp;lt;/settings&amp;gt;
-&amp;lt;typeAliases">
+&amp;lt;settings&amp;gt;&amp;lt;/settings">
     
     
     
@@ -54,7 +52,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -72,6 +70,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -110,16 +110,14 @@ var _hmt = _hmt || [];
 		</div>
 		
 		<h1 id="配置文件中的元素"><a href="#配置文件中的元素" class="headerlink" title="配置文件中的元素"></a>配置文件中的元素</h1><p>根元素：</p>
-<pre><code>&lt;configuration&gt;&lt;/configuration&gt;
-</code></pre><p><configuration\>的子元素:</configuration\></p>
+<pre><code>&lt;configuration&gt;&lt;/configuration&gt;</code></pre><p>&lt;configuration&gt;的子元素:</p>
 <pre><code>&lt;properties&gt;&lt;/properties&gt;
 &lt;settings&gt;&lt;/settings&gt;
 &lt;typeAliases&gt;&lt;/typeAliases&gt;
 &lt;environments&gt;&lt;environments&gt;
 &lt;typeHandlers&gt;&lt;typeHandlers&gt;
 &lt;objectFactory&gt;&lt;/objectFactory&gt;
-&lt;plugins&gt;&lt;/plugins&gt;
-</code></pre><h2 id="类型处理器typeHandlers"><a href="#类型处理器typeHandlers" class="headerlink" title="类型处理器typeHandlers"></a>类型处理器typeHandlers</h2><p>无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时， 都会用类型处理器将获取的值以合适的方式转换成 Java 类型。你可以重写类型处理器或创建你自己的类型处理器来处理不支持的或非标准的类型。 具体做法为：实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型。例如：</p>
+&lt;plugins&gt;&lt;/plugins&gt;</code></pre><h2 id="类型处理器typeHandlers"><a href="#类型处理器typeHandlers" class="headerlink" title="类型处理器typeHandlers"></a>类型处理器typeHandlers</h2><p>无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时， 都会用类型处理器将获取的值以合适的方式转换成 Java 类型。你可以重写类型处理器或创建你自己的类型处理器来处理不支持的或非标准的类型。 具体做法为：实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型。例如：</p>
 <pre><code>// ExampleTypeHandler.java
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public class ExampleTypeHandler extends BaseTypeHandler&lt;String&gt; {
@@ -143,13 +141,11 @@ public class ExampleTypeHandler extends BaseTypeHandler&lt;String&gt; {
   public String getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
     return cs.getString(columnIndex);
   }
-}
-</code></pre><p>在配置文件中配置该类型处理器：</p>
+}</code></pre><p>在配置文件中配置该类型处理器：</p>
 <pre><code>&lt;!-- mybatis-config.xml --&gt;
 &lt;typeHandlers&gt;
   &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot;/&gt;
-&lt;/typeHandlers&gt;
-</code></pre><p>使用如上的类型处理器的作用：</p>
+&lt;/typeHandlers&gt;</code></pre><p>使用如上的类型处理器的作用：</p>
 <ol>
 <li>将会覆盖已经存在的处理Java的String类型属性的类型处理器。</li>
 <li>将会覆盖已经存在的处理VARCHAR参数及结果的类型处理器。</li>
@@ -160,18 +156,18 @@ public class ExampleTypeHandler extends BaseTypeHandler&lt;String&gt; {
 <li><p>在类型处理器的配置元素（typeHandler element）上增加一个 javaType 属性。</p>
 <pre><code>&lt;typeHandlers&gt;
   &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot; javaType=&quot;String&quot;/&gt;
-&lt;/typeHandlers&gt;
-</code></pre></li>
-<li>在类型处理器的类上（TypeHandler class）增加一个 @MappedTypes 注解来指定与其关联的 Java 类型列表，<strong>如果在 javaType 属性中也同时指定，则注解方式将被忽略.</strong></li>
+&lt;/typeHandlers&gt;</code></pre></li>
+<li><p>在类型处理器的类上（TypeHandler class）增加一个 @MappedTypes 注解来指定与其关联的 Java 类型列表，<strong>如果在 javaType 属性中也同时指定，则注解方式将被忽略.</strong></p>
+</li>
 </ul>
 <p>可以通过两种方式来指定被关联的JDBC类型：</p>
 <ul>
 <li><p>在类型处理器的配置元素上增加一个 jdbcType 属性</p>
 <pre><code>&lt;typeHandlers&gt;
   &lt;typeHandler handler=&quot;org.mybatis.example.ExampleTypeHandler&quot; jdbcType=&quot;String&quot;/&gt;
-&lt;/typeHandlers&gt;
-</code></pre></li>
-<li>在类型处理器的类上（TypeHandler class）增加一个 @MappedJdbcTypes 注解来指定与其关联的 JDBC 类型列表，<strong>如果在 jdbcType 属性中也同时指定，则注解方式将被忽略。</strong></li>
+&lt;/typeHandlers&gt;</code></pre></li>
+<li><p>在类型处理器的类上（TypeHandler class）增加一个 @MappedJdbcTypes 注解来指定与其关联的 JDBC 类型列表，<strong>如果在 jdbcType 属性中也同时指定，则注解方式将被忽略。</strong></p>
+</li>
 </ul>
 <h2 id="插件（plugins）"><a href="#插件（plugins）" class="headerlink" title="插件（plugins）"></a>插件（plugins）</h2><p>MyBatis 允许你在已映射语句执行过程中的某一点进行拦截调用。默认情况下，MyBatis 允许使用插件来拦截的方法调用包括：</p>
 <ul>
@@ -184,8 +180,7 @@ public class ExampleTypeHandler extends BaseTypeHandler&lt;String&gt; {
 <p>不过要记住的是：<strong>每个数据库对应一个 SqlSessionFactory 实例</strong>。</p>
 <p>为了指定创建哪种环境，只要将它作为可选的参数传递给 SqlSessionFactoryBuilder 即可。可以接受环境配置的两个方法签名是：</p>
 <pre><code>SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment);
-SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment, properties);
-</code></pre><h3 id="事务管理器transactionManager"><a href="#事务管理器transactionManager" class="headerlink" title="事务管理器transactionManager"></a>事务管理器transactionManager</h3><p>Mybatis有两种类型的事务管理器：</p>
+SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environment, properties);</code></pre><h3 id="事务管理器transactionManager"><a href="#事务管理器transactionManager" class="headerlink" title="事务管理器transactionManager"></a>事务管理器transactionManager</h3><p>Mybatis有两种类型的事务管理器：</p>
 <ul>
 <li>JDBC 直接使用了 JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域</li>
 <li>MANAGED 这个配置几乎没做什么。它从来不提交或回滚一个连接，而是让容器来管理事务的整个生命周期（比如 JEE 应用服务器的上下文）</li>
@@ -196,16 +191,14 @@ SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environ
   void setProperties(Properties props);  
   Transaction newTransaction(Connection conn);
   Transaction newTransaction(DataSource dataSource, TransactionIsolationLevel level, boolean autoCommit);  
-}
-</code></pre><p>你也需要创建一个 Transaction 接口的实现类，这个接口也很简单：</p>
+}</code></pre><p>你也需要创建一个 Transaction 接口的实现类，这个接口也很简单：</p>
 <pre><code>public interface Transaction {
   Connection getConnection() throws SQLException;
   void commit() throws SQLException;
   void rollback() throws SQLException;
   void close() throws SQLException;
   Integer getTimeout() throws SQLException;
-}
-</code></pre><p><strong>使用这两个接口，你可以完全自定义 MyBatis 对事务的处理</strong>。</p>
+}</code></pre><p><strong>使用这两个接口，你可以完全自定义 MyBatis 对事务的处理</strong>。</p>
 <h3 id="数据源-DataSource"><a href="#数据源-DataSource" class="headerlink" title="数据源 DataSource"></a>数据源 DataSource</h3><p>Mybatis有三种内置的数据源类型：</p>
 <ul>
 <li>UNPOOLED 这个数据源的实现只是每次被请求时打开和关闭连接，没有连接池的必要的应用或数据库可以选择这种类型。这种类型的数据源只需要配置五种属性：driver、url、username、password和defaultTransactionIsolationLevel（默认的事务隔离级别）</li>
@@ -216,8 +209,7 @@ SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(reader, environ
 <pre><code>public interface DataSourceFactory {
   void setProperties(Properties props);
   DataSource getDataSource();
-}
-</code></pre><p>org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory 可被用作父类来构建新的数据源适配器，比如下面这段插入 C3P0 数据源所必需的代码：</p>
+}</code></pre><p>org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory 可被用作父类来构建新的数据源适配器，比如下面这段插入 C3P0 数据源所必需的代码：</p>
 <pre><code>import org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -226,10 +218,8 @@ public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
   public C3P0DataSourceFactory() {
     this.dataSource = new ComboPooledDataSource();
   }
-}
-</code></pre><h2 id="databaseIdProvider"><a href="#databaseIdProvider" class="headerlink" title="databaseIdProvider"></a>databaseIdProvider</h2><p>MyBatis 可以根据不同的数据库厂商执行不同的语句，这种多厂商的支持是基于映射语句中的 databaseId 属性。为支持多厂商特性只要像下面这样在 mybatis-config.xml 文件中加入 databaseIdProvider 即可：</p>
-<pre><code>&lt;databaseIdProvider type=&quot;DB_VENDOR&quot; /&gt;
-</code></pre><h2 id="映射器-mapper"><a href="#映射器-mapper" class="headerlink" title="映射器 mapper"></a>映射器 mapper</h2><p>告诉mybatis去哪里寻找SQL的映射语句。</p>
+}</code></pre><h2 id="databaseIdProvider"><a href="#databaseIdProvider" class="headerlink" title="databaseIdProvider"></a>databaseIdProvider</h2><p>MyBatis 可以根据不同的数据库厂商执行不同的语句，这种多厂商的支持是基于映射语句中的 databaseId 属性。为支持多厂商特性只要像下面这样在 mybatis-config.xml 文件中加入 databaseIdProvider 即可：</p>
+<pre><code>&lt;databaseIdProvider type=&quot;DB_VENDOR&quot; /&gt;</code></pre><h2 id="映射器-mapper"><a href="#映射器-mapper" class="headerlink" title="映射器 mapper"></a>映射器 mapper</h2><p>告诉mybatis去哪里寻找SQL的映射语句。</p>
 <h1 id="XML映射文件中元素"><a href="#XML映射文件中元素" class="headerlink" title="XML映射文件中元素"></a>XML映射文件中元素</h1><p>SQL 映射文件有很少的几个顶级元素：</p>
 <ul>
 <li>cache 给定命名空间的缓存配置</li>
@@ -253,8 +243,7 @@ public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
   timeout=&quot;10000&quot;
   fetchSize=&quot;256&quot;
   statementType=&quot;PREPARED&quot;
-  resultSetType=&quot;FORWARD_ONLY&quot;&gt;
-</code></pre><ul>
+  resultSetType=&quot;FORWARD_ONLY&quot;&gt;</code></pre><ul>
 <li>id 在命名空间中唯一的标识符，可以被用来引用这条语句。</li>
 <li>parameterType 将会传入这条语句的参数类的完全限定名或别名。这个属性是可选的，因为 MyBatis 可以通过 TypeHandler 推断出具体传入语句的参数，默认值为 unset。</li>
 <li>resultType 从这条语句中返回的期望类型的类的完全限定名或别名。<strong>注意如果是集合情形，那应该是集合可以包含的类型，</strong>而不能是集合本身。使用 resultType 或 resultMap，但不能同时使用。</li>
@@ -291,8 +280,7 @@ public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
   parameterType=&quot;domain.blog.Author&quot;
   flushCache=&quot;true&quot;
   statementType=&quot;PREPARED&quot;
-  timeout=&quot;20&quot;&gt;
-</code></pre><p>与select相同的属性在这里就不解释了，解释select没有的</p>
+  timeout=&quot;20&quot;&gt;</code></pre><p>与select相同的属性在这里就不解释了，解释select没有的</p>
 <ul>
 <li>useGeneratedKeys 这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键</li>
 <li>keyProperty 唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值</li>
@@ -303,14 +291,11 @@ public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
     keyProperty=&quot;id&quot;&gt;
   insert into Author (username,password,email,bio)
   values (#{username},#{password},#{email},#{bio})
-&lt;/insert&gt;
-</code></pre><p>${xxx} 映射语句内部的参数传递。</p>
+&lt;/insert&gt;</code></pre><p>${xxx} 映射语句内部的参数传递。</p>
 <h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>对于数值类型，还有一个小数保留位数的设置，来确定小数点后保留的位数。</p>
-<pre><code>#{height,javaType=double,jdbcType=NUMERIC,numericScale=2}
-</code></pre><p><strong>字符串替换</strong>：</p>
+<pre><code>#{height,javaType=double,jdbcType=NUMERIC,numericScale=2}</code></pre><p><strong>字符串替换</strong>：</p>
 <p>默认情况下,使用 #{} 格式的语法会导致 MyBatis 创建 PreparedStatement 参数并安全地设置参数（就像使用 ? 一样）。这样做更安全，更迅速，通常也是首选做法，不过有时你就是想直接在 SQL 语句中插入一个不转义的字符串。比如，像 ORDER BY，你可以这样来使用：</p>
-<pre><code>ORDER BY ${columnName} -- 这里 MyBatis 不会修改或转义字符串。即不会被？替换
-</code></pre><p><strong>注：用这种方式接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击，因此要么不允许用户输入这些字段，要么自行转义并检验。</strong></p>
+<pre><code>ORDER BY ${columnName} -- 这里 MyBatis 不会修改或转义字符串。即不会被？替换</code></pre><p><strong>注：用这种方式接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击，因此要么不允许用户输入这些字段，要么自行转义并检验。</strong></p>
 <h2 id="Result-Maps"><a href="#Result-Maps" class="headerlink" title="Result Maps"></a>Result Maps</h2><p>ResultMap 的设计思想是，简单的语句不需要明确的结果映射，而复杂一点的语句只需要描述它们的关系就行了。ResultMap 最优秀的地方在于，虽然你已经对它相当了解了，但是根本就不需要显式地用到他们。 </p>
 <p>ResultMap有许多的子元素，下面是其元素的概念图：</p>
 <ul>
@@ -347,31 +332,32 @@ public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
 <p>自定义 trim 元素来定制 where 元素的功能:</p>
 <pre><code>&lt;trim prefix=&quot;WHERE&quot; prefixOverrides=&quot;AND |OR &quot;&gt;
   ... 
-&lt;/trim&gt;
-</code></pre><p>set 元素等价的自定义 trim 元素:</p>
+&lt;/trim&gt;</code></pre><p>set 元素等价的自定义 trim 元素:</p>
 <pre><code>&lt;trim prefix=&quot;SET&quot; suffixOverrides=&quot;,&quot;&gt;
   ...
-&lt;/trim&gt;
-</code></pre><h2 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h2><p>你可以将任何可迭代对象（如 List、Set 等）、Map 对象或者数组对象传递给 foreach 作为集合参数。当使用可迭代对象或者数组时，index 是当前迭代的次数，item 的值是本次迭代获取的元素。当使用 Map 对象（或者 Map.Entry 对象的集合）时，index 是键，item 是值。</p>
+&lt;/trim&gt;</code></pre><h2 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h2><p>你可以将任何可迭代对象（如 List、Set 等）、Map 对象或者数组对象传递给 foreach 作为集合参数。当使用可迭代对象或者数组时，index 是当前迭代的次数，item 的值是本次迭代获取的元素。当使用 Map 对象（或者 Map.Entry 对象的集合）时，index 是键，item 是值。</p>
 <h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>bind 元素可以从 OGNL 表达式中创建一个变量并将其绑定到上下文。比如：</p>
 <pre><code>&lt;select id=&quot;selectBlogsLike&quot; resultType=&quot;Blog&quot;&gt;
   &lt;bind name=&quot;pattern&quot; value=&quot;&apos;%&apos; + _parameter.getTitle() + &apos;%&apos;&quot; /&gt;
   SELECT * FROM BLOG
   WHERE title LIKE #{pattern}
-&lt;/select&gt;
-</code></pre><h1 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h1><p>MyBatis的主要接口就是SqlSession，可以通过这个接口来执行命令，获取映射器和管理事务。SqlSessions 是由 SqlSessionFactory 实例创建的。SqlSessionFactory 对象包含创建 SqlSession 实例的所有方法。而 SqlSessionFactory 本身是由 SqlSessionFactoryBuilder 创建的，它可以从 XML、注解或手动配置 Java 代码来创建 SqlSessionFactory</p>
+&lt;/select&gt;</code></pre><h1 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h1><p>MyBatis的主要接口就是SqlSession，可以通过这个接口来执行命令，获取映射器和管理事务。SqlSessions 是由 SqlSessionFactory 实例创建的。SqlSessionFactory 对象包含创建 SqlSession 实例的所有方法。而 SqlSessionFactory 本身是由 SqlSessionFactoryBuilder 创建的，它可以从 XML、注解或手动配置 Java 代码来创建 SqlSessionFactory</p>
 <p>注意：当 Mybatis 与一些依赖注入框架（如 Spring 或者 Guice）同时使用时，SqlSessions 将被依赖注入框架所创建，所以你不需要使用 SqlSessionFactoryBuilder 或者 SqlSessionFactory。</p>
 <p>MyBatis中比较重要的三个类：</p>
 <ul>
-<li>SqlSessionFactoryBuilder 用于创建SqlSessionFactory</li>
-<li>SqlSessionFactory 用于创建SqlSession</li>
+<li><p>SqlSessionFactoryBuilder 用于创建SqlSessionFactory</p>
+</li>
+<li><p>SqlSessionFactory 用于创建SqlSession</p>
+</li>
 <li><p>SqlSession SqlSession 实例在 MyBatis 中是非常强大的一个类,其中包括超过20个方法，对这些方法进行简单的分类：</p>
 <ul>
-<li>执行语句的方法</li>
-<li>提交或回滚事务的方法</li>
+<li><p>执行语句的方法</p>
+</li>
+<li><p>提交或回滚事务的方法</p>
+</li>
 <li><p>获取映射器实例的方法</p>
 <h2 id="执行语句的方法"><a href="#执行语句的方法" class="headerlink" title="执行语句的方法"></a>执行语句的方法</h2><p>这些方法被用来执行定义在 SQL 映射的 XML 文件中的 SELECT、INSERT、UPDATE 和 DELETE 语句。它们都会自行解释，每一句都使用语句的 ID 属性和参数对象，参数可以是原生类型（自动装箱或包装类）、JavaBean、POJO 或 Map。这些方法如下：</p>
-<p>  <t> T selectOne(String statement, Object parameter)<br>  <e> List<e> selectList(String statement, Object parameter)<br>  <k,v> Map<k,v> selectMap(String statement, Object parameter, String mapKey)<br>  int insert(String statement, Object parameter)<br>  int update(String statement, Object parameter)<br>  int delete(String statement, Object parameter)</k,v></k,v></e></e></t></p>
+<p>  <t> T selectOne(String statement, Object parameter)<br>  <e> List<e> selectList(String statement, Object parameter)<br>  &lt;K,V&gt; Map&lt;K,V&gt; selectMap(String statement, Object parameter, String mapKey)<br>  int insert(String statement, Object parameter)<br>  int update(String statement, Object parameter)<br>  int delete(String statement, Object parameter)</e></e></t></p>
 </li>
 </ul>
 </li>
@@ -381,15 +367,12 @@ public class C3P0DataSourceFactory extends UnpooledDataSourceFactory {
 <pre><code>void commit()
 void commit(boolean force)
 void rollback()
-void rollback(boolean force)
-</code></pre><p>MyBatis-Spring 和 MyBatis-Guice 提供了声明事务处理，所以如果你在使用 Mybatis 的同时使用了Spring 或者 Guice，那么请参考它们的手册以获取更多的内容。</p>
+void rollback(boolean force)</code></pre><p>MyBatis-Spring 和 MyBatis-Guice 提供了声明事务处理，所以如果你在使用 Mybatis 的同时使用了Spring 或者 Guice，那么请参考它们的手册以获取更多的内容。</p>
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>MyBatis使用了两种缓存:本地缓存（local cache）和二级缓存（second level cache）。</p>
 <p>每当一个新 session 被创建，MyBatis 就会创建一个与之相关联的本地缓存。任何在 session 执行过的查询语句本身都会被保存在本地缓存。默认情况下，本地缓存数据可在整个 session 的周期内使用，这一缓存需要被用来解决循环引用错误和加快重复嵌套查询的速度，所以它可以不被禁用掉，但是你可以设置localCacheScope=STATEMENT 表示缓存仅在语句执行时有效本地缓存会被增删改、提交事务、关闭事务以及关闭 session 所清空。</p>
 <h1 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h1><p> #{param}和${param}的区别？</p>
-<pre><code>答：前者可以防止SQL注入；参数中含有单引号的时候可以自动转义；把参数值转为字符串的形式。后者可以用来拼接SQL，必须用${param}的地方： order by   ${column}。
-</code></pre><p>如果xml中有特殊符号的处理方式？</p>
-<pre><code>答：加上转义标签&lt;![CDATA[sql语句]]&gt;
-</code></pre>  
+<pre><code>答：前者可以防止SQL注入；参数中含有单引号的时候可以自动转义；把参数值转为字符串的形式。后者可以用来拼接SQL，必须用${param}的地方： order by   ${column}。</code></pre><p>如果xml中有特殊符号的处理方式？</p>
+<pre><code>答：加上转义标签&lt;![CDATA[sql语句]]&gt;</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -398,7 +381,7 @@ void rollback(boolean force)
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/03/18/MyBatis/" data-title="MyBatis | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/03/18/MyBatis/" data-title="MyBatis | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -429,7 +412,7 @@ void rollback(boolean force)
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="MyBatis" data-thread-key="MyBatis" data-author-key="Daniel" data-url="http://yoursite.com/post/MyBatis"></div>
+	<div class="ds-thread" data-title="MyBatis" data-thread-key="MyBatis" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/MyBatis"></div>
 	
 </section>
 

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>日志系统 | 山间听雨者主页</title>
@@ -49,7 +49,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -67,6 +67,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -107,7 +109,7 @@ var _hmt = _hmt || [];
 		<h1 id="slf4j-api、slf4j-log4j12以及log4j之间什么关系？"><a href="#slf4j-api、slf4j-log4j12以及log4j之间什么关系？" class="headerlink" title="slf4j-api、slf4j-log4j12以及log4j之间什么关系？"></a>slf4j-api、slf4j-log4j12以及log4j之间什么关系？</h1><p><code>slf4j:Simple Logging Facade for Java</code>，为java提供的简单日志Facade。Facade：门面，更底层一点说就是接口。他允许用户以自己的喜好，在工程中通过slf4j接入不同的日志系统。更直观一点，slf4j是个数据线，一端嵌入程序，另一端链接日志系统，从而实现将程序中的信息导入到日志系统并记录。</p>
 <p>因此，slf4j入口就是众多接口的集合，他不负责具体的日志实现，只在编译时负责寻找合适的日志系统进行绑定。具体有哪些接口，全部都定义在slf4j-api中。查看slf4j-api源码就可以发现，里面除了public final class LoggerFactory类之外，都是接口定义。因此，slf4j-api本质就是一个接口定义。</p>
 <p>一句话总结：slf4j提供接口，各个日志系统或框架实现这些接口。好处是统一了日志系统的管理</p>
-<center><img src="http://img.my.csdn.net/uploads/201211/18/1353244238_7191.png" alt="三者之间的关系">     </center>
+<center>![三者之间的关系](http://img.my.csdn.net/uploads/201211/18/1353244238_7191.png)     </center>
 
 <p>说明：</p>
 <ol>
@@ -127,7 +129,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/12/31/日志系统/" data-title="日志系统 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2017/12/31/日志系统/" data-title="日志系统 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -158,7 +160,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="日志系统" data-thread-key="日志系统" data-author-key="Daniel" data-url="http://yoursite.com/post/日志系统"></div>
+	<div class="ds-thread" data-title="日志系统" data-thread-key="日志系统" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/日志系统"></div>
 	
 </section>
 

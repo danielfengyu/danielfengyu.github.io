@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>Spring | 山间听雨者主页</title>
@@ -61,7 +61,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -79,6 +79,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -113,7 +115,7 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ioc"><span class="toc-number">1.</span> <span class="toc-text">Ioc</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#核心"><span class="toc-number">1.1.</span> <span class="toc-text">核心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化步骤"><span class="toc-number">1.2.</span> <span class="toc-text">初始化步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IoC容器初始化的基本步骤"><span class="toc-number">1.3.</span> <span class="toc-text">IoC容器初始化的基本步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Beanfactory-和-Factory-Bean"><span class="toc-number">1.4.</span> <span class="toc-text">Beanfactory  和 Factory Bean</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IoC容器的依赖注入"><span class="toc-number">1.5.</span> <span class="toc-text">IoC容器的依赖注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖注入发生的时机"><span class="toc-number">1.5.1.</span> <span class="toc-text">依赖注入发生的时机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC的高级应用"><span class="toc-number">1.6.</span> <span class="toc-text">IOC的高级应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用中启动应用Spring容器"><span class="toc-number">1.7.</span> <span class="toc-text">应用中启动应用Spring容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring实例化bean方式"><span class="toc-number">1.7.1.</span> <span class="toc-text">Spring实例化bean方式</span></a></li></ol></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ioc"><span class="toc-number">1.</span> <span class="toc-text">Ioc</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#核心"><span class="toc-number">1.1.</span> <span class="toc-text">核心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化步骤"><span class="toc-number">1.2.</span> <span class="toc-text">初始化步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IoC容器初始化的基本步骤"><span class="toc-number">1.3.</span> <span class="toc-text">IoC容器初始化的基本步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Beanfactory-和-Factory-Bean"><span class="toc-number">1.4.</span> <span class="toc-text">Beanfactory  和 Factory Bean</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IoC容器的依赖注入"><span class="toc-number">1.5.</span> <span class="toc-text">IoC容器的依赖注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖注入发生的时机"><span class="toc-number">1.5.1.</span> <span class="toc-text">依赖注入发生的时机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC的高级应用"><span class="toc-number">1.6.</span> <span class="toc-text">IOC的高级应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用中启动应用Spring容器"><span class="toc-number">1.7.</span> <span class="toc-text">应用中启动应用Spring容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring实例化bean方式"><span class="toc-number">1.7.1.</span> <span class="toc-text">Spring实例化bean方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringMVC-中的注意事项"><span class="toc-number">2.</span> <span class="toc-text">SpringMVC 中的注意事项</span></a></li></ol>
 		</div>
 		
 		<h1 id="Ioc"><a href="#Ioc" class="headerlink" title="Ioc"></a>Ioc</h1><h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><ol>
@@ -137,7 +139,7 @@ var _hmt = _hmt || [];
 </blockquote>
 </li>
 </ol>
-<ol>
+<ol start="3">
 <li>然后我们就可以通过 BeanFactory 和 ApplicationContext 来享受到 Spring IOC 的服务了,在使用 IOC 容器的时候，我们注意到除了少量粘合代码，绝大多数以正确 IoC 风格编写的应用程序代码完全不用关心如何到达工厂，因为容器将把这些对象与容器管理的其他对象钩在一起。基本的策略是把工厂放到已知的地方，最好是放在对预期使用的上下文有意义的地方，以及代码将实际需要访问工厂的地方</li>
 </ol>
 <h2 id="Beanfactory-和-Factory-Bean"><a href="#Beanfactory-和-Factory-Bean" class="headerlink" title="Beanfactory  和 Factory Bean"></a>Beanfactory  和 Factory Bean</h2><ol>
@@ -159,13 +161,13 @@ var _hmt = _hmt || [];
 </ol>
 <p>Spring IoC容器的autowiring属性自动依赖注入是一个很方便的特性，可以简化开发时的配置，但是凡是都有两面性，自动属性依赖注入也有不足，首先，Bean的依赖关系在配置文件中无法很清楚地看出来，对于维护造成一定困难。其次，由于自动依赖注入是Spring容器自动执行的，容器是不会智能判断的，如果配置不当，将会带来无法预料的后果，所以自动依赖注入特性在使用时还是综合考虑。</p>
 <h2 id="应用中启动应用Spring容器"><a href="#应用中启动应用Spring容器" class="headerlink" title="应用中启动应用Spring容器"></a>应用中启动应用Spring容器</h2><ul>
-<li>把配置文件放到web.xml中，随应用程序被Tomcat等servlet容器加载的时候加载。</li>
+<li><p>把配置文件放到web.xml中，随应用程序被Tomcat等servlet容器加载的时候加载。</p>
+</li>
 <li><p>在code中手动加载，下面是一种加载方式：</p>
 <pre><code>//启动上下文容器
 ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
 //获取配置文件中配置的实例对象，或者是通过注解注释的类的对象
-EagerSingleton1 singleton1 = ctx.getBean(&quot;eagerSingleton1&quot;, EagerSingleton1.class);
-</code></pre></li>
+EagerSingleton1 singleton1 = ctx.getBean(&quot;eagerSingleton1&quot;, EagerSingleton1.class);</code></pre></li>
 </ul>
 <h3 id="Spring实例化bean方式"><a href="#Spring实例化bean方式" class="headerlink" title="Spring实例化bean方式"></a>Spring实例化bean方式</h3><ul>
 <li><p>使用setter</p>
@@ -195,23 +197,20 @@ public class StudentServiceImpl implements IStudentService {
         this.handler = handler;
     }
 
-}
-</code></pre><p>  配置：</p>
+}</code></pre><p>  配置：</p>
 <pre><code>&lt;!-- 使用setter方式实例化 --&gt;
 &lt;bean id=&quot;handler&quot; class=&quot;com.daniel.study.spring.handler.StudentHandler&quot;&gt;
 &lt;/bean&gt;
 &lt;bean id=&quot;studentManager&quot; class=&quot;com.daniel.study.spring.service.impl.StudentServiceImpl&quot;&gt;
     &lt;property name=&quot;handler&quot; ref=&quot;handler&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+&lt;/bean&gt;</code></pre><p>  测试：</p>
 <pre><code>@Test
 public void test() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
     IStudentService studenManager = (IStudentService) ctx.getBean(&quot;studentManager&quot;);
     String stName = studenManager.getSudentName();
     System.out.println(stName);
-}
-</code></pre></li>
+}</code></pre></li>
 <li><p>使用构造器，上面的handler实例的定义就是通过构造器实现的，只不过没有参数而已。</p>
 <p>  测试：</p>
 <pre><code>@Test
@@ -220,8 +219,7 @@ public void test1() {
     StudentHandler handler = ctx.getBean(&quot;handler&quot;, StudentHandler.class);
     Student student = handler.addName(&quot;fengyu&quot;);
     System.out.println(student.getName());
-}
-</code></pre></li>
+}</code></pre></li>
 <li><p>静态构造方法</p>
 <pre><code>public class Student {
     private String name;
@@ -256,18 +254,15 @@ public void test1() {
     public static Student getStudentInstance() {
         return new Student();
     }
-}
-</code></pre><p>  配置：</p>
+}</code></pre><p>  配置：</p>
 <pre><code>&lt;！-- lazy-init只有到了真正使用的时候才实例化 --&gt;
-&lt;bean id=&quot;student&quot; class=&quot;com.daniel.study.spring.entity.Student&quot; factory-method=&quot;getStudentInstance&quot; lazy-init=&quot;true&quot;&gt;&lt;/bean&gt; 
-</code></pre><p>  测试：</p>
+&lt;bean id=&quot;student&quot; class=&quot;com.daniel.study.spring.entity.Student&quot; factory-method=&quot;getStudentInstance&quot; lazy-init=&quot;true&quot;&gt;&lt;/bean&gt; </code></pre><p>  测试：</p>
 <pre><code>@Test
 public void test() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
     Student student = ctx.getBean(&quot;student&quot;, Student.class);
     System.out.println(student.getName());
-}
-</code></pre></li>
+}</code></pre></li>
 <li><p>实例化工厂方法</p>
 <pre><code>//需要实例化的类
 public class Book {
@@ -297,20 +292,20 @@ public class BookFactory {
     public Book createBook() {
         return new Book();
     }
-}
-</code></pre><p>  配置：</p>
+}</code></pre><p>  配置：</p>
 <pre><code>&lt;!-- 工厂实例化方法 --&gt;
 &lt;bean id=&quot;bookFactory&quot; class=&quot;com.daniel.study.spring.factory.BookFactory&quot;&gt;&lt;/bean&gt;
-&lt;bean id=&quot;book&quot; factory-bean=&quot;bookFactory&quot; factory-method=&quot;createBook&quot; &gt;&lt;/bean&gt;
-</code></pre><p>  测试：</p>
+&lt;bean id=&quot;book&quot; factory-bean=&quot;bookFactory&quot; factory-method=&quot;createBook&quot; &gt;&lt;/bean&gt;</code></pre><p>  测试：</p>
 <pre><code>@Test
 public void test() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;classpath*:./applicationContext.xml&quot;);
     Book book = ctx.getBean(&quot;book&quot;, Book.class);
     System.out.println(book.getName());
-}
-</code></pre></li>
+}</code></pre></li>
 </ul>
+<h1 id="SpringMVC-中的注意事项"><a href="#SpringMVC-中的注意事项" class="headerlink" title="SpringMVC 中的注意事项"></a>SpringMVC 中的注意事项</h1><ol>
+<li>Spring容器在SpringMVC框架中严格区分了父子上下文，父上下文只有一个，是在web.xml中配置的监听器来进行初始化的，这个父容器初始化完成后是保存在 ServletContext中，key WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE的值。每个Servlet有自己的Spring容器，一个web应用可以配置多个servlet，即便是SpringMVC项目也可以配置多个servlet，这些容器都是子容器，它们的父容器就是ContextInitor初始化的Spring容器。重要的是我们需要知道父子容器之间的关系，子容器中的bean可以使用父容器中的bean，但父容器中bean不可以使用子容器中的bean，间接表明多个不同的servlet可以配置相同名称的bean。了解了父子容器的关系，我们还需要知道，父子容器中各自存储的是什么bean？父容器中存放的是一些公共的bean，在web项目启动时就初始化的，比如service,dao,po,bo,vo等；而子容器中存放的就是controller(action)bean。通常来说我们做事务控制是在service层，因为需要进行事务控制的数据bean,如po等都是放在父容器中的，只有父容器中的bean才可以调用。如果我们想在controller控制事务等等怎么办，很简单就是把要进行事务控制的数据bean放到子容器中，这个怎么做到呢？其实很简单，只要不通过监听器进行初始化bean即可，改为在各个servlet中进行初始化化，通过DispatchServlet中的configLocation指定Spring的配置文件即可。</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -320,7 +315,7 @@ public void test() {
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/02/01/Spring/" data-title="Spring | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/02/01/Spring/" data-title="Spring | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -351,7 +346,7 @@ public void test() {
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Spring" data-thread-key="Spring" data-author-key="Daniel" data-url="http://yoursite.com/post/Spring"></div>
+	<div class="ds-thread" data-title="Spring" data-thread-key="Spring" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/Spring"></div>
 	
 </section>
 

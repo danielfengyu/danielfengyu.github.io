@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>JVM | 山间听雨者主页</title>
@@ -16,10 +16,10 @@
 堆区
 方法区
 
-
+![JVM内存模型](https://ws1.sinaimg.cn/large/af2f0e07ly1fnw6oozzasj20x80k13z0.jpg)
 
 各个内存模块的作用虚拟机栈
-程序逻辑运行的区域，可固定，可扩展。如果固定，当其中的某个线程需要执行内存（在栈空间上），而恰好分配的栈区不足就会出现StackOverflowError异常（运行时异常）。如">
+程序逻辑运行的区域，可">
     
     
     
@@ -59,7 +59,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -77,6 +77,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -111,7 +113,7 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的内存模型"><span class="toc-number">1.</span> <span class="toc-text">JVM的内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM内存划分"><span class="toc-number">1.1.</span> <span class="toc-text">JVM内存划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各个内存模块的作用"><span class="toc-number">1.2.</span> <span class="toc-text">各个内存模块的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#虚拟机栈"><span class="toc-number">1.2.1.</span> <span class="toc-text">虚拟机栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本地方法栈"><span class="toc-number">1.2.2.</span> <span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄存器（程序计数器）"><span class="toc-number">1.2.3.</span> <span class="toc-text">寄存器（程序计数器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆区"><span class="toc-number">1.2.4.</span> <span class="toc-text">堆区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区"><span class="toc-number">1.2.5.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PermGen（永久代）"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">PermGen（永久代）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metaspace（元空间）"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">Metaspace（元空间）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#每个内存区域出现异常的情形"><span class="toc-number">1.2.6.</span> <span class="toc-text">每个内存区域出现异常的情形</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM参数设置"><span class="toc-number">2.</span> <span class="toc-text">JVM参数设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类加载机制"><span class="toc-number">3.</span> <span class="toc-text">类加载机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加载"><span class="toc-number">3.1.</span> <span class="toc-text">加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链接"><span class="toc-number">3.2.</span> <span class="toc-text">链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类的初始化"><span class="toc-number">3.3.</span> <span class="toc-text">类的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器"><span class="toc-number">3.4.</span> <span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GC"><span class="toc-number">3.5.</span> <span class="toc-text">GC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#java堆的逻辑划分"><span class="toc-number">3.5.1.</span> <span class="toc-text">java堆的逻辑划分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java命令"><span class="toc-number">3.6.</span> <span class="toc-text">java命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的内存模型"><span class="toc-number">1.</span> <span class="toc-text">JVM的内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM内存划分"><span class="toc-number">1.1.</span> <span class="toc-text">JVM内存划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各个内存模块的作用"><span class="toc-number">1.2.</span> <span class="toc-text">各个内存模块的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#虚拟机栈"><span class="toc-number">1.2.1.</span> <span class="toc-text">虚拟机栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本地方法栈"><span class="toc-number">1.2.2.</span> <span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄存器（程序计数器）"><span class="toc-number">1.2.3.</span> <span class="toc-text">寄存器（程序计数器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆区"><span class="toc-number">1.2.4.</span> <span class="toc-text">堆区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区"><span class="toc-number">1.2.5.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PermGen（永久代）"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">PermGen（永久代）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metaspace（元空间）"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">Metaspace（元空间）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#每个内存区域出现异常的情形"><span class="toc-number">1.2.6.</span> <span class="toc-text">每个内存区域出现异常的情形</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM参数设置"><span class="toc-number">2.</span> <span class="toc-text">JVM参数设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类加载机制"><span class="toc-number">3.</span> <span class="toc-text">类加载机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加载"><span class="toc-number">3.1.</span> <span class="toc-text">加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链接"><span class="toc-number">3.2.</span> <span class="toc-text">链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类的初始化"><span class="toc-number">3.3.</span> <span class="toc-text">类的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器"><span class="toc-number">3.4.</span> <span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GC"><span class="toc-number">3.5.</span> <span class="toc-text">GC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#java堆的逻辑划分"><span class="toc-number">3.5.1.</span> <span class="toc-text">java堆的逻辑划分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java命令"><span class="toc-number">3.6.</span> <span class="toc-text">java命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调优"><span class="toc-number">4.</span> <span class="toc-text">调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于栈的调优"><span class="toc-number">4.1.</span> <span class="toc-text">关于栈的调优</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于堆的调优"><span class="toc-number">4.2.</span> <span class="toc-text">关于堆的调优</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配参数设置"><span class="toc-number">4.3.</span> <span class="toc-text">内存分配参数设置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
 		</div>
 		
 		<h1 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h1><h2 id="JVM内存划分"><a href="#JVM内存划分" class="headerlink" title="JVM内存划分"></a>JVM内存划分</h2><ol>
@@ -121,7 +123,7 @@ var _hmt = _hmt || [];
 <li>堆区</li>
 <li>方法区</li>
 </ol>
-<center><img src="https://ws1.sinaimg.cn/large/af2f0e07ly1fnw6oozzasj20x80k13z0.jpg" alt="JVM内存模型"></center>
+<center>![JVM内存模型](https://ws1.sinaimg.cn/large/af2f0e07ly1fnw6oozzasj20x80k13z0.jpg)</center>
 
 <h2 id="各个内存模块的作用"><a href="#各个内存模块的作用" class="headerlink" title="各个内存模块的作用"></a>各个内存模块的作用</h2><h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><ol>
 <li>程序逻辑运行的区域，可固定，可扩展。如果固定，当其中的某个线程需要执行内存（在栈空间上），而恰好分配的栈区不足就会出现StackOverflowError异常（运行时异常）。如果可扩展，当其中的某个线程需要执行内存（在栈空间上，而恰好内存已经使用完，会出现OutofMemeryError。</li>
@@ -158,7 +160,7 @@ var _hmt = _hmt || [];
 <p>除了上面两个指定大小的选项以外，还有两个与 GC 相关的属性：</p>
 <p>-XX:MinMetaspaceFreeRatio，在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集</p>
 <p>-XX:MaxMetaspaceFreeRatio，在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集</p>
-<h3 id="每个内存区域出现异常的情形"><a href="#每个内存区域出现异常的情形" class="headerlink" title="每个内存区域出现异常的情形"></a>每个内存区域出现异常的情形</h3><center><img src="https://images2015.cnblogs.com/blog/539365/201511/539365-20151119105947202-10960285.png" alt=""></center>
+<h3 id="每个内存区域出现异常的情形"><a href="#每个内存区域出现异常的情形" class="headerlink" title="每个内存区域出现异常的情形"></a>每个内存区域出现异常的情形</h3><center>![](https://images2015.cnblogs.com/blog/539365/201511/539365-20151119105947202-10960285.png)</center>
 
 <ol>
 <li>堆或方法区的内存不够分配都会出现OutOfMemoryError。</li>
@@ -167,8 +169,7 @@ var _hmt = _hmt || [];
 <li>程序计数器理论上回出现OutOfMemoryError，但实际情况下是不会出现的，除非线程栈的大小小于计数器。</li>
 </ol>
 <p>注意：以上所说的各个区并不是在物理上进行分割的，而是在逻辑上进行分割的。比如堆区就可以分配在整个内存区域的不连续的空间中。</p>
-<h1 id="JVM参数设置"><a href="#JVM参数设置" class="headerlink" title="JVM参数设置"></a>JVM参数设置</h1><pre><code>java -Xmx3550m -Xms3550m -Xss128k -XX:NewRatio=4 -XX:SurvivorRatio=4 -XX:MaxPermSize=16m -XX:MaxTenuringThreshold=0
-</code></pre><p>-Xmx128m：设置JVM最大可用内存为128M。</p>
+<h1 id="JVM参数设置"><a href="#JVM参数设置" class="headerlink" title="JVM参数设置"></a>JVM参数设置</h1><pre><code>java -Xmx3550m -Xms3550m -Xss128k -XX:NewRatio=4 -XX:SurvivorRatio=4 -XX:MaxPermSize=16m -XX:MaxTenuringThreshold=0</code></pre><p>-Xmx128m：设置JVM最大可用内存为128M。</p>
 <p>-Xms128m：设置JVM最小内存为128m。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。</p>
 <p>-Xmn2g：设置年轻代大小为2G。整个堆大小=年轻代大小 + 年老代大小 + 持久代大小。持久代一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。</p>
 <p>-Xss128k：设置每个线程的堆栈大小。 JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更 多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</p>
@@ -227,13 +228,25 @@ var _hmt = _hmt || [];
 <li>分代收集：主要是对新生代来说的，分代收集法是目前大部分JVM所采用的方法，其核心思想是根据对象存活的不同生命周期将内存划分为不同的域，一般情况下将GC堆划分为老生代(Tenured/Old Generation)和新生代(Young Generation)。老生代的特点是每次垃圾回收时只有少量对象需要被回收，新生代的特点是每次垃圾回收时都有大量垃圾需要被回收，因此可以根据不同区域选择不同的算法。新生代一般选择的是复制算法。</li>
 </ol>
 <h3 id="java堆的逻辑划分"><a href="#java堆的逻辑划分" class="headerlink" title="java堆的逻辑划分"></a>java堆的逻辑划分</h3><p>java堆逻辑上被分为3大部分：新生代、老生代和永久代，其中的新生代有被划分为Eden、Suvivor0和Suvivor1三个区。Suvivor0和Suvivor1两个区的大小相等，新生代的垃圾回收策略是基于复制回收算法的。这里提到的永久带就是我们说的方法区，只有在HotSpot虚拟机中才存在该区。并非所有的对象创建都会在Eden区中分配内存空间。对于Serial和ParNew垃圾收集器,通过指定-XX:PretenureSizeThreshold={size}来设置超过这个阈值大小的对象直接进入老年代。</p>
-<p><img src="http://ocytp9y7u.bkt.clouddn.com/jvm%20memory.png" alt=""></p>
+<p><img src="http://ocytp9y7u.bkt.clouddn.com/jvm%20memory.png" alt></p>
 <h2 id="java命令"><a href="#java命令" class="headerlink" title="java命令"></a>java命令</h2><p>java 虚拟机参数分为基本和扩展两类，基本的选项列表通过在命令行窗口中输入java 列出，扩展的选项列表通过java -X命令就可以查看。</p>
 <p>java命令的基本格式：</p>
-<pre><code>java [-options] class [args...]
-</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
-<li><a href="https://www.cnblogs.com/z-sm/p/5674684.html" target="_blank" rel="external">Java 命令行运行参数大全</a></li>
-<li><a href="http://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="external">深入理解Java类加载器</a></li>
+<pre><code>java [-options] class [args...]</code></pre><h1 id="调优"><a href="#调优" class="headerlink" title="调优"></a>调优</h1><p>JVM的调优离不开对jvm内存接口和GC机制的熟悉，所以要想对项目中的jvm进行调优，先要掌握jvm的内存模型的基本知识和GC的工作原理。</p>
+<h2 id="关于栈的调优"><a href="#关于栈的调优" class="headerlink" title="关于栈的调优"></a>关于栈的调优</h2><p>jvm中的虚拟机栈的大小即可以固定，也是可变的。对于固定大小的栈，则其方法调用的深度是有限的，如果栈大小固定，为了增加调用深度，需要使得栈帧尽量小，栈帧的大小又取决于占中的局部变量（方法参数，局部变量）的个数尽量少。栈固定大小，可能会出现stackoverflowerror。如果栈的大小可变，那么栈的调用深度取决于栈区的内存大小。大小可变的栈，可能会导致outofmemoryerror。</p>
+<p>上面提到的局部变量表，在内存中以“字”为单位进行内存划分。局部变量表中的字空间是可以复用的，在一个方法中的变量都是局部变量，但是作用域可能不一样（一个方法中有多个作用域），当一个退出一个作用域后，其中的局部变量占用的字空间可以被其他的作用域的变量复用。</p>
+<p>在gc的时候，如果当前方法没有出栈，那么局部变量表中引用的对象就不会被gc,原因是局部变量表中引用的对象是作为gc根的。</p>
+<p>线程数量的多少与线程栈的大小和堆的大小有关，都是反比关系。</p>
+<h2 id="关于堆的调优"><a href="#关于堆的调优" class="headerlink" title="关于堆的调优"></a>关于堆的调优</h2><h2 id="内存分配参数设置"><a href="#内存分配参数设置" class="headerlink" title="内存分配参数设置"></a>内存分配参数设置</h2><ul>
+<li>-Xmx：指定最大堆。最大堆是新生代和老年代的大小之和的上限。</li>
+<li>-Xms:设置最小堆内存。如果该值设置过小，为了尽量满足在该内存下工作，就会频繁的触发GC。</li>
+<li>-Xmn：设置新生代的大小。</li>
+<li>-XX:NewSize 设置新生代的最小值。</li>
+<li>-XX：MaxNewSize 设置新生代的最大值</li>
+<li>-XX：MaxPermSize 设置持久代的最大值</li>
+<li>-XX：PermSize 设置持久代的初始大小</li>
+<li>-Xss 设置线程栈的大小。<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1></li>
+<li><a href="https://www.cnblogs.com/z-sm/p/5674684.html" target="_blank" rel="noopener">Java 命令行运行参数大全</a></li>
+<li><a href="http://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="noopener">深入理解Java类加载器</a></li>
 </ul>
   
 	</div>
@@ -244,7 +257,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/01/28/JVM/" data-title="JVM | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/01/28/JVM/" data-title="JVM | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -275,7 +288,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="JVM" data-thread-key="JVM" data-author-key="Daniel" data-url="http://yoursite.com/post/JVM"></div>
+	<div class="ds-thread" data-title="JVM" data-thread-key="JVM" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/JVM"></div>
 	
 </section>
 

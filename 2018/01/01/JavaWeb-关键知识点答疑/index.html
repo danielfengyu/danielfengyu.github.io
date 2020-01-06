@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>JavaWeb 关键知识点答疑 | 山间听雨者主页</title>
@@ -50,7 +50,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -68,6 +68,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -112,8 +114,7 @@ var _hmt = _hmt || [];
     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
     xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
     http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;&gt;
-&lt;/web-app&gt;
-</code></pre><p>Tomcat加载欢迎页面的顺序：</p>
+&lt;/web-app&gt;</code></pre><p>Tomcat加载欢迎页面的顺序：</p>
 <ol>
 <li>如果web中的web.xml文件中配置了欢迎页面，访问web的时候，就返回那个指定的欢迎页面</li>
 <li>如果web中没有web.xml，或者web.xml中没有指定欢迎页面，Tomcat默认先查询index.html</li>
@@ -126,14 +127,12 @@ var _hmt = _hmt || [];
 <pre><code>&lt;servlet&gt;
     &lt;servlet-name&gt;servlet1&lt;/servlet-name&gt;
     &lt;servlet-class&gt;net.test.TestServlet&lt;/servlet-class&gt;
-&lt;/servlet&gt;
-</code></pre></li>
+&lt;/servlet&gt;</code></pre></li>
 <li><p>为servlet定制URL</p>
 <pre><code>&lt;servlet-mapping&gt;
     &lt;servlet-name&gt;servlet1&lt;/servlet-name&gt;
     &lt;url-pattern&gt;*.do&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-</code></pre></li>
+&lt;/servlet-mapping&gt;</code></pre></li>
 </ol>
 <h2 id="web-xml的加载顺序"><a href="#web-xml的加载顺序" class="headerlink" title="web.xml的加载顺序"></a>web.xml的加载顺序</h2><h3 id="根据节点确定加载顺序"><a href="#根据节点确定加载顺序" class="headerlink" title="根据节点确定加载顺序"></a>根据节点确定加载顺序</h3><ol>
 <li>启动一个WEB项目的时候，WEB容器会去读取它的配置文件web.xml，读取<listener>和<context-param>两个结点。</context-param></listener></li>
@@ -165,7 +164,7 @@ var _hmt = _hmt || [];
 <li>什么是服务器？</li>
 </ol>
 <p>就是应用运行的环境</p>
-<ol>
+<ol start="2">
 <li>什么是servlet容器？</li>
 </ol>
 <p>如果服务器是一个Java web服务器，那么这个web服务器中就必须包含一个Servlet容器。</p>
@@ -174,19 +173,17 @@ var _hmt = _hmt || [];
 <h1 id="MIME"><a href="#MIME" class="headerlink" title="MIME"></a>MIME</h1><p>MIME(Multipurpose Internet Mail Extensions)多用途互联网邮件扩展类型。用来告诉客户端所获取的文件的类型，使得客户端可以调用相应的插件或应用来处理这个请求相应回来的文件。</p>
 <h1 id="请求转发和请求重定向"><a href="#请求转发和请求重定向" class="headerlink" title="请求转发和请求重定向"></a>请求转发和请求重定向</h1><h2 id="请求转发"><a href="#请求转发" class="headerlink" title="请求转发"></a>请求转发</h2><p>有时候，你的应用需要把一个Servlet要处理的请求转让给另外的Servlet来处理并完成任务。而且，转让请求时不能重定向客户端的URL。即浏览器地址栏上的URL不会改变。在 ServletContext 里已经内置了实现上面需求的方法。所以，当你获取了 ServletContext 的引用，你就可以简单地调用getRequestDispatcher() 方法去获取用来转发请求的 RequestDispatcher 对象。当调用 getRequestDispatcher() 方法时，需要传递包含servlet名的字符串，这个Servlet就是你用来处理转让请求的Servlet。获取 RequestDispatcher 对象后，通过传递 HttpServletRequest 和HttpServletResponse 对象给它来调用转发方法。转发方法负责对请求进行转发。</p>
 <pre><code>RequestDispatcher rd = servletContext.getRequestDispatcher(&quot;/NextServlet&quot;);
-rd.forward(request, response);
-</code></pre><h2 id="请求重定向"><a href="#请求重定向" class="headerlink" title="请求重定向"></a>请求重定向</h2><p>尽管有时候，你不想在Servlet发送重定向时通知用户，就像我们在上面那段看到的一样。但是在某些情况下，我们确实想要通知用户。当应用内的特定URL被访问时，你想把浏览器的URL重定向到另外一个。<br>要实现这种功能，你需要调用 HttpServletResponse 对象的sendRedirect()方法。</p>
-<pre><code>httpServletResponse.sendRedirect(&quot;/anotherURL&quot;);
-</code></pre><h1 id="Web服务器，应用服务器，Web容器"><a href="#Web服务器，应用服务器，Web容器" class="headerlink" title="Web服务器，应用服务器，Web容器"></a>Web服务器，应用服务器，Web容器</h1><h2 id="Web服务器和应用服务器"><a href="#Web服务器和应用服务器" class="headerlink" title="Web服务器和应用服务器"></a>Web服务器和应用服务器</h2><p>在以前这两者是有明显的区别，但是现在这两者的区别逐渐合并，甚至于在某些情况下可以把二者看为一件事物了（实体）。</p>
+rd.forward(request, response);</code></pre><h2 id="请求重定向"><a href="#请求重定向" class="headerlink" title="请求重定向"></a>请求重定向</h2><p>尽管有时候，你不想在Servlet发送重定向时通知用户，就像我们在上面那段看到的一样。但是在某些情况下，我们确实想要通知用户。当应用内的特定URL被访问时，你想把浏览器的URL重定向到另外一个。<br>要实现这种功能，你需要调用 HttpServletResponse 对象的sendRedirect()方法。</p>
+<pre><code>httpServletResponse.sendRedirect(&quot;/anotherURL&quot;);</code></pre><h1 id="Web服务器，应用服务器，Web容器"><a href="#Web服务器，应用服务器，Web容器" class="headerlink" title="Web服务器，应用服务器，Web容器"></a>Web服务器，应用服务器，Web容器</h1><h2 id="Web服务器和应用服务器"><a href="#Web服务器和应用服务器" class="headerlink" title="Web服务器和应用服务器"></a>Web服务器和应用服务器</h2><p>在以前这两者是有明显的区别，但是现在这两者的区别逐渐合并，甚至于在某些情况下可以把二者看为一件事物了（实体）。</p>
 <p>一开始，<strong>web服务器</strong>足够简单，只提供基于HTTP协议的静态页面内容和图片，在那个时候，大部分的内容都是静态的，HTTP1.0协议只是把静态文件移动来移动去。但是之后很快web server演进到有了CGI的能力，这意味着有效地在每个web请求上启动一个进程来生成动态内容，这个时候的HTTP协议更加成熟，web server变得更加的复杂，其增加了许多的功能，如缓存，安全和会话管理等。随着技术的进一步成熟，我们从Kiva和NetDynamics获得了公司特有的基于java的服务器端技术，这些技术最终都集成到JSP中，这项技术我们今天任然用在大部分的应用开发中。</p>
 <p>与web server对应的应用服务器（application servers）演进和存在了很长时间。一些公司为Unix发布产品，如Tuxedo, TopEnd, Encina ，它们都是基于大型机应用管理和类似IMS和CICS的模拟环境的哲学上的演进思想。这些产品中的大多数都指定了“封闭”的特定于产品的通信协议，将“重量级”客户端与服务器互连。90年代，这些传统的应用服务器产品开始演进出基于HTTP的通信协议的能力，一开始是经由网关，但很快这两种方式的界限就变得模糊不清了。</p>
 <p>与此同时，web server因为能处理更高的加载，更多的并发和更好的特性。应用服务器开始发布越来越多的基于HTTP协议的通信能力，这就导致了web服务和应用服务器的之间的界限越来越窄。</p>
 <p>现今，web服务器和应用服务器已经无多大区别，但有时候人们还会基于一些重要的特征来区别它们。</p>
-<h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><center> <img src="https://howtodoinjava.com/wp-content/uploads/web-server-servlet-container.jpg" alt="web server与web container的区别"> </center>
+<h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><center> ![web server与web container的区别](https://howtodoinjava.com/wp-content/uploads/web-server-servlet-container.jpg) </center>
 
 <p>Web Container，是java中的一种特殊说法，应该指的就是servlet容器。servlet容器就是web服务器的一个组件，它可以与servlet交互。一个web容器负责管理servlet的生命周期，映射一个URL到一个特殊的servlet，并确保这个URL请求有正确的访问权限和更多这样的服务。总之，据以上所述，servlet容器就是servlet的运行环境和它的生命周期的维护位置。</p>
 <h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><p>对于java而言，servlet让你可以编写服务端组件，这些组件有助于生成基于请求的动态内容。实际上，servlet是javax.servlet包中的一个接口，其中为一个servlet的生命周期声明了三个重要的方法——init(),service()和destroy()。每个servlet都会实现这三个方法，它们会在servlet的生命周期中的特定时间被调用。servlet是运行与服务端的，独立与平台和协议的技术。</p>
-<center><img src="http://img.blog.csdn.net/20150420163121018" alt="servlet的工作流程"></center>
+<center>![servlet的工作流程](http://img.blog.csdn.net/20150420163121018)</center>
 
 <p>在浏览器中输入一个URL地址后发生的事：</p>
 <ol>
@@ -236,40 +233,31 @@ rd.forward(request, response);
 <p><strong><em>JSP可通过servlet引擎动态的编译为静态页面</em></strong></p>
 <ol>
 <li><p>JSP脚本，JSP语法：</p>
-<pre><code>&lt;% code fragment %&gt;
-</code></pre><p>或XML语法：</p>
+<pre><code>&lt;% code fragment %&gt;</code></pre><p>或XML语法：</p>
 <pre><code>&lt;jsp:scriptlet&gt;
        code fragment
-&lt;/jsp:scriptlet&gt;
-</code></pre></li>
+&lt;/jsp:scriptlet&gt;</code></pre></li>
 <li><p>JSP声明，JSP语法：</p>
-<pre><code>&lt;%! declaration; [ declaration; ]+ ... %&gt;
-</code></pre><p>或XML语法：</p>
+<pre><code>&lt;%! declaration; [ declaration; ]+ ... %&gt;</code></pre><p>或XML语法：</p>
 <pre><code>&lt;jsp:declaration&gt;
        code fragment
-&lt;/jsp:declaration&gt;
-</code></pre></li>
+&lt;/jsp:declaration&gt;</code></pre></li>
 <li><p>JSP表达式，JSP语法：</p>
-<pre><code>&lt;%= expression %&gt;
-</code></pre><p>或XML语法：</p>
+<pre><code>&lt;%= expression %&gt;</code></pre><p>或XML语法：</p>
 <pre><code>&lt;jsp:expression&gt;
        expression
-&lt;/jsp:expression&gt;
-</code></pre></li>
+&lt;/jsp:expression&gt;</code></pre></li>
 <li><p>JSP注释，JSP语法：</p>
-<pre><code>&lt;%-- This is JSP comment --%&gt;
-</code></pre></li>
+<pre><code>&lt;%-- This is JSP comment --%&gt;</code></pre></li>
 <li><p>JSP指令</p>
-<pre><code>&lt;%@ directive attribute=&quot;value&quot; %&gt;
-</code></pre><p>有三种类型的指令标记：</p>
+<pre><code>&lt;%@ directive attribute=&quot;value&quot; %&gt;</code></pre><p>有三种类型的指令标记：</p>
 <pre><code>&lt;%@ page ... %&gt;&lt;!--定义页面依赖属性，例如脚本语言，错误页面和缓冲的要求--&gt;
 &lt;%@ include ... %&gt;&lt;!--包括在转换阶段的文件--&gt;
-&lt;%@ taglib ... %&gt;&lt;!--声明了一个标签库，包含自定义动作，用在页面中--&gt;
-</code></pre></li>
+&lt;%@ taglib ... %&gt;&lt;!--声明了一个标签库，包含自定义动作，用在页面中--&gt;</code></pre></li>
 <li><p>JSP动作，JSP动作使用XML语法结构来控制Servlet引擎的行为。可以动态地插入文件，重用JavaBeans组件，用户转发到另一个页面，或为Java插件生成HTML。语法：</p>
-<pre><code>&lt;jsp:action_name attribute=&quot;value&quot; /&gt;    
-</code></pre></li>
-<li>JSP隐式对象</li>
+<pre><code>&lt;jsp:action_name attribute=&quot;value&quot; /&gt;    </code></pre></li>
+<li><p>JSP隐式对象</p>
+</li>
 </ol>
 <p>JSP支持九种自动定义的变量，这也被称为隐式对象。这些变量是：</p>
 <ul>
@@ -289,11 +277,11 @@ rd.forward(request, response);
 <li>Session 范围:使用该JSP的对象可用于在属于同一个会话页面。</li>
 <li>Application 范围：使用该JSP的对象可以在整个应用程序页面中使用。</li>
 </ul>
-<h2 id="JSP中使用Javabean"><a href="#JSP中使用Javabean" class="headerlink" title="JSP中使用Javabean"></a>JSP中使用Javabean</h2><p>嵌入一个Java bean到JSP网页，有三个基本动作或标签：<jsp:usebean>, <jsp:setproperty>, <jsp:getproperty></jsp:getproperty></jsp:setproperty></jsp:usebean></p>
+<h2 id="JSP中使用Javabean"><a href="#JSP中使用Javabean" class="headerlink" title="JSP中使用Javabean"></a>JSP中使用Javabean</h2><p>嵌入一个Java bean到JSP网页，有三个基本动作或标签：<a href="jsp:useBean" target="_blank" rel="noopener">jsp:useBean</a>, <a href="jsp:setProperty" target="_blank" rel="noopener">jsp:setProperty</a>, <a href="jsp:getProperty" target="_blank" rel="noopener">jsp:getProperty</a></p>
 <ul>
-<li><jsp:usebean>：这个标签是用来给bean指定“id”和“scope”属性相关联。</jsp:usebean></li>
-<li><jsp:setproperty>：这个标签被用于设置一个beans属性的值，主要使用“name”属性已经定义的Javabean对象的ID。其他属性是 “property”, “param”, “value”</jsp:setproperty></li>
-<li><jsp:getproperty>：个标签是用来获取引用Bean实例属性并将其存储到隐式out对象。</jsp:getproperty></li>
+<li><a href="jsp:useBean" target="_blank" rel="noopener">jsp:useBean</a>：这个标签是用来给bean指定“id”和“scope”属性相关联。</li>
+<li><a href="jsp:setProperty" target="_blank" rel="noopener">jsp:setProperty</a>：这个标签被用于设置一个beans属性的值，主要使用“name”属性已经定义的Javabean对象的ID。其他属性是 “property”, “param”, “value”</li>
+<li><a href="jsp:getProperty" target="_blank" rel="noopener">jsp:getProperty</a>：个标签是用来获取引用Bean实例属性并将其存储到隐式out对象。</li>
 </ul>
 <p>bean的规则：</p>
 <ul>
@@ -304,25 +292,22 @@ rd.forward(request, response);
 <li>例如变量“名称”的get，set方法就是getName(), setName(String)</li>
 <li>设置方法应该返回像一个空(void)值： “return void()”</li>
 </ul>
-<h2 id="JSP的运行机制"><a href="#JSP的运行机制" class="headerlink" title="JSP的运行机制"></a>JSP的运行机制</h2><center><img src="http://www.blogjava.net/images/blogjava_net/fancydeepin/myself/jsp.png" alt=""></center>
+<h2 id="JSP的运行机制"><a href="#JSP的运行机制" class="headerlink" title="JSP的运行机制"></a>JSP的运行机制</h2><center>![](http://www.blogjava.net/images/blogjava_net/fancydeepin/myself/jsp.png)</center>
 
 <ol>
 <li>当客户端浏览器向服务器请求一个 JSP 页面时，服务器收到该请求后，首先检查所请求的这个JSP 文件内容 ( 代码 ) 是否已经被更新，或者是否是 JSP 文件创建后的第一次被访问</li>
 <li>如果是，那么，这个 JSP 文件就会在服务器端的 JSP 引擎作用下转化为一个 Servlet 类的 Java 源代码文件。紧接着，这个 Servlet 类会在 Java 编译器的作用下被编译成一个字节码文件，并装载到 jvm 解释执行。剩下的就等同于 Servlet 的处理过程了。</li>
 <li>如果被请求的 JSP 文件内容 ( 代码 ) 没有被修改，那么它的处理过程也等同于一个 Servlet 的处理过程。即直接由服务器检索出与之对应的 Servlet 实例来处理。</li>
 </ol>
-<p><em>注：JSP 文件不是在服务器启动的时候转换成 Servlet 类的。而是在被客户端访问的时候才可能发生转换的 ( 如 JSP 文件内容没有被更新等，就不再发生 Servlet 转换 )。</em><br>对Tomcat而言，打开目录 %Tomcat%/work/%您的工程文件目录%，在里面会有一个子目录：org/apache/jsp，如果没有这个目录，说明项目的JSP文件还没有被访问过。如果有该目录，进入其中会发现一些<em>_jsp.java 和 </em>_jsp.class 文件，这就是 JSP 文件被转换成Servlet 类的源文件和字节码文件了。</p>
+<p><em>注：JSP 文件不是在服务器启动的时候转换成 Servlet 类的。而是在被客户端访问的时候才可能发生转换的 ( 如 JSP 文件内容没有被更新等，就不再发生 Servlet 转换 )。</em><br>对Tomcat而言，打开目录 %Tomcat%/work/%您的工程文件目录%，在里面会有一个子目录：org/apache/jsp，如果没有这个目录，说明项目的JSP文件还没有被访问过。如果有该目录，进入其中会发现一些*_jsp.java 和 *_jsp.class 文件，这就是 JSP 文件被转换成Servlet 类的源文件和字节码文件了。</p>
 <h1 id="java中一些很少用到特性"><a href="#java中一些很少用到特性" class="headerlink" title="java中一些很少用到特性"></a>java中一些很少用到特性</h1><ol>
 <li>import static,静态导入</li>
 </ol>
 <p>import static（静态导入）是JDK1.5中的新特性，一般我们导入一个类都用 import com…..ClassName;而静态导入是这样：import static com…..ClassName.<em>;这里多了个static，还有就是类名ClassName后面多了个 .</em> ，意思是导入这个类里的静态方法。当然，也可以只导入某个静态方法，只要把 .* 换成静态方法名就行了。然后在这个类中，就可以直接用方法名调用静态方法，而不必用ClassName.方法名的方式来调用。</p>
-<h1 id="路径的特殊处理"><a href="#路径的特殊处理" class="headerlink" title="路径的特殊处理"></a>路径的特殊处理</h1><pre><code>URL url = this.getClass().getClassLoader().getResource(&quot;/&quot;)
-</code></pre><p>上面这行代码会获取class目录的路径，如果其所在目录中含有空格等字符，导致通过如下方式</p>
-<pre><code>File dir = new File(url.getFile());
-</code></pre><p>获取不了class目录。</p>
+<h1 id="路径的特殊处理"><a href="#路径的特殊处理" class="headerlink" title="路径的特殊处理"></a>路径的特殊处理</h1><pre><code>URL url = this.getClass().getClassLoader().getResource(&quot;/&quot;)</code></pre><p>上面这行代码会获取class目录的路径，如果其所在目录中含有空格等字符，导致通过如下方式</p>
+<pre><code>File dir = new File(url.getFile());</code></pre><p>获取不了class目录。</p>
 <p>解决方法：</p>
-<pre><code>File dir = new File(URLDecoder.decode(url.getFile(),&quot;utf-8&quot;));
-</code></pre>  
+<pre><code>File dir = new File(URLDecoder.decode(url.getFile(),&quot;utf-8&quot;));</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -331,7 +316,7 @@ rd.forward(request, response);
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/01/01/JavaWeb-关键知识点答疑/" data-title="JavaWeb 关键知识点答疑 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/01/01/JavaWeb-关键知识点答疑/" data-title="JavaWeb 关键知识点答疑 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -341,10 +326,10 @@ rd.forward(request, response);
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2018/01/07/学习JMS/" title="学习JMS">
+ <a href="/2018/01/04/我的2017/" title="我的2017">
   <strong>新一篇:</strong><br/>
   <span>
-  学习JMS</span>
+  我的2017</span>
 </a>
 </div>
 
@@ -362,7 +347,7 @@ rd.forward(request, response);
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="JavaWeb 关键知识点答疑" data-thread-key="JavaWeb-关键知识点答疑" data-author-key="Daniel" data-url="http://yoursite.com/post/JavaWeb-关键知识点答疑"></div>
+	<div class="ds-thread" data-title="JavaWeb 关键知识点答疑" data-thread-key="JavaWeb-关键知识点答疑" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/JavaWeb-关键知识点答疑"></div>
 	
 </section>
 

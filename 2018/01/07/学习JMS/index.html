@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>学习JMS | 山间听雨者主页</title>
@@ -51,7 +51,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -69,6 +69,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -114,20 +116,26 @@ var _hmt = _hmt || [];
 <li>客户端配置，该方式是在5.12.2和5.13.1及之后的版本中提供的配置方式，这种方式是常用的。</li>
 </ol>
 <p>Spring配置文件中配置，配置方式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  </div><div class="line">	    &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;</div><div class="line">	    &lt;!-- 指定可以通过ObjectMessage进行安全转换的对象的类所在的包 --&gt;</div><div class="line">	    &lt;property name=&quot;trustedPackages&quot;&gt;</div><div class="line">	        &lt;list&gt;</div><div class="line">	            &lt;value&gt;com.daniel.study.jms.model&lt;/value&gt;</div><div class="line">	        &lt;/list&gt;</div><div class="line">        &lt;/property&gt;  </div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  </span><br><span class="line">	    &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;</span><br><span class="line">	    &lt;!-- 指定可以通过ObjectMessage进行安全转换的对象的类所在的包 --&gt;</span><br><span class="line">	    &lt;property name=&quot;trustedPackages&quot;&gt;</span><br><span class="line">	        &lt;list&gt;</span><br><span class="line">	            &lt;value&gt;com.daniel.study.jms.model&lt;/value&gt;</span><br><span class="line">	        &lt;/list&gt;</span><br><span class="line">        &lt;/property&gt;  </span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
 <p>或</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  </div><div class="line">	    &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;</div><div class="line">	    &lt;property name=&quot;trustAllPackages&quot; value=&quot;true&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
-<p>如上的配置就是把com.daniel.study.jms.model下的所有类都加入白名单，在该白名单下的类的对象都是可以通过spring提供的转换器进行转换的。<a href="http://activemq.apache.org/objectmessage.html" target="_blank" rel="external">参考</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;targetConnectionFactory&quot; class=&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;&gt;  </span><br><span class="line">	    &lt;property name=&quot;brokerURL&quot; value=&quot;tcp://localhost:61616&quot;/&gt;</span><br><span class="line">	    &lt;property name=&quot;trustAllPackages&quot; value=&quot;true&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如上的配置就是把com.daniel.study.jms.model下的所有类都加入白名单，在该白名单下的类的对象都是可以通过spring提供的转换器进行转换的。<a href="http://activemq.apache.org/objectmessage.html" target="_blank" rel="noopener">参考</a></p>
 <p>java代码中设置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);</div><div class="line">factory.setTrustedPackages(new ArrayList(Arrays.asList(&quot;org.apache.activemq.test,org.apache.camel.test&quot;.split(&quot;,&quot;))));</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);</span><br><span class="line">factory.setTrustedPackages(new ArrayList(Arrays.asList(&quot;org.apache.activemq.test,org.apache.camel.test&quot;.split(&quot;,&quot;))));</span><br></pre></td></tr></table></figure>
+
 <p>或者</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);</div><div class="line">factory.setTrustAllPackages(true);</div></pre></td></tr></table></figure>
-<ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(&quot;tcp://localhost:61616&quot;);</span><br><span class="line">factory.setTrustAllPackages(true);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
 <li>还可以在服务端（activeMq broker）中进行配置，这种方式的配置开始于activeMq的5.12.2和5.13.0版本，在${ACTIVEMQ_HOME}/bin/env中配置activeMq的系统属性ACTIVEMQ_OPTS：</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Dorg.apache.activemq.SERIALIZABLE_PACKAGES=java.lang,javax.security,java.util,org.apache.activemq,org.fusesource.hawtbuf,com.thoughtworks.xstream.mapper,com.daniel.study.jms.model</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dorg.apache.activemq.SERIALIZABLE_PACKAGES=java.lang,javax.security,java.util,org.apache.activemq,org.fusesource.hawtbuf,com.thoughtworks.xstream.mapper,com.daniel.study.jms.model</span><br></pre></td></tr></table></figure>
+
 <p>或</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*`</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*`</span><br></pre></td></tr></table></figure>
+
 <p>如上的设置，其中com.daniel.study.jms.model是加入白名单的包，对于broker的，其余的包默认是必须的。</p>
 <h1 id="JMS事务管理之JNDI数据源配置"><a href="#JMS事务管理之JNDI数据源配置" class="headerlink" title="JMS事务管理之JNDI数据源配置"></a>JMS事务管理之JNDI数据源配置</h1><h2 id="什么是jndi"><a href="#什么是jndi" class="headerlink" title="什么是jndi"></a>什么是jndi</h2><p>jndi(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。命名服务将名称和对象联系起来，使得我们可以用名称访问对象。目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。也就是说目录服务是一种特殊的命名服务。</p>
 <h2 id="Tomcat容器"><a href="#Tomcat容器" class="headerlink" title="Tomcat容器"></a>Tomcat容器</h2><h3 id="配置方式"><a href="#配置方式" class="headerlink" title="配置方式"></a>配置方式</h3><p><strong>全局：</strong></p>
@@ -140,27 +148,20 @@ username=&quot;root&quot;
 password=&quot;root&quot;   
 maxActive=&quot;20&quot;   
 maxIdle=&quot;10&quot;   
-maxWait=&quot;10000&quot;/&gt; 
-</code></pre>`</li>
-<li>在项目的web.xml中加入资源引用：<br><code>&lt;resource-ref&gt;  
-&lt;description&gt;JNDI DataSource&lt;/description&gt;  
-&lt;res-ref-name&gt;jndi/mysql&lt;/res-ref-name&gt;  
-&lt;res-ref-type&gt;javax.sql.DataSource&lt;/res-ref-type&gt;  
-&lt;res-auth&gt;Container&lt;/res-auth&gt;  
-&lt;/resource-ref&gt;</code></li>
+maxWait=&quot;10000&quot;/&gt; </code></pre>`</li>
+<li>在项目的web.xml中加入资源引用：<br>`<resource-ref><br><description>JNDI DataSource</description><br><res-ref-name>jndi/mysql</res-ref-name><br><res-ref-type>javax.sql.DataSource</res-ref-type><br><res-auth>Container</res-auth>  </resource-ref>  
+`</li>
 <li>在mybatis配置文件中加入:<br>`<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"><pre><code>&lt;property name=&quot;jndiName&quot;&gt;
     &lt;value&gt;java:comp/env/jdbc/mysql&lt;/value&gt;
-&lt;/property&gt;
-</code></pre> </bean><br>`<br><strong>单个项目：</strong></li>
-<li>在META-INF中创建一个名为context.xml文件，在其中加入：<br>`&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br><context><br> &lt;Resource  name=”jdbc/mysql” auth=”Container” <pre><code>type=&quot;javax.sql.DataSource&quot;                                                     
-driverClassName=&quot;com.mysql.jdbc.Driver&quot;                                 
-url=&quot;jdbc:mysql://localhost:3306/test?useUnicode=true&quot;
-username=&quot;root&quot;
-password=&quot;root&quot;
-maxActive=&quot;50&quot;
-maxIdle=&quot;30&quot;
-maxWait=&quot;10000&quot; /&gt;
-</code></pre></context><br>`</li>
+&lt;/property&gt;</code></pre> </bean>
+`</li>
+</ol>
+<p><strong>单个项目：</strong></p>
+<ol>
+<li>在META-INF中创建一个名为context.xml文件，在其中加入：<br>`<?xml version="1.0" encoding="UTF-8"?><context>
+ <resource name="jdbc/mysql" auth="Container" type="javax.sql.DataSource" driverclassname="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/test?useUnicode=true" username="root" password="root" maxactive="50" maxidle="30" maxwait="10000">
+</resource></context>
+`</li>
 <li>其他的同全局配置</li>
 </ol>
 <h2 id="JBoss"><a href="#JBoss" class="headerlink" title="JBoss"></a>JBoss</h2><h3 id="配置方式-1"><a href="#配置方式-1" class="headerlink" title="配置方式"></a>配置方式</h3><h2 id="WebLogic"><a href="#WebLogic" class="headerlink" title="WebLogic"></a>WebLogic</h2><h3 id="配置方式-2"><a href="#配置方式-2" class="headerlink" title="配置方式"></a>配置方式</h3><h2 id="IIS"><a href="#IIS" class="headerlink" title="IIS"></a>IIS</h2><h3 id="配置方式-3"><a href="#配置方式-3" class="headerlink" title="配置方式"></a>配置方式</h3><h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h2><p>事务是指一个工作单元，它包含了一组添加，删除，修改等具有逻辑关系的多个操作,作为一个单元整体执行，这组命令要么都执行成功，要么全部恢复</p>
@@ -189,7 +190,7 @@ javax.sql.DataSource</code></p>
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/01/07/学习JMS/" data-title="学习JMS | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/01/07/学习JMS/" data-title="学习JMS | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -208,9 +209,9 @@ javax.sql.DataSource</code></p>
 
 
 <div class="next">
-<a href="/2018/01/01/JavaWeb-关键知识点答疑/"  title="JavaWeb 关键知识点答疑">
+<a href="/2018/01/04/我的2017/"  title="我的2017">
  <strong>旧一篇:</strong><br/> 
- <span>JavaWeb 关键知识点答疑
+ <span>我的2017
 </span>
 </a>
 </div>
@@ -220,7 +221,7 @@ javax.sql.DataSource</code></p>
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="学习JMS" data-thread-key="学习JMS" data-author-key="Daniel" data-url="http://yoursite.com/post/学习JMS"></div>
+	<div class="ds-thread" data-title="学习JMS" data-thread-key="学习JMS" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/学习JMS"></div>
 	
 </section>
 

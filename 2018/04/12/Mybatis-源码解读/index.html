@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>Mybatis 源码解读 | 山间听雨者主页</title>
@@ -57,7 +57,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -75,6 +75,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -131,8 +133,7 @@ try {
 SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is, &quot;development&quot;);
 SqlSession sqlSession = sessionFactory.openSession();
 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-User user = userMapper.selectUser(id);
-</code></pre><p>mybatis-config.xml:</p>
+User user = userMapper.selectUser(id);</code></pre><p>mybatis-config.xml:</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
 &lt;!DOCTYPE configuration
   PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
@@ -193,8 +194,7 @@ User user = userMapper.selectUser(id);
     &lt;mapper resource=&quot;com/daniel/study/mybatis/dao/impl/UserMapper.xml&quot;/&gt;
     &lt;mapper resource=&quot;com/daniel/study/mybatis/dao/impl/ConsumerMapper.xml&quot;/&gt;
   &lt;/mappers&gt;
-&lt;/configuration&gt;
-</code></pre><p>这就是要使用配置文件+代码的方式实现mybatis数据持久层访问的方式。</p>
+&lt;/configuration&gt;</code></pre><p>这就是要使用配置文件+代码的方式实现mybatis数据持久层访问的方式。</p>
 <h1 id="配置文件的加载"><a href="#配置文件的加载" class="headerlink" title="配置文件的加载"></a>配置文件的加载</h1><p>这一节主要介绍mybatis是怎么加载上一节中使用的配置文件的。</p>
 <p>加载的过程中设计到的主要类及过程如下图：</p>
 <p><img src="http://ocytp9y7u.bkt.clouddn.com/mybatis%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B.png" alt="mybatis配置文件的加载过程"></p>
@@ -243,8 +243,7 @@ private XMLConfigBuilder(XPathParser parser, String environment, Properties prop
     this.parsed = false;
     this.environment = environment;
     this.parser = parser;
-}
-</code></pre><p>字节流的方式加载配置的主要代码：</p>
+}</code></pre><p>字节流的方式加载配置的主要代码：</p>
 <pre><code>public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     try {
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
@@ -288,8 +287,7 @@ private XMLConfigBuilder(XPathParser parser, String environment, Properties prop
     this.parsed = false;
     this.environment = environment;
     this.parser = parser;
-}
-</code></pre><p>两者其实没有多大区别，只是读取数据源的方式不同而已，最终都是使用XPathParser来对xml进行解析。XPathParser是对jdk中XPath的封装。通过XPathParser创建了与xml配置文件对应的document对象。</p>
+}</code></pre><p>两者其实没有多大区别，只是读取数据源的方式不同而已，最终都是使用XPathParser来对xml进行解析。XPathParser是对jdk中XPath的封装。通过XPathParser创建了与xml配置文件对应的document对象。</p>
 <pre><code>//InputStream
 public XPathParser(InputStream inputStream, boolean validation, Properties variables, EntityResolver entityResolver) {
     commonConstructor(validation, variables, entityResolver);
@@ -301,8 +299,7 @@ public XPathParser(InputStream inputStream, boolean validation, Properties varia
 public XPathParser(Reader reader, boolean validation, Properties variables, EntityResolver entityResolver) {
     commonConstructor(validation, variables, entityResolver);
     this.document = createDocument(new InputSource(reader));
-}
-</code></pre><p>解析xml配置文件的最终结果是得到一个Configuration对象，使用该对象作为原材料，通过DefaultSqlSessionFactory创建SqlSession对象。SqlSession对象是整个mybatis操作数据库的核心。DefaultSqlSessionFactory创建SQLSession的方法主要有两个：</p>
+}</code></pre><p>解析xml配置文件的最终结果是得到一个Configuration对象，使用该对象作为原材料，通过DefaultSqlSessionFactory创建SqlSession对象。SqlSession对象是整个mybatis操作数据库的核心。DefaultSqlSessionFactory创建SQLSession的方法主要有两个：</p>
 <ol>
 <li><p>根据数据源创建：</p>
 <pre><code>private SqlSession openSessionFromDataSource(ExecutorType execType, TransactionIsolationLevel level, boolean autoCommit) {
@@ -321,8 +318,7 @@ public XPathParser(Reader reader, boolean validation, Properties variables, Enti
     } finally {
       ErrorContext.instance().reset();
     }
-}
-</code></pre></li>
+}</code></pre></li>
 <li><p>根据连接（Connection）创建：</p>
 <pre><code>private SqlSession openSessionFromConnection(ExecutorType execType, Connection connection) {
     try {
@@ -346,8 +342,7 @@ public XPathParser(Reader reader, boolean validation, Properties variables, Enti
     } finally {
       ErrorContext.instance().reset();
     }
-  }
-</code></pre></li>
+  }</code></pre></li>
 </ol>
 <h1 id="SqlSession的工作揭秘"><a href="#SqlSession的工作揭秘" class="headerlink" title="SqlSession的工作揭秘"></a>SqlSession的工作揭秘</h1><p>回到之前介绍的代码使用mybatis的demo代码：</p>
 <pre><code>String resourcePath = &quot;./mybatis-config.xml&quot;;
@@ -361,8 +356,7 @@ try {
 SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is, &quot;development&quot;);
 SqlSession sqlSession = sessionFactory.openSession();//1
 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);//2
-User user = userMapper.selectUser(id);
-</code></pre><p>在上面的代码中的<code>1</code>处，获取了SqlSession,<code>2</code>处使用该SqlSession对象对映射接口进行处理，获取UserMapper的代理对象，在该代理对象的selectUser()方法中增强了一些和处理数据库相关的内容。这个userMapper代理对象生成的时间是在加载配置对象Configuration的时候。生成代理对象的代码：</p>
+User user = userMapper.selectUser(id);</code></pre><p>在上面的代码中的<code>1</code>处，获取了SqlSession,<code>2</code>处使用该SqlSession对象对映射接口进行处理，获取UserMapper的代理对象，在该代理对象的selectUser()方法中增强了一些和处理数据库相关的内容。这个userMapper代理对象生成的时间是在加载配置对象Configuration的时候。生成代理对象的代码：</p>
 <pre><code>    private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
         for (XNode child : parent.getChildren()) {
@@ -401,8 +395,7 @@ User user = userMapper.selectUser(id);
             }
         }
     }
-}
-</code></pre><h2 id="解析Mapper-xml文件"><a href="#解析Mapper-xml文件" class="headerlink" title="解析Mapper.xml文件"></a>解析Mapper.xml文件</h2><p>解析mapper文件的工作其实是在加载配置文件的时候就进行的了，解析涉及到的主要代码：</p>
+}</code></pre><h2 id="解析Mapper-xml文件"><a href="#解析Mapper-xml文件" class="headerlink" title="解析Mapper.xml文件"></a>解析Mapper.xml文件</h2><p>解析mapper文件的工作其实是在加载配置文件的时候就进行的了，解析涉及到的主要代码：</p>
 <pre><code>private void parseConfiguration(XNode root) {
     try {
         // issue #117 read properties first
@@ -424,8 +417,7 @@ User user = userMapper.selectUser(id);
     } catch (Exception e) {
         throw new BuilderException(&quot;Error parsing SQL Mapper Configuration. Cause: &quot; + e, e);
     }
-}
-</code></pre><p>把解析到的mapper.class存放到Configuration对象中的mapperRegistry对象中，mapperRegistry对象负责管理各个mapper类。</p>
+}</code></pre><p>把解析到的mapper.class存放到Configuration对象中的mapperRegistry对象中，mapperRegistry对象负责管理各个mapper类。</p>
 <pre><code>private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
         for (XNode child : parent.getChildren()) {
@@ -464,8 +456,7 @@ User user = userMapper.selectUser(id);
             }
         }
     }
-}
-</code></pre><p>mpper.xml有四种方式可以表示映射资源：</p>
+}</code></pre><p>mpper.xml有四种方式可以表示映射资源：</p>
 <ol>
 <li>mapper.xml所在的包</li>
 <li>单个文件的位置resource属性来定位</li>
@@ -482,7 +473,7 @@ User user = userMapper.selectUser(id);
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/04/12/Mybatis-源码解读/" data-title="Mybatis 源码解读 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/04/12/Mybatis-源码解读/" data-title="Mybatis 源码解读 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -513,7 +504,7 @@ User user = userMapper.selectUser(id);
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="Mybatis 源码解读" data-thread-key="Mybatis-源码解读" data-author-key="Daniel" data-url="http://yoursite.com/post/Mybatis-源码解读"></div>
+	<div class="ds-thread" data-title="Mybatis 源码解读" data-thread-key="Mybatis-源码解读" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/Mybatis-源码解读"></div>
 	
 </section>
 

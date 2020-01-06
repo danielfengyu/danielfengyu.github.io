@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>eclipse下javaweb 开发环境搭建 | 山间听雨者主页</title>
@@ -54,7 +54,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -72,6 +72,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -106,22 +108,23 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"></strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#eclipse安装"><span class="toc-number">1.</span> <span class="toc-text">eclipse安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tomcat安装配置"><span class="toc-number">2.</span> <span class="toc-text">Tomcat安装配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Maven安装配置"><span class="toc-number">3.</span> <span class="toc-text">Maven安装配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#maven功能简介"><span class="toc-number">3.1.</span> <span class="toc-text">maven功能简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maven基本命令"><span class="toc-number">3.2.</span> <span class="toc-text">maven基本命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建webApp项目"><span class="toc-number">4.</span> <span class="toc-text">创建webApp项目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建步骤"><span class="toc-number">4.1.</span> <span class="toc-text">创建步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目配置"><span class="toc-number">4.2.</span> <span class="toc-text">项目配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MySql安装配置"><span class="toc-number">5.</span> <span class="toc-text">MySql安装配置</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#eclipse安装"><span class="toc-number">1.</span> <span class="toc-text">eclipse安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tomcat安装配置"><span class="toc-number">2.</span> <span class="toc-text">Tomcat安装配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Maven安装配置"><span class="toc-number">3.</span> <span class="toc-text">Maven安装配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#maven功能简介"><span class="toc-number">3.1.</span> <span class="toc-text">maven功能简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maven基本命令"><span class="toc-number">3.2.</span> <span class="toc-text">maven基本命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建webApp项目"><span class="toc-number">4.</span> <span class="toc-text">创建webApp项目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建步骤"><span class="toc-number">4.1.</span> <span class="toc-text">创建步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MySql安装配置"><span class="toc-number">5.</span> <span class="toc-text">MySql安装配置</span></a></li></ol>
 		</div>
 		
 		<h1 id="eclipse安装"><a href="#eclipse安装" class="headerlink" title="eclipse安装"></a>eclipse安装</h1><h1 id="Tomcat安装配置"><a href="#Tomcat安装配置" class="headerlink" title="Tomcat安装配置"></a>Tomcat安装配置</h1><ol>
-<li><a href="https://tomcat.apache.org/" target="_blank" rel="external">下载</a>需要的版本</li>
+<li><a href="https://tomcat.apache.org/" target="_blank" rel="noopener">下载</a>需要的版本</li>
 <li>解压</li>
-<li>启动，进入/bin目录双击startup.bat，启动后通过在浏览器输入<a href="http://localhost:8080访问Tomcat首页，如果启动成功，就会打开Tomcat首页" target="_blank" rel="external">http://localhost:8080访问Tomcat首页，如果启动成功，就会打开Tomcat首页</a></li>
+<li>启动，进入/bin目录双击startup.bat，启动后通过在浏览器输入<a href="http://localhost:8080访问Tomcat首页，如果启动成功，就会打开Tomcat首页" target="_blank" rel="noopener">http://localhost:8080访问Tomcat首页，如果启动成功，就会打开Tomcat首页</a></li>
 <li>配置环境变量</li>
-<li>给eclipse添加本地Tomcat，window-&gt;preferences-&gt;Server-&gt;Runtime Environment。如果eclipse不支持高版本的Tomcat，可以把高版本的Tomcat伪造为eclipse支持的Tomcat。把高版本的Tomcat伪造为低版本的Tomcat：1. <a href="https://www.zhihu.com/question/37809905" target="_blank" rel="external">参考</a>；2. 安装Eclipse Tomcat Plugin</li>
+<li>给eclipse添加本地Tomcat，window-&gt;preferences-&gt;Server-&gt;Runtime Environment。如果eclipse不支持高版本的Tomcat，可以把高版本的Tomcat伪造为eclipse支持的Tomcat。把高版本的Tomcat伪造为低版本的Tomcat：1. <a href="https://www.zhihu.com/question/37809905" target="_blank" rel="noopener">参考</a>；2. 安装Eclipse Tomcat Plugin</li>
 </ol>
 <h1 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h1><ol>
-<li><a href="http://maven.apache.org/" target="_blank" rel="external">下载</a>需要的版本</li>
+<li><a href="http://maven.apache.org/" target="_blank" rel="noopener">下载</a>需要的版本</li>
 <li>解压</li>
 <li>配置环境变量</li>
 <li>检查安装是否成功：命令行输入mvn -version,看到Maven home字样，说明安装成功。</li>
-<li>配置：在config/settings.xml中配置本地库目录<code>&lt;localRepository&gt;D:\Software App\Java\Maven\mvn_repository&lt;/localRepository&gt;</code> settings.xml文件是用来设置maven的，对maven的配置基本上都是在这个文件中完成。<br>6.</li>
+<li>配置：在config/settings.xml中配置本地库目录<code>&lt;localRepository&gt;D:\Software App\Java\Maven\mvn_repository&lt;/localRepository&gt;</code> settings.xml文件是用来设置maven的，对maven的配置基本上都是在这个文件中完成。</li>
+<li></li>
 </ol>
 <h2 id="maven功能简介"><a href="#maven功能简介" class="headerlink" title="maven功能简介"></a>maven功能简介</h2><h2 id="maven基本命令"><a href="#maven基本命令" class="headerlink" title="maven基本命令"></a>maven基本命令</h2><h1 id="创建webApp项目"><a href="#创建webApp项目" class="headerlink" title="创建webApp项目"></a>创建webApp项目</h1><h2 id="创建步骤"><a href="#创建步骤" class="headerlink" title="创建步骤"></a>创建步骤</h2><ol>
 <li>右键-&gt;new-&gt;other,找到maven,选择maven project-&gt;next。</li>
@@ -129,15 +132,24 @@ var _hmt = _hmt || [];
 <li>输入groupid,artifact id和packgage,点击finish,然后耐心等待,第一次新建maven会有很多依赖包要下载,所以会比较慢.取决于你的网速和电脑配置。</li>
 <li>创建中的注意事项：groupId一般分为多个段，这里我只说两段，第一段为域，第二段为公司名称。域又分为org、com、cn等等许多，其中org为非营利组织，com为商业组织。artifactId设置为项目名称依照这个设置，你的包结构最好是（域.公司名称.项目名称）打头的.当然你的package可以不是这个,也可以自由输入,输入后你新建的项目默认就会有对应的包。</li>
 <li>如果项目中的内容未报错，但项目文件夹上有错误，很可能是项目依赖的jdk版本与settings.xml文件中的java版本不同。只需要把settings.xml文件中java版本改为与eclipse引用的java版本相同即可。</li>
-<li>eclipse中使用maven创建项目JDK版本默认是1.5解决方法：1. 修改maven的settings.xml文件。添加以下行，jdk版本改为自己需要的版本：<br>` <profile><br> <id>jdk-1.7</id><br> <activation>  <pre><code>&lt;activeByDefault&gt;true&lt;/activeByDefault&gt;  
-&lt;jdk&gt;1.7&lt;/jdk&gt;  
-</code></pre> </activation><br> <properties>  <pre><code>&lt;maven.compiler.source&gt;1.7&lt;/maven.compiler.source&gt;  
-&lt;maven.compiler.target&gt;1.7&lt;/maven.compiler.target&gt;  
-&lt;maven.compiler.compilerVersion&gt;1.7&lt;/maven.compiler.compilerVersion&gt;  
-</code></pre> </properties><br></profile>`<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><a href="https://www.cnblogs.com/NieXiaoHui/p/5990570.html" target="_blank" rel="external">参考</a></li>
+<li>eclipse中使用maven创建项目JDK版本默认是1.5解决方法：1. 修改maven的settings.xml文件。添加以下行，jdk版本改为自己需要的版本：<br>` <profile><br> <id>jdk-1.7</id>   <activation>  
+     <activebydefault>true</activebydefault>  
+     <jdk>1.7</jdk>  
+ </activation>  
+ <properties>  
+     <maven.compiler.source>1.7</maven.compiler.source>  
+     <maven.compiler.target>1.7</maven.compiler.target>  
+     <maven.compiler.compilerversion>1.7</maven.compiler.compilerversion>  
+ </properties>  
+</profile>`
+## 项目配置
+[参考](https://www.cnblogs.com/NieXiaoHui/p/5990570.html)
+
+
+</li>
 </ol>
 <h1 id="MySql安装配置"><a href="#MySql安装配置" class="headerlink" title="MySql安装配置"></a>MySql安装配置</h1><ol>
-<li><a href="https://dev.mysql.com/downloads/windows/installer/" target="_blank" rel="external">下载</a>，Windows下只有32位的安装包</li>
+<li><a href="https://dev.mysql.com/downloads/windows/installer/" target="_blank" rel="noopener">下载</a>，Windows下只有32位的安装包</li>
 <li>安装，与普通软件的安装并没有区别</li>
 </ol>
   
@@ -149,7 +161,7 @@ var _hmt = _hmt || [];
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2017/12/10/eclipse下Java Web开发环境搭建/" data-title="eclipse下javaweb 开发环境搭建 | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2017/12/10/eclipse下Java Web开发环境搭建/" data-title="eclipse下javaweb 开发环境搭建 | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -180,7 +192,7 @@ var _hmt = _hmt || [];
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="eclipse下javaweb 开发环境搭建" data-thread-key="eclipse下Java Web开发环境搭建" data-author-key="Daniel" data-url="http://yoursite.com/post/eclipse下Java Web开发环境搭建"></div>
+	<div class="ds-thread" data-title="eclipse下javaweb 开发环境搭建" data-thread-key="eclipse下Java Web开发环境搭建" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/eclipse下Java Web开发环境搭建"></div>
 	
 </section>
 

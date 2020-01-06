@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN,en-US,default">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>MySQL | 山间听雨者主页</title>
@@ -54,7 +54,7 @@ var _hmt = _hmt || [];
   _st('install','.............Add your swiftype userID...............');
 </script>
 </head>
-
+</html>
   <body>
     <header>
       <div>
@@ -72,6 +72,8 @@ var _hmt = _hmt || [];
 						<li><a href="/">首页</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/images">图片</a></li>
 					
 						<li><a href="/aboutme">关于</a></li>
 					
@@ -119,19 +121,16 @@ ALTER TABLE user_t ADD PRIMARY KEY(id);
 -- create方式增加索引
 CREATE INDEX create_first_index on user_t (user_name);
 
-create UNIQUE INDEX create_second_index on user_t (password,user_name,id);
-</code></pre><p>在主键上创建索引不用给定名称，因为主键对于一张表来说是唯一的。</p>
+create UNIQUE INDEX create_second_index on user_t (password,user_name,id);</code></pre><p>在主键上创建索引不用给定名称，因为主键对于一张表来说是唯一的。</p>
 <h2 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h2><pre><code>-- 删除索引
 DROP INDEX first_index on user_t;
 ALTER TABLE user_t DROP INDEX first_index;
-ALTER TABLE user_t drop PRIMARY KEY;
-</code></pre><p>删除 primary key不用指定名称，因为一张表上只可能有一个 primary key索引。执行第三条语句的时候，如果表上没有创建primary key索引，但表具有一个或多个UNIQUE索引，则MySQL将删除第一个UNIQUE索引。如果从表中删除了某列，会对索引有影响。对于多列组合的索引，如果删除其中的某列，则该列也会从索引中删除。如果删除组成索引的所有列，则整个索引将被删除。</p>
+ALTER TABLE user_t drop PRIMARY KEY;</code></pre><p>删除 primary key不用指定名称，因为一张表上只可能有一个 primary key索引。执行第三条语句的时候，如果表上没有创建primary key索引，但表具有一个或多个UNIQUE索引，则MySQL将删除第一个UNIQUE索引。如果从表中删除了某列，会对索引有影响。对于多列组合的索引，如果删除其中的某列，则该列也会从索引中删除。如果删除组成索引的所有列，则整个索引将被删除。</p>
 <h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><ol>
 <li>索引不包含重复值，则索引应该创建为 primary Key或Unique。对于单列唯一性约束来说，保证单列不包含重复值，对于多列唯一性索引，多列的值的组合不重复。PRIMARY KEY索引和UNIQUE索引非常类似。事实上，PRIMARY KEY索引仅是一个具有名称PRIMARY的UNIQUE索引</li>
 </ol>
-<h2 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h2><pre><code>show index from user_t;
-</code></pre><p>结果：</p>
-<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foaffzkkpfj21aa09b0u8.jpg" alt=""></center>
+<h2 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h2><pre><code>show index from user_t;</code></pre><p>结果：</p>
+<center>![](https://ws1.sinaimg.cn/large/af2f0e07gy1foaffzkkpfj21aa09b0u8.jpg)</center>
 
 
 <ul>
@@ -162,32 +161,31 @@ ALTER TABLE user_t drop PRIMARY KEY;
 </li>
 </ol>
 <p>B+Tree:</p>
-<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foah7rvrxmj20f6089gli.jpg" alt="B+Tree"></center>
+<center>![B+Tree](https://ws1.sinaimg.cn/large/af2f0e07gy1foah7rvrxmj20f6089gli.jpg)</center>
 
 <p>B-Tree:</p>
-<center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foahaxvy5oj20m406kjrc.jpg" alt="B-Tree"></center>
+<center>![B-Tree](https://ws1.sinaimg.cn/large/af2f0e07gy1foahaxvy5oj20m406kjrc.jpg)</center>
 
 <p>比较B-Tree和B+Tree,B+Tree更适合外存索引，原因和内节点出度d有关。从上面分析可以看到，d越大索引的性能越好，而出度的上限取决于节点内key和data的大小：</p>
-<pre><code>dmax=floor(pagesize/(keysize+datasize+pointsize))
-</code></pre><p>floor表示向下取整。由于B+Tree内节点去掉了data域，因此可以拥有更大的出度，拥有更好的性能。</p>
+<pre><code>dmax=floor(pagesize/(keysize+datasize+pointsize))</code></pre><p>floor表示向下取整。由于B+Tree内节点去掉了data域，因此可以拥有更大的出度，拥有更好的性能。</p>
 <h2 id="索引实现"><a href="#索引实现" class="headerlink" title="索引实现"></a>索引实现</h2><p>在MySQL中，索引属于存储引擎级别的概念，不同存储引擎对索引的实现方式是不同的。</p>
 <h3 id="MyISAM-索引"><a href="#MyISAM-索引" class="headerlink" title="MyISAM 索引"></a>MyISAM 索引</h3><p>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址。在MyISAM中，主索引和辅助索引（Secondary key）在结构上没有任何区别，只是主索引要求key是唯一的，而辅助索引的key可以重复。因此，MyISAM中索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。</p>
-<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/8.png" alt="主索引"></center>
+<center>![主索引](http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/8.png)</center>
 
-<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png" alt="辅助索引"></center>
+<center>![辅助索引](http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png)</center>
 
 <p>主索引与辅助索引在结构上没有什么区别。主索引要求key是唯一的，而辅助索引的key可以重复。</p>
 <h3 id="InnoDB索引"><a href="#InnoDB索引" class="headerlink" title="InnoDB索引"></a>InnoDB索引</h3><p>虽然InnoDB也使用B+Tree作为索引结构，但具体实现方式却与MyISAM截然不同。</p>
 <ol>
 <li>第一个重大区别是InnoDB的数据文件本身就是索引文件。 而在InnoDB中，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录。</li>
 </ol>
-<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png" alt="主索引"></center>
+<center>![主索引](http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png)</center>
 
 <p>可以看到叶节点包含了完整的数据记录。这种索引叫做聚集索引。<strong>因为InnoDB的数据文件本身要按主键聚集，所以InnoDB要求表必须有主键</strong>（MyISAM可以没有），如果没有显式指定，则MySQL系统会自动选择一个可以唯一标识数据记录的列作为主键，如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整形。</p>
-<ol>
+<ol start="2">
 <li>第二个与MyISAM索引的不同是InnoDB的辅助索引<strong>data域存储相应记录主键的值</strong>而不是地址。换句话说，InnoDB的所有辅助索引都引用主键作为data域。</li>
 </ol>
-<center><img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png" alt="辅助索引"></center>
+<center>![辅助索引](http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png)</center>
 
 <p>聚集索引这种实现方式使得按主键的搜索十分高效，但是辅助索引搜索需要检索两遍索引：首先检索辅助索引获得主键，然后用主键到主索引中检索获得记录。所以一般来说INNODB的索引都是创建在主键上。</p>
 <p>根据INNODB的特征，不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择</p>
@@ -199,7 +197,7 @@ ALTER TABLE user_t drop PRIMARY KEY;
 <p>查询中只有用到条件，索引才会起作用。而且索引列要起作用还必须是查询的条件之一。</p>
 <p>有一种与索引选择性有关的索引优化策略叫做前缀索引，就是用列的前缀代替整个列作为索引key，当前缀长度合适时，可以做到既使得前缀索引的选择性接近全列索引，同时因为索引key变短而减少了索引文件的大小和维护开销。</p>
 <p>在B+树中，插入和删除操作是 O(log(N)) 复杂度。所以有些人听到过使用太多索引不是个好主意这类说法。没错，你减慢了快速插入/更新/删除表中的一个行的操作，因为数据库需要以代价高昂的索引 O(log(N)) 运算来更新表的索引。</p>
-<h2 id="最左前缀原理"><a href="#最左前缀原理" class="headerlink" title="最左前缀原理"></a>最左前缀原理</h2><p>MySQL中的索引可以以一定顺序引用多个列，这种索引叫做联合索引，一般的，一个联合索引是一个有序元组<a1, a2,="" …,="" an="">，其中各个元素均为数据表的一列。另外，单列索引可以看成联合索引元素数为1的特例。如果在进行精确匹配的时候，使用的是隔断精确匹配，则只有最前面的连续的几个字段的索引会陪用到。</a1,></p>
+<h2 id="最左前缀原理"><a href="#最左前缀原理" class="headerlink" title="最左前缀原理"></a>最左前缀原理</h2><p>MySQL中的索引可以以一定顺序引用多个列，这种索引叫做联合索引，一般的，一个联合索引是一个有序元组&lt;a1, a2, …, an&gt;，其中各个元素均为数据表的一列。另外，单列索引可以看成联合索引元素数为1的特例。如果在进行精确匹配的时候，使用的是隔断精确匹配，则只有最前面的连续的几个字段的索引会陪用到。</p>
 <p>什么时候索引会被用到？</p>
 <ol>
 <li>当按照索引中所有列进行精确匹配时，索引可以被用到。这里的所谓精确匹配是指使用‘=’和‘IN’进行匹配。</li>
@@ -250,131 +248,115 @@ ALTER TABLE user_t drop PRIMARY KEY;
 </ol>
 <p><strong><em>注意：幻读出现的情况应该是针对插入（insert）和删除(delete)。可重复读对应的是更新（update）。</em></strong></p>
 <h2 id="原子性、稳定性和持久性实现原理"><a href="#原子性、稳定性和持久性实现原理" class="headerlink" title="原子性、稳定性和持久性实现原理"></a>原子性、稳定性和持久性实现原理</h2><p>原子性、稳定性和持久性是通过redo 和 undo 日志文件实现的，不管是redo还是undo文件都会有一个缓存我们称之为redo_buf和undo_buf。同样，数据库文件也会有缓存称之为data_buf。</p>
-<h3 id="undo-日志文件"><a href="#undo-日志文件" class="headerlink" title="undo 日志文件"></a>undo 日志文件</h3><p><center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fob9zgu8xij208w0i3glj.jpg" alt="undo日志文件保证原子性、稳定性和持久性的原理图"></center><br>说明：</p>
-<ol>
-<li>如果事务在F之前崩溃由于数据还没写入磁盘，所以数据不会被破坏。 </li>
-<li>如果事务在G之前崩溃或者回滚则可以根据undo恢复到初始状态。</li>
-<li>数据在任务提交之前写到磁盘保证了持久性。但是单纯使用undo保证原子性和持久性需要在事务提交之前将数据写到磁盘，浪费大量I/O。</li>
-</ol>
-<h3 id="redo-undo-日志文件"><a href="#redo-undo-日志文件" class="headerlink" title="redo/undo 日志文件"></a>redo/undo 日志文件</h3><p><center><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobaafvyt4j20ag0m93yj.jpg" alt="undo/redo日志文件保证原子性、稳定性和持久性的原理图"></center><br>说明：</p>
-<ol>
-<li>通过undo保证事务的原子性，redo保证持久性。</li>
-<li>F之前崩溃由于所有数据都在内存，恢复后重新冲磁盘载入之前的数据，数据没有被破坏。 </li>
-<li>FG之间的崩溃可以使用redo来恢复。 </li>
-<li>G之前的回滚都可以使用undo来完成。</li>
-</ol>
+<h3 id="undo-日志文件"><a href="#undo-日志文件" class="headerlink" title="undo 日志文件"></a>undo 日志文件</h3><center>![undo日志文件保证原子性、稳定性和持久性的原理图](https://ws1.sinaimg.cn/large/af2f0e07gy1fob9zgu8xij208w0i3glj.jpg)</center>
+说明：
+1. 如果事务在F之前崩溃由于数据还没写入磁盘，所以数据不会被破坏。 
+2. 如果事务在G之前崩溃或者回滚则可以根据undo恢复到初始状态。
+3. 数据在任务提交之前写到磁盘保证了持久性。但是单纯使用undo保证原子性和持久性需要在事务提交之前将数据写到磁盘，浪费大量I/O。
+
+<h3 id="redo-undo-日志文件"><a href="#redo-undo-日志文件" class="headerlink" title="redo/undo 日志文件"></a>redo/undo 日志文件</h3><center>![undo/redo日志文件保证原子性、稳定性和持久性的原理图](https://ws1.sinaimg.cn/large/af2f0e07gy1fobaafvyt4j20ag0m93yj.jpg)</center>
+说明：
+1. 通过undo保证事务的原子性，redo保证持久性。
+2. F之前崩溃由于所有数据都在内存，恢复后重新冲磁盘载入之前的数据，数据没有被破坏。 
+3. FG之间的崩溃可以使用redo来恢复。 
+4. G之前的回滚都可以使用undo来完成。
+
+
 <h2 id="模拟不同的事务级别对数据安全的影响"><a href="#模拟不同的事务级别对数据安全的影响" class="headerlink" title="模拟不同的事务级别对数据安全的影响"></a>模拟不同的事务级别对数据安全的影响</h2><p>实验准备：</p>
 <ol>
-<li>安装mysql数据库</li>
-<li>打开两个mysql命令行客户端，模拟多用户多事务场景。</li>
-<li>导入官方推荐的数据库 employees。<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="测试read-uncommitted-级别"><a href="#测试read-uncommitted-级别" class="headerlink" title="测试read uncommitted 级别"></a>测试read uncommitted 级别</h3></li>
+<li><p>安装mysql数据库</p>
+</li>
+<li><p>打开两个mysql命令行客户端，模拟多用户多事务场景。</p>
+</li>
+<li><p>导入官方推荐的数据库 employees。</p>
+<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="测试read-uncommitted-级别"><a href="#测试read-uncommitted-级别" class="headerlink" title="测试read uncommitted 级别"></a>测试read uncommitted 级别</h3></li>
 <li><p>查看当前的数据库隔离级别</p>
-<pre><code>mysql&gt; select @@tx_isolation;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcqcxqidj20a3051dfo.jpg" alt="查看数据库的当前的隔离级别"></p>
+<pre><code>mysql&gt; select @@tx_isolation;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcqcxqidj20a3051dfo.jpg" alt="查看数据库的当前的隔离级别"></p>
 </li>
 <li><p>在A客户端（打开的mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted</p>
 <pre><code>set session transaction isolation level read uncommitted；
 start transaction;
-select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcr48xktj20hy0d2jrn.jpg" alt=""></p>
+select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcr48xktj20hy0d2jrn.jpg" alt></p>
 </li>
 <li><p>在B客户端（打开的另一个mysql命令行客户端），设置当前会话的事务隔离级别为 read uncommitted，并更新数据。</p>
 <pre><code>set session transaction isolation level read uncommitted;
 start transaction;
-update salaries set salary=salary+100 where emp_no = 100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrinkm2j20ix06raa2.jpg" alt=""></p>
+update salaries set salary=salary+100 where emp_no = 100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrinkm2j20ix06raa2.jpg" alt></p>
 </li>
 <li><p>在A中再次执行相同的查询数据</p>
-<pre><code>select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrsldjtj20eo09c0sq.jpg" alt=""></p>
+<pre><code>select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobcrsldjtj20eo09c0sq.jpg" alt></p>
 </li>
 </ol>
 <p>结论：一个事务没有提交，但是在另外的事务中却可以查看到这个事务没有提交的数据。这是所有隔离级别中最低级的一种。<br>导致的问题：可以读取到事务未提交的数据，俗称<strong>脏读</strong></p>
 <h3 id="read-committed-级别"><a href="#read-committed-级别" class="headerlink" title="read committed 级别"></a>read committed 级别</h3><ol>
 <li><p>查询B客户端的当前会话的事务的级别</p>
-<pre><code>select @@tx_isolation;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdrdhmn2j20b704jdfo.jpg" alt=""></p>
+<pre><code>select @@tx_isolation;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdrdhmn2j20b704jdfo.jpg" alt></p>
 </li>
 <li><p>将B客户端的当前会话的事务级别设置为read committed，查询当前的数据。</p>
 <pre><code>set session transaction isolation level read committed;
 start transaction;
-select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdu7zrmvj20f00baaa4.jpg" alt=""></p>
+select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdu7zrmvj20f00baaa4.jpg" alt></p>
 </li>
 <li><p>在A客户端的会话中启动事务，对数据进行修改</p>
 <pre><code>start transaction;
 select * from salaries where emp_no=100000;
 update salaries set salary=salary-200 where emp_no=100000;
-select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdulbvghj20k50qadgo.jpg" alt=""></p>
+select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdulbvghj20k50qadgo.jpg" alt></p>
 </li>
 <li><p>在B客户端的会话中查询</p>
-<pre><code>select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobduz0fusj20fn09wwel.jpg" alt=""></p>
+<pre><code>select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobduz0fusj20fn09wwel.jpg" alt></p>
 </li>
 <li><p>提交A客户端中会话的事务</p>
-<pre><code>commit
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+<pre><code>commit</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt></p>
 </li>
 <li><p>在B客户端会话中查看数据</p>
-<pre><code>select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt=""></p>
+<pre><code>select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobdyqktp6j20fr0cvmxc.jpg" alt></p>
 </li>
 </ol>
 <p>结论：可见在A中修改的数据，在A中的事务被提交前，在B中是看不见的。一旦A提交，B中再次查询就可以看见了。如果当前会话的隔离级别是 read committed的，当前会话只能读取到其他事务提交的数据，未提交的数据是读不到的。<br>导致的问题：两次读取的结果不同，导致了<strong>不可重复读</strong>。</p>
 <h3 id="Repeatable-read级别"><a href="#Repeatable-read级别" class="headerlink" title="Repeatable read级别"></a>Repeatable read级别</h3><p>这个是MySQL的默认事务级别。</p>
 <ol>
 <li><p>查询B客户端的当前会话的事务的级别</p>
-<pre><code>select @@tx_isolation;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobep7am6xj20az05qjr8.jpg" alt=""></p>
+<pre><code>select @@tx_isolation;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobep7am6xj20az05qjr8.jpg" alt></p>
 </li>
 <li><p>设置B客户端中的会话的隔离级别为repeatable read(可重复读，保证了两次读取的数据一致)。</p>
 <pre><code>set session transaction isolation level repeatable read;
 start transaction;
-select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobepmfqibj20i00dx3ys.jpg" alt=""></p>
+select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobepmfqibj20i00dx3ys.jpg" alt></p>
 </li>
 <li><p>在客户端A中的会话中启动一个事务,在事务里执行添加一条记录,并提交该事务。</p>
 <pre><code>start transaction;
 insert into salaries (emp_no,salary,from_date,to_date) value(100000,21232323,&apos;2017-06-29&apos;,&apos;2018-07-01&apos;);
 select * from salaries where emp_no=100000;
-commit;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfphq7lxj20vc0efaah.jpg" alt=""></p>
+commit;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfphq7lxj20vc0efaah.jpg" alt></p>
 </li>
 <li><p>在客户端B的会话中查询数据，</p>
-<pre><code>select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfq8jd5mj20i50azdfz.jpg" alt=""></p>
+<pre><code>select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfq8jd5mj20i50azdfz.jpg" alt></p>
 </li>
 <li><p>在客户端B的会话中插入一条与第三步插入的记录的<code>emp_no</code>和<code>from_date</code>都相同的数据</p>
-<pre><code>insert into salaries (emp_no,salary,from_date,to_date) value(100000,1000000,&apos;2017-06-29&apos;,&apos;2020-07-01&apos;);
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfqkg9znj20vg02iwed.jpg" alt=""></p>
+<pre><code>insert into salaries (emp_no,salary,from_date,to_date) value(100000,1000000,&apos;2017-06-29&apos;,&apos;2020-07-01&apos;);</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobfqkg9znj20vg02iwed.jpg" alt></p>
 </li>
 <li><p>在客户端B的会话中查询数据，</p>
-<pre><code>select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foberfvn12j20f209imx6.jpg" alt=""></p>
+<pre><code>select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1foberfvn12j20f209imx6.jpg" alt></p>
 </li>
 </ol>
 <p>结论：会话使用事务的级别为repeatable read，保证了在事务提交前的每次查询数据都是一样的，避免了不可重复读的问题，<br>导致的问题：从上述的实验中不难看出问题，就是在第五步出现的该问题，明明在当前会话中查询的数据没有与要提交的的数据冲突，可是在插入的时候却提示已经有该主键的数据记录了。看不见记录，却提示已存在该记录，这种情况称为<strong>幻读</strong>。</p>
 <h3 id="serializable级别"><a href="#serializable级别" class="headerlink" title="serializable级别"></a>serializable级别</h3><p>serializable级别是隔离级别最高的，是最安全的，但也是最耗资源的。</p>
 <ol>
 <li><p>查询B客户端的当前会话的事务的级别</p>
-<pre><code>select @@tx_isolation;
-</code></pre></li>
+<pre><code>select @@tx_isolation;</code></pre></li>
 <li><p>设置B客户端会话的事务级别为 serializable</p>
 <pre><code>set session transaction isolation level serializable;
 -- 启动事务
-start transaction;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgq6qmduj20i903hjr9.jpg" alt=""></p>
+start transaction;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgq6qmduj20i903hjr9.jpg" alt></p>
 </li>
 <li><p>在B客户端的会话中查询数据</p>
-<pre><code>select * from salaries where emp_no=100000;
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""></p>
+<pre><code>select * from salaries where emp_no=100000;</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt></p>
 </li>
 <li><p>在A客户端会话中启动事务，查询数据，并插入一条数据。</p>
 <pre><code>start transaction
 select * from salaries where emp_no=100000;
-insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt=""><br><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgrek0cnj20uz031wed.jpg" alt=""></p>
+insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgqunr43j20f00b8q2z.jpg" alt><br><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgrek0cnj20uz031wed.jpg" alt></p>
 <p> 可以看到插入数据并没有成功，尽管库中并没有相同主键的记录。</p>
 </li>
 <li><p>在A客户端插入数据的时候，同时在B客户端提交事务。</p>
@@ -382,24 +364,19 @@ insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apo
 insert into salaries (emp_no,salary,from_date,to_date) value(100000,2000000,&apos;2015-06-29&apos;,&apos;2020-07-01&apos;);
 
 -- 客户端B
-commit
-</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgx2jlpbj20v508e74c.jpg" alt=""></p>
+commit</code></pre><p><img src="https://ws1.sinaimg.cn/large/af2f0e07gy1fobgx2jlpbj20v508e74c.jpg" alt></p>
 </li>
 </ol>
 <p>由上面的结果看，A中的insert语句在等待执行期间，如果B客户端的事务执行了commit，那么A中的insert就会执成功，否则就会超时。</p>
 <h1 id="自问自答-1"><a href="#自问自答-1" class="headerlink" title="自问自答"></a>自问自答</h1><ol>
 <li><p>什么时候更能体现出索引查询的优势？</p>
-<pre><code>答：因为索引是基于B+tree的，因此查询到一条记录的时间复杂度是O(logN),所以查询的记录越多，更能体现出索引的优势，在数据量不大的情况下，通过索引查询与不通过索引查询的时间相差不多。
-</code></pre></li>
+<pre><code>答：因为索引是基于B+tree的，因此查询到一条记录的时间复杂度是O(logN),所以查询的记录越多，更能体现出索引的优势，在数据量不大的情况下，通过索引查询与不通过索引查询的时间相差不多。</code></pre></li>
 <li><p>数据库索引的工作原理是？</p>
-<pre><code>答：把添加索引的列在内存中创建一棵以索引列的值为key的B+tree。
-</code></pre></li>
+<pre><code>答：把添加索引的列在内存中创建一棵以索引列的值为key的B+tree。</code></pre></li>
 <li><p>为什么说索引不是越多越好？</p>
-<pre><code>答：数据维护索引需要消耗资源，因为索引的数据结构是B+树，在插入/删除数据的时候都需要调整树的平衡，调整树的平衡是需要耗时的，还有可能涉及到磁盘等的操作。这就减慢了插入/删除操作的速度。
-</code></pre></li>
+<pre><code>答：数据维护索引需要消耗资源，因为索引的数据结构是B+树，在插入/删除数据的时候都需要调整树的平衡，调整树的平衡是需要耗时的，还有可能涉及到磁盘等的操作。这就减慢了插入/删除操作的速度。</code></pre></li>
 <li><p>阵列与hash表的区别</p>
-<pre><code>答：搜索的复杂度不同，阵列是O(n),hash表是O(1)。阵列需要一次性加载到内存中，有时候这显得有点不现实。hash可以分不同的&quot;桶&quot;加载到内存中。
-</code></pre></li>
+<pre><code>答：搜索的复杂度不同，阵列是O(n),hash表是O(1)。阵列需要一次性加载到内存中，有时候这显得有点不现实。hash可以分不同的&quot;桶&quot;加载到内存中。</code></pre></li>
 <li></li>
 </ol>
 <h1 id="数据设计原则"><a href="#数据设计原则" class="headerlink" title="数据设计原则"></a>数据设计原则</h1><p>三范式：</p>
@@ -427,12 +404,13 @@ commit
 </li>
 <li><p>其他</p>
 <ol>
-<li>存放图片、文件等大文件用文件系统存储。数据库只存储路径，图片和文件存放在文件系统，甚至单独存放在一台服务器(图床)。</li>
+<li><p>存放图片、文件等大文件用文件系统存储。数据库只存储路径，图片和文件存放在文件系统，甚至单独存放在一台服务器(图床)。</p>
+</li>
 <li><p>数据参数的配置。最重要的参数就是内存，我们主要用的innodb引擎，所以下面两个参数调的很大：</p>
 <pre><code>innodb_additional_mem_pool_size=64M
-innodb_buffer_pool_size=1G
-</code></pre></li>
-<li>合理的硬件资源和操作系统。如果机器的内存超过4G，那么应当采用64位操作系统和64位MySQL。</li>
+innodb_buffer_pool_size=1G</code></pre></li>
+<li><p>合理的硬件资源和操作系统。如果机器的内存超过4G，那么应当采用64位操作系统和64位MySQL。</p>
+</li>
 </ol>
 </li>
 </ul>
@@ -445,7 +423,7 @@ innodb_buffer_pool_size=1G
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2018/02/09/MySQL/" data-title="MySQL | 山间听雨者主页" data-tsina="null" class="share clearfix">
+  <div data-url="https://github.com/danielfengyu/danielfengyu.github.io/2018/02/09/MySQL/" data-title="MySQL | 山间听雨者主页" data-tsina="" class="share clearfix">
   </div>
 
 </div>
@@ -476,7 +454,7 @@ innodb_buffer_pool_size=1G
 	
 <section class="comment">
 	
-	<div class="ds-thread" data-title="MySQL" data-thread-key="MySQL" data-author-key="Daniel" data-url="http://yoursite.com/post/MySQL"></div>
+	<div class="ds-thread" data-title="MySQL" data-thread-key="MySQL" data-author-key="Daniel" data-url="https://github.com/danielfengyu/danielfengyu.github.io/post/MySQL"></div>
 	
 </section>
 
